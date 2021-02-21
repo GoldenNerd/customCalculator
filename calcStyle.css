@@ -28,6 +28,8 @@ border-radius:10%;
 font-size: 13vw;
 text-align:right;
 line-height: 180%;
+
+
 }
 
 #lastOpDispl{
@@ -42,7 +44,7 @@ line-height: 180%;
 
 .key{
  display: block;
- width: 24vw;
+ width: 23.5vw;
  height: 15vw;
  background-color: rgb(1,1,83,1);
  border: 1px solid lightgreen;
@@ -75,15 +77,19 @@ background-color: #010153;
 }
 
 #keys{
-  width: 100vw;
+  width: 98vw;
   height: fit-content;
   display:flex;
   flex-direction: row;
   flex-wrap: wrap;
   justify-content:flex-start;
-  align-items: flex-start;
+  align-items: center ;
   font-weight: bold;
-} 
+  opacity:1;
+  position: relative;
+right:0;
+transition: all 0.5s;
+}
 
 .top-clue{
   outline: 1px solid transparent ;
@@ -166,3 +172,59 @@ margin:0 auto;
  font-size:2rem;
  color:white;
  }
+ 
+ 
+/* MODAL OF APP */
+
+/*  PROPERTIES FOR FORMAT MODAL  */
+#format-modal{ /* duplicate rule */
+margin: 0;
+/*height:15vw;*/
+opacity:1;
+position:absolute ;
+left:-101vw;
+transition: all 0.5s;
+color:white ;
+font-size:1.5rem;
+margin-bottom: 2rem;
+height:105.1vw;}
+
+#apply-format, #quit-format{
+opacity:1;
+font-size: 5vw;
+width:fit-content;
+height:fit-content;
+color: lightgreen;
+}
+#quit-format{
+color: red;
+}
+
+h2{
+text-align:center;
+}
+
+ul{
+margin-left:7rem ;
+list-style:none;
+}
+
+.datum{
+margin-left: 7rem;
+color:white ;
+background-color:rgb(0,128,0,0.3);
+/*rgb(255,255,255,0.2);*/
+border:none ;
+text-align:right;
+margin-right: 1rem;
+font-weight:bold;
+}
+
+#format-buttons{
+margin-top:2rem;
+display:flex;
+flex-direction:row;
+flex-wrap:nowrap;
+justify-content:space-between;
+align-items:flex-start;
+}
