@@ -11,13 +11,92 @@
  <div id="lcd-frame">
   <span id="lastOpDispl"></span>
   <span id="lcd" value=""></span>
- </div>
+</div>
+   <!-- MODAL OF APP: -->
+<div id=format-modal>
+
+
+  <h2>Select your Format</h2>
+  
+<div id="format">
+
+ <ul class="choices">
+   <li> <label><input type="radio" name="choice" id="none" class="choice" value="" checked/> none</label></li>
+   <li> <label><input type="radio" name="choice" id="round" class="choice" value="" /> round-off</label></li>
+   <li> <label><input type="radio" class="choice" name="choice" id="exponent" value=""/> exponent notation</label></li>
+   <li> <label><input type="radio" class="choice" name="choice" id="scientific" value="" /> scientific notation</label></li>
+ </ul>
  
+ <h2>Enter Parameters for your Format</h2>
+   
+<div id="normal-panel">
+ <label><input
+          type="number"
+          name="num"
+          class="datum" 
+          id="none"
+          placeholder="Num."
+          value="3"
+          min="0"
+          max="13"
+          step="1"
+        /> decimal places</label>
+</div>
+<div id="round-panel">
+ <label><input
+          type="number"
+          name="num"
+          class="datum" 
+          id="decimals"
+          placeholder="Num."
+          value="4"
+          min="0"
+          max="13"
+          step="1"
+        /> decimal places</label>
+</div>
+<div id="exponent-panel">
+ <label><input
+          type="number"
+          name="num"
+          class="datum" 
+          id="exponent"
+          placeholder="Num."
+          value="3"
+          min="0"
+          max="13"
+          step="1"
+        /> exponent</label>
+</div>
+<div id="scientific-panel">
+ <label><input
+          type="number"
+          name="num"
+          class="datum" 
+          id="significant"
+          placeholder="Num."
+          value="7"
+          min="0"
+          max="13"
+          step="1"
+        /> significant figures</label>
+</div>
+</div>
+
+<div id="format-buttons">
+<input type="button" class="key" id="apply-format" value="Go">
+<input type="button" class="key" id="quit-format" value="&#x2718;">
+<!-- &#x2704; -->
+</div>
+
+</div>
+  
+ <!-- MAIN BODY OF APP: -->
  <div id="keys">
   <input type="button" class="key" id="ms" value="MS">
   <input type="button" class="key" id="mr" value="MR">
   <input type="button" class="key" id="mc" value="MC">
-  <input type="button" class="key" id="format" value="&#x2704;">
+  <input type="button" class="key" id="scissors1" value="&#x2704;">
   <input type="button" class="key" id="clear" value="C">
   <input type="button" class="key" id="percentage" value="%">
   <input type="button" class="key" id="change-sign" value="&#177;">
@@ -45,6 +124,8 @@
   <input type="button" class="key" id="equal" value="=">
  </div>
  
+
+ <!-- DEBUG SECTION: -->
 <div id="debug">
  <div class="top-clue" >
     <p class="visual-top">
@@ -68,7 +149,7 @@
  <!--  -->
  <div class="top-clue">
    <p class="visual-top">
-    operator: <span id="multAccDebug"></span>
+    opNow: <span id="multAccDebug"></span>
    </p>
    <p class="visual-top">
     RESULT: <span id="prcntAccDebug"></span>
