@@ -48,7 +48,7 @@ const subTot=document.querySelector('#sub-tot');
 const keyMS = document. querySelector('#ms');
 const keyMR = document.querySelector('#mr');
 const keyMC = document.querySelector('#mc');
-const keyFormat = document.querySelector('#format');
+const keyFormat = document.querySelector('#scissors1');
 
 // Grab number keys
 const key0 = document.querySelector('#key0');
@@ -152,7 +152,7 @@ keyMC.addEventListener('click', () =>{
   keyPressedMC=true;
   memory();});
   
-keyFormat.addEventListener('click', format);
+keyFormat.addEventListener('click', launchFormatMode);
 
 // Key Presses - Event listeners for unary key presses:
 clearKey.addEventListener('click', () =>{clear();});
@@ -343,10 +343,76 @@ keyPressedMC=false;
 return;
 }
 
-function format (){
+function exitFormatMode (){
+formatModal.style.position='absolute';
+formatModal.style.height='fit-content';
+formatModal.style.left='-101vw';
+keyBoard.style.position='relative';
+keyBoard.style.right='0';
+return;
+}
+const quitBtn=document.querySelector('#quit-format');
+quitBtn.addEventListener('click', exitFormatMode);
+//@@@@
+
+const decimalCount = num => {
+   // Convert to String
+   const numStr = String(num);
+   // String Contains Decimal
+   if (numStr.includes('.')) {
+      return numStr.split('.')[1].length;
+   }
+   // String Does Not Contain Decimal
+   return 0;
+};
+
+let lcdBackup;
+function launchFormatMode (){
+// Change appearance of number displayed without changing the finalResult source number. 
+//keyFormat.style.fontSize='5vw';
+formatModal.style.position='relative';
+formatModal.style.height='fit-content';
+formatModal.style.left='0';
+keyBoard.style.position='absolute';
+keyBoard.style.right='101vw';
+// Preserve LCD value to be used by applyFormat()
+lcdBackup=lcd.innerHTML;
+defaultDigits.value=decimalCount(lcdBackup);
+console.log(`lcdBackup: ${lcdBackup}`);
+console.log(`defaultDigits.value: ${defaultDigits.value}`);
+return;
+}
+const keyBoard=document.querySelector('#keys');
+const formatModal=document.querySelector('#format-modal');
+
+const defaultChoice=document.querySelector('#none');
+const roudOffChoice=document.querySelector('#round');
+const exponentialChoice=document.querySelector('#exponent');
+const scientificChoice=document.querySelector('scientific');
+
+const defaultDigits=document.querySelector('#none');
+const roundOffDigits=document.querySelector('#decimals');
+const exponentialDigits=document.querySelector('#exponent');
+const scientificDigits=document.querySelector('scientific');
+
+function applyFormat(){
+if (defaultChoice.checked) {
+lcd.innerHTML=lcdBackup;
+}else if(roudOffChoice.checked){
+lcd.innerHTML=Math.round(lcdBackup*10**roundOffDigits.value)/(10**roundOffDigits.value);
+}else if(exponentialChoice.checked){
+parseFloat(lcdBackup).toExponential(exponentialDigits);
+}else if(scientificChoice.checked){
+
+}else{
+// NOP
+}
 
 return;
 }
+const goBtn=document.querySelector('#apply-format');
+goBtn.addEventListener('click', applyFormat);
+
 
 // functions called by Main
 function appendDigit (){// Also appends dot
