@@ -360,7 +360,7 @@ const decimalCount = num => {
    const numStr = String(num);
    // String Contains Decimal
    if (numStr.includes('.')) {
-      return numStr.split('.')[1].length;
+      return numStr.split('.')[1].length+1;
    }
    // String Does Not Contain Decimal
    return 0;
@@ -369,47 +369,135 @@ const decimalCount = num => {
 let lcdBackup;
 function launchFormatMode (){
 // Change appearance of number displayed without changing the finalResult source number. 
-//keyFormat.style.fontSize='5vw';
 formatModal.style.position='relative';
 formatModal.style.height='fit-content';
 formatModal.style.left='0';
 keyBoard.style.position='absolute';
 keyBoard.style.right='101vw';
-// Preserve LCD value to be used by applyFormat()
-lcdBackup=lcd.innerHTML;
-defaultDigits.value=decimalCount(lcdBackup);
-console.log(`lcdBackup: ${lcdBackup}`);
-console.log(`defaultDigits.value: ${defaultDigits.value}`);
+// At launch time, preserve LCD value to be used by applyFormat()
+// Adding zero before saving removes all trailing zeroes, and removes repeat leading zeroes
+lcdBackup=parseFloat(lcd.innerHTML)+0;
+lcd.innerHTML=lcdBackup;
+defaultDigits.value=decimalCount(lcdBackup)-1;
 return;
 }
 const keyBoard=document.querySelector('#keys');
 const formatModal=document.querySelector('#format-modal');
 
-const defaultChoice=document.querySelector('#none');
-const roudOffChoice=document.querySelector('#round');
-const exponentialChoice=document.querySelector('#exponent');
-const scientificChoice=document.querySelector('scientific');
+const defaultChoice=document.querySelector('#none-choice');
+const roudOffChoice=document.querySelector('#round-choice');
+const exponentialChoice=document.querySelector('#exponent-choice');
+const scientificChoice=document.querySelector('#scientific-choice');
 
-const defaultDigits=document.querySelector('#none');
+const defaultDigits=document.querySelector('#none-decimals');
 const roundOffDigits=document.querySelector('#decimals');
-const exponentialDigits=document.querySelector('#exponent');
-const scientificDigits=document.querySelector('scientific');
+const exponentialDigits=document.querySelector('#exponent-digits');
+const scientificDigits=document.querySelector('#scientific-choice');
+
+// Determine sign of exponential notation
+function expSign(){
+let sign;
+if(parseInt(exponentialDigits.value)<0){
+sign='';
+}else{
+sign='+';
+}
+return sign;
+}
+
+// Round-off for round-off format choice
+function roundOff(num){
+const roundedOff=Math.round(num*10**roundOffDigits.value)/(10**roundOffDigits.value);
+return roundedOff;
+}
+
+// Determine if a number contains a dot
+function hasDot(num){
+const dotIsPresent=num.toString().includes('.');
+return dotIsPresent;
+} 
+// Determine the amount of digits in a number
+let digitsCount=(num)=>{
+num=num.toString();
+if(hasDot(num) && num<0){// -0.1
+const digitCount=num.length-2;
+console.log('digitCount: ', digitCount);
+return digitCount;
+
+}else if(hasDot(num) && num>=0){// 0.4
+const digitCount=num.length-1;
+console.log('digitCount: ', digitCount);
+return digitCount;
+
+}else if(!hasDot(num) && num<0){// -1
+const digitCount=num.length-1;
+console.log('digitCount: ', digitCount);
+return digitCount;
+
+}else if(!hasDot(num) && num>=0){// 1
+const digitCount=num.length;
+console.log('digitCount: ', digitCount);
+return digitCount;
+}else{
+// NOP
+}
+};
+
+function leftmostZeroCounter(num){
+if(num<0){
+num=num*(-1);//Negative sign does not count as digit. Strip the neg sign.
+}// continue...
+num=num.toString();
+// Chop off all leftmost zeroes and dot
+let zeroesCount=0;
+for (let character of num) {
+if(character==='0'){
+zeroesCount++;
+}else if(character==='0'||character==='.'){
+num=num.slice(0,1);
+console.log('num', num);
+}else{
+console.log('zeroesCount', zeroesCount);
+return zeroesCount;
+}
+}
+}
+
+// Digits count not including leading edge zero, if present
+function significantDigitsCount(num){
+
+return;
+}
 
 function applyFormat(){
 if (defaultChoice.checked) {
 lcd.innerHTML=lcdBackup;
-}else if(roudOffChoice.checked){
-lcd.innerHTML=Math.round(lcdBackup*10**roundOffDigits.value)/(10**roundOffDigits.value);
-}else if(exponentialChoice.checked){
-parseFloat(lcdBackup).toExponential(exponentialDigits);
-}else if(scientificChoice.checked){
-
-}else{
-// NOP
-}
-
 return;
+
+}else if(roudOffChoice.checked){
+lcd.innerHTML=roundOff(lcdBackup);
+return;
+
+}else if(exponentialChoice.checked){
+const shifted=lcdBackup/(10 ** exponentialDigits.value);
+const digits=roundOff(shifted);
+lcd.innerHTML=`${digits}e${expSign()}${exponentialDigits.value}`;
+return;
+
+}else if(scientificChoice.checked){
+//digitsCount(lcdBackup);
+const integerCount=digitsCount(lcdBackup)-decimalCount(lcdBackup);
+console.log('leftmostDigit: ', lcdBackup.toString().slice(0,1));
+if(lcdBackup.toString().slice(0,1)==='0'){
+const exponent=integerCount;
+console.log('exponent: ', exponent);
+}else{
+const exponent=integerCount-1;
+console.log('exponent: ', exponent);
 }
+}
+}
+
 const goBtn=document.querySelector('#apply-format');
 goBtn.addEventListener('click', applyFormat);
 
@@ -908,3 +996,12 @@ main();
 }
 return;
 }
+// Test
+function test(){
+console.log('testing num.toFixed():');
+console.log((parseFloat(lcdBackup).toFixed(15)).toString());
+
+ 
+}
+const testBtn=document.querySelector ('#test');
+testBtn.addEventListener('click', test);
