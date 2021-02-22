@@ -1,6 +1,6 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
+<html lang="en"> 
+<head> 
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
@@ -21,10 +21,10 @@
 <div id="format">
 
  <ul class="choices">
-   <li> <label><input type="radio" name="choice" id="none" class="choice" value="" checked/> none</label></li>
-   <li> <label><input type="radio" name="choice" id="round" class="choice" value="" /> round-off</label></li>
-   <li> <label><input type="radio" class="choice" name="choice" id="exponent" value=""/> exponent notation</label></li>
-   <li> <label><input type="radio" class="choice" name="choice" id="scientific" value="" /> scientific notation</label></li>
+   <li> <label><input type="radio" name="choice" id="none-choice" class="choice" value="" checked/> none</label></li>
+   <li> <label><input type="radio" name="choice" id="round-choice" class="choice" value="" /> round-off</label></li>
+   <li> <label><input type="radio" class="choice" name="choice" id="exponent-choice" value=""/> exponent notation</label></li>
+   <li> <label><input type="radio" class="choice" name="choice" id="scientific-choice" value="" /> scientific notation</label></li>
  </ul>
  
  <h2>Enter Parameters for your Format</h2>
@@ -34,7 +34,7 @@
           type="number"
           name="num"
           class="datum" 
-          id="none"
+          id="none-decimals"
           placeholder="Num."
           value="3"
           min="0"
@@ -53,14 +53,14 @@
           min="0"
           max="13"
           step="1"
-        /> decimal places</label>
+        /> round-off decimals</label>
 </div>
 <div id="exponent-panel">
  <label><input
           type="number"
           name="num"
           class="datum" 
-          id="exponent"
+          id="exponent-digits"
           placeholder="Num."
           value="3"
           min="0"
@@ -170,10 +170,10 @@
  <span id= "notification"></span>
 </div>
 
-  <!-- <input type="button" name="debug" id="test" value="&#x267d; TEST" />
+  <!-- 
 <input type="button" name="debug2" id="test2" value="1/x" />
 <input type="button" name="debug2" id="test3" value="x²" /> -->
-
+<input type="button" name="debug" id="test" value="&#x267d; TEST" />
  <script type="text/javascript" charset="utf-8" src="calcApp.js"></script>
 </body>
 </html>
