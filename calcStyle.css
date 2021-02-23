@@ -28,8 +28,6 @@ border-radius:10%;
 font-size: 13vw;
 text-align:right;
 line-height: 180%;
-
-
 }
 
 #lastOpDispl{
@@ -85,7 +83,7 @@ background-color: #010153;
   justify-content:flex-start;
   align-items: center ;
   font-weight: bold;
-  opacity:1;
+  margin: 0 auto;
   position: relative;
 right:0;
 transition: all 0.5s;
@@ -124,10 +122,11 @@ span, p{
   justify-content:space-between;
 }
 
-#debug{outline: 1px solid transparent;
+#debug{outline: 1px solid transparent ;
  font-size: 1.2rem;
-  margin-top:3vw;
-  margin-left:0;
+ /* margin-top:3vw;
+  margin-left:0; */
+  margin: 0.3rem auto;
   display:flex;
   flex-direction: column;
   flex-wrap: nowrap;
@@ -159,6 +158,9 @@ margin:0 auto;
  
  #test, #test2, #test3{
    margin:1vw;
+   position: absolute;
+   right:.5rem;
+   bottom: 1rem;
  }
  
  #test{
@@ -209,7 +211,7 @@ margin-left:7rem ;
 list-style:none;
 }
 
-.datum{
+.datum{outline: 1px solid transparent ;
 margin-left: 7rem;
 color:white ;
 background-color:rgb(0,128,0,0.3);
@@ -218,6 +220,12 @@ border:none ;
 text-align:right;
 margin-right: 1rem;
 font-weight:bold;
+}
+
+#none-decimals{
+display:inline-block;
+min-width: 4.46rem;
+padding-right:0;
 }
 
 #format-buttons{
