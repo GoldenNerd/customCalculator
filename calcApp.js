@@ -343,6 +343,9 @@ keyPressedMC=false;
 return;
 }
 
+//  **** FORMAT MODE BEHAVIOR ****
+
+// Format mode display behavior. This is upon pressing the red "X" button.
 function exitFormatMode (){
 formatModal.style.position='absolute';
 formatModal.style.height='fit-content';
@@ -376,9 +379,14 @@ keyBoard.style.position='absolute';
 keyBoard.style.right='101vw';
 // At launch time, preserve LCD value to be used by applyFormat()
 // Adding zero before saving removes all trailing zeroes, and removes repeat leading zeroes
+if(lcd.innerHTML===null){
+defaultDigits.innerHTML=null;
+}else if (lcd.innerHTML==='0'){
+defaultDigits.value=0;
+}else{
 lcdBackup=parseFloat(lcd.innerHTML)+0;
 lcd.innerHTML=lcdBackup;
-defaultDigits.value=decimalCount(lcdBackup)-1;
+defaultDigits.innerHTML=decimalCount(lcdBackup)-1;}
 return;
 }
 const keyBoard=document.querySelector('#keys');
@@ -387,23 +395,12 @@ const formatModal=document.querySelector('#format-modal');
 const defaultChoice=document.querySelector('#none-choice');
 const roudOffChoice=document.querySelector('#round-choice');
 const exponentialChoice=document.querySelector('#exponent-choice');
-const scientificChoice=document.querySelector('#scientific-choice');
+//const scientificChoice=document.querySelector('#scientific-choice');
 
 const defaultDigits=document.querySelector('#none-decimals');
 const roundOffDigits=document.querySelector('#decimals');
 const exponentialDigits=document.querySelector('#exponent-digits');
-const scientificDigits=document.querySelector('#scientific-choice');
-
-// Determine sign of exponential notation
-function expSign(){
-let sign;
-if(parseInt(exponentialDigits.value)<0){
-sign='';
-}else{
-sign='+';
-}
-return sign;
-}
+// const scientificDigits=document.querySelector('#scientific-choice');
 
 // Round-off for round-off format choice
 function roundOff(num){
@@ -416,6 +413,7 @@ function hasDot(num){
 const dotIsPresent=num.toString().includes('.');
 return dotIsPresent;
 } 
+
 // Determine the amount of digits in a number
 let digitsCount=(num)=>{
 num=num.toString();
@@ -463,10 +461,27 @@ return zeroesCount;
 }
 }
 
-// Digits count not including leading edge zero, if present
-function significantDigitsCount(num){
 
-return;
+function reverseString(str) {
+ const reversedStr=str.split("").reverse().join("");
+return reversedStr;
+}
+
+function rightmostZeroCounter(num){
+// Stringify number
+const strNum=num.toString();
+// Reverse stringified number
+let revStrNum=reverseString(strNum);
+const rightZeroesCount=leftmostZeroCounter(revStrNum);
+console.log('rightZeroesCount: ', rightZeroesCount);
+return rightZeroesCount;
+}
+
+// Digits count not including leading edge zero, if present
+function significantDigitsCount(){
+const sigDigits=digitsCount(lcdBackup)-leftmostZeroCounter(lcdBackup)-rightmostZeroCounter(lcdBackup);
+console.log('sigDigits: ', sigDigits);
+return sigDigits;
 }
 
 function applyFormat(){
@@ -479,24 +494,15 @@ lcd.innerHTML=roundOff(lcdBackup);
 return;
 
 }else if(exponentialChoice.checked){
-const shifted=lcdBackup/(10 ** exponentialDigits.value);
-const digits=roundOff(shifted);
-lcd.innerHTML=`${digits}e${expSign()}${exponentialDigits.value}`;
-return;
+  lcd.innerHTML=parseFloat(lcdBackup).toExponential(parseFloat(significantDigitsCount()-1));
+return ;
 
-}else if(scientificChoice.checked){
-//digitsCount(lcdBackup);
-const integerCount=digitsCount(lcdBackup)-decimalCount(lcdBackup);
-console.log('leftmostDigit: ', lcdBackup.toString().slice(0,1));
-if(lcdBackup.toString().slice(0,1)==='0'){
-const exponent=integerCount;
-console.log('exponent: ', exponent);
 }else{
 const exponent=integerCount-1;
 console.log('exponent: ', exponent);
 }
 }
-}
+
 
 const goBtn=document.querySelector('#apply-format');
 goBtn.addEventListener('click', applyFormat);
@@ -996,12 +1002,27 @@ main();
 }
 return;
 }
+
 // Test
 function test(){
-console.log('testing num.toFixed():');
-console.log((parseFloat(lcdBackup).toFixed(15)).toString());
 
- 
+function reverseString(str) {
+ const reversedStr=str.split("").reverse().join("");
+return reversedStr;
+}
+
+function rightmostZeroCounter(num){
+// Stringify number
+const strNum=num.toString();
+// Reverse stringified number
+let revStrNum=reverseString(strNum);
+const rightZeroesCount=leftmostZeroCounter(revStrNum);
+console.log('rightZeroesCount: ', rightZeroesCount);
+return rightZeroesCount;
+}
+
+let num=33200000.0000;
+rightmostZeroCounter(num);
 }
 const testBtn=document.querySelector ('#test');
 testBtn.addEventListener('click', test);
