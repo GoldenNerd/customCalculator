@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!DOCTYPE html> 
 <html lang="en"> 
 <head> 
   <meta charset="UTF-8">
@@ -14,33 +14,21 @@
 </div>
    <!-- MODAL OF APP: -->
 <div id=format-modal>
-
-
-  <h2>Select your Format</h2>
+  <h2>Re-format your number to:</h2>
   
 <div id="format">
-
  <ul class="choices">
-   <li> <label><input type="radio" name="choice" id="none-choice" class="choice" value="" checked/> none</label></li>
-   <li> <label><input type="radio" name="choice" id="round-choice" class="choice" value="" /> round-off</label></li>
-   <li> <label><input type="radio" class="choice" name="choice" id="exponent-choice" value=""/> exponent notation</label></li>
-   <li> <label><input type="radio" class="choice" name="choice" id="scientific-choice" value="" /> scientific notation</label></li>
+   <li> <label><input type="radio" name="choice" id="none-choice" class="choice" value="" checked/> fixed format</label></li>
+   <li> <label><input type="radio" name="choice" id="round-choice" class="choice" value="" /> rounded-off format</label></li>
+   <li> <label><input type="radio" class="choice" name="choice" id="exponent-choice" value=""/> scientific notation</label></li>
+   <!--   <li> <label><input type="radio" class="choice" name="choice" id="scientific-choice" value="" /> scientific notation</label></li>
+    -->
  </ul>
  
- <h2>Enter Parameters for your Format</h2>
-   
+ <h2>Enter Parameters for your Format</h2> 
+
 <div id="normal-panel">
- <label><input
-          type="number"
-          name="num"
-          class="datum" 
-          id="none-decimals"
-          placeholder="Num."
-          value="3"
-          min="0"
-          max="13"
-          step="1"
-        /> decimal places</label>
+ <span class="datum" id="none-decimals"> Num.</span> decimal places
 </div>
 <div id="round-panel">
  <label><input
@@ -55,7 +43,7 @@
           step="1"
         /> round-off decimals</label>
 </div>
-<div id="exponent-panel">
+<!--<div id="exponent-panel">
  <label><input
           type="number"
           name="num"
@@ -66,9 +54,9 @@
           min="0"
           max="13"
           step="1"
-        /> exponent</label>
+        /> decimal places</label>
 </div>
-<div id="scientific-panel">
+ <div id="scientific-panel">
  <label><input
           type="number"
           name="num"
@@ -81,6 +69,7 @@
           step="1"
         /> significant figures</label>
 </div>
+ -->
 </div>
 
 <div id="format-buttons">
@@ -90,16 +79,12 @@
 </div>
 
 </div>
-  
+ 
  <!-- MAIN BODY OF APP: -->
  <div id="keys">
-  <input type="button" class="key" id="ms" value="MS">
-  <input type="button" class="key" id="mr" value="MR">
-  <input type="button" class="key" id="mc" value="MC">
-  <input type="button" class="key" id="scissors1" value="&#x2704;">
-  <input type="button" class="key" id="clear" value="C">
   <input type="button" class="key" id="percentage" value="%">
-  <input type="button" class="key" id="change-sign" value="&#177;">
+<input type="button" class="key" id="square" value="x²">
+ <input type="button" class="key" id="sqrt" value="&#x221a;">
   <input type="button" class="key" id="divide" value="&#247;">
   <input type="button" class="key" id="key9" value="9">
   <input type="button" class="key" id="key8" value="8">
@@ -115,13 +100,21 @@
   <input type="button" class="key" id="sum" value="+">
   <input type="button" class="key" id="key0" value="0">
   <input type="button" class="key" id="dotKey" value="&middot;">
-  <input type="button" class="key" id="square" value="x²">
-  <input type="button" class="key" id="sqrt" value="&#x221a;">
-  <button class="key"><a href="help.html" id="help">&#x3f;</a></button>
-  <input type="button" class="key" id="invert" value="1/x">
+  <input type="button" class="key" id="change-sign" value="&#177;">
+ <input type="button" class="key" id="equal" value="=">
+ 
+
+
+ <button class="key"><a href="help.html" id="help">&#x3f;</a></button>
+ 
+ <input type="button" class="key" id="invert" value="1/x">
    <!-- x&#x207b;&#xb9; -->
   <input type="button" class="key" id="backspace" value="&#x232b;">
-  <input type="button" class="key" id="equal" value="=">
+ <input type="button" class="key" id="clear" value="C">
+    <input type="button" class="key" id="ms" value="MS">
+  <input type="button" class="key" id="mr" value="MR">
+  <input type="button" class="key" id="mc" value="MC">
+  <input type="button" class="key" id="scissors1" value="&#x2704;">
  </div>
  
 
