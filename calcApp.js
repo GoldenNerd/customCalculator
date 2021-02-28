@@ -96,7 +96,7 @@ percentAccDebug.innerHTML = finalResult;
 lastOpDispl.innerHTML = operator;
 currentOpKeyDebug.innerHTML =operator;
 lcdDebug.innerHTML = lcd.innerHTML;
-subTot.innerHTML=subtotal;// @@@@
+subTot.innerHTML=subtotal;
 return;
 }
 
@@ -152,7 +152,7 @@ keyMC.addEventListener('click', () =>{
   keyPressedMC=true;
   memory();});
   
-keyFormat.addEventListener('click', launchFormatMode);
+keyFormat.addEventListener('click', enterFormatMode);
 
 // Key Presses - Event listeners for unary key presses:
 clearKey.addEventListener('click', () =>{clear();});
@@ -293,7 +293,7 @@ equalKey.addEventListener('click', ()=>{
 });
 
 function memRecall (){
-// Preset the environment @@@
+// Preset the environment
 keyPressedUnary=true;
 keyPressedNumber=true;
 keyPressed=memorized;// Treat memorized number as a regular number key press
@@ -304,9 +304,8 @@ keyPressedMR=false;
 return;
 }
 
-// Misc functions
+// Memory behavior (MS, MC, MR)
 let lcdToViewMemory=document.querySelector('#lcd-to-view-memory');
-
 function memory (){
 // Save LCD to memory
 if(keyPressedMS){
@@ -345,64 +344,52 @@ return;
 
 //  **** FORMAT MODE BEHAVIOR ****
 
-// Format mode display behavior. This is upon pressing the red "X" button.
-function exitFormatMode (){
-formatModal.style.position='absolute';
-formatModal.style.height='fit-content';
-formatModal.style.left='-101vw';
-keyBoard.style.position='relative';
-keyBoard.style.right='0';
-return;
-}
-const quitBtn=document.querySelector('#quit-format');
-quitBtn.addEventListener('click', exitFormatMode);
-//@@@@
-
+// Count the decimal places of a number
 const decimalCount = num => {
    // Convert to String
    const numStr = String(num);
    // String Contains Decimal
    if (numStr.includes('.')) {
-      return numStr.split('.')[1].length+1;
+      return numStr.split('.')[1].length;
    }
    // String Does Not Contain Decimal
    return 0;
 };
 
+// Preserve the number displayed on the LCD
 let lcdBackup;
-function launchFormatMode (){
-// Change appearance of number displayed without changing the finalResult source number. 
+const originalDigits=document.querySelector('#original-format-decimals');
+const backupNumDisplayed=()=>{
+console.log('lcd.innerHTML', lcd.innerHTML);
+if(lcd.innerHTML===''){
+originalDigits.innerHTML=null;
+}else if (lcd.innerHTML==='0'){
+originalDigits.value=0;
+}else{
+// Adding zero before saving removes all trailing zeroes, and removes repeat leading zeroes
+// lcdBackup=parseFloat(lcd.innerHTML)+0;
+lcdBackup=lcd.innerHTML;
+lcd.innerHTML=lcdBackup;
+originalDigits.innerHTML=decimalCount(lcdBackup);}
+return};
+
+// Enter Format Mode display. This is upon pressing the green "Go" button.
+const formatModal=document.querySelector('#format-modal');
+const keyBoard=document.querySelector('#keys');
+function enterFormatMode (){
 formatModal.style.position='relative';
 formatModal.style.height='fit-content';
 formatModal.style.left='0';
 keyBoard.style.position='absolute';
 keyBoard.style.right='101vw';
-// At launch time, preserve LCD value to be used by applyFormat()
-// Adding zero before saving removes all trailing zeroes, and removes repeat leading zeroes
-if(lcd.innerHTML===null){
-defaultDigits.innerHTML=null;
-}else if (lcd.innerHTML==='0'){
-defaultDigits.value=0;
-}else{
-lcdBackup=parseFloat(lcd.innerHTML)+0;
-lcd.innerHTML=lcdBackup;
-defaultDigits.innerHTML=decimalCount(lcdBackup)-1;}
+// Preserve the original number displayed on the LCD. Will be used latter by applySelectedFormat()
+backupNumDisplayed();
+stdScientificDigitCount();
 return;
 }
-const keyBoard=document.querySelector('#keys');
-const formatModal=document.querySelector('#format-modal');
 
-const defaultChoice=document.querySelector('#none-choice');
-const roudOffChoice=document.querySelector('#round-choice');
-const exponentialChoice=document.querySelector('#exponent-choice');
-//const scientificChoice=document.querySelector('#scientific-choice');
-
-const defaultDigits=document.querySelector('#none-decimals');
+// Round-off for round-off format
 const roundOffDigits=document.querySelector('#decimals');
-const exponentialDigits=document.querySelector('#exponent-digits');
-// const scientificDigits=document.querySelector('#scientific-choice');
-
-// Round-off for round-off format choice
 function roundOff(num){
 const roundedOff=Math.round(num*10**roundOffDigits.value)/(10**roundOffDigits.value);
 return roundedOff;
@@ -461,7 +448,6 @@ return zeroesCount;
 }
 }
 
-
 function reverseString(str) {
  const reversedStr=str.split("").reverse().join("");
 return reversedStr;
@@ -478,14 +464,22 @@ return rightZeroesCount;
 }
 
 // Digits count not including leading edge zero, if present
-function significantDigitsCount(){
+function scientificDigitsCount(){
 const sigDigits=digitsCount(lcdBackup)-leftmostZeroCounter(lcdBackup)-rightmostZeroCounter(lcdBackup);
-console.log('sigDigits: ', sigDigits);
 return sigDigits;
 }
 
-function applyFormat(){
-if (defaultChoice.checked) {
+// Display std scientific number of digits
+const ScientificDigitsDisplay=document. querySelector('#significant');
+function stdScientificDigitCount(){
+ScientificDigitsDisplay.value=scientificDigitsCount();}
+
+// Change format of number displayed without altering its value.
+const originalFormatChoice=document.querySelector('#original-format-choice');
+const roudOffChoice=document.querySelector('#roundoff-choice');
+const exponentialChoice=document.querySelector('#exponential-choice');
+function applySelectedFormat(){
+if (originalFormatChoice.checked) {
 lcd.innerHTML=lcdBackup;
 return;
 
@@ -494,19 +488,29 @@ lcd.innerHTML=roundOff(lcdBackup);
 return;
 
 }else if(exponentialChoice.checked){
-  lcd.innerHTML=parseFloat(lcdBackup).toExponential(parseFloat(significantDigitsCount()-1));
+  lcd.innerHTML=parseFloat(lcdBackup).toExponential(parseInt(ScientificDigitsDisplay.value-1));
 return ;
 
 }else{
-const exponent=integerCount-1;
-console.log('exponent: ', exponent);
+// NOP
+// const exponent=integerCount-1;
+// console.log('exponent: ', exponent);
 }
 }
-
-
 const goBtn=document.querySelector('#apply-format');
-goBtn.addEventListener('click', applyFormat);
+goBtn.addEventListener('click', applySelectedFormat);
 
+// Format mode display exit behavior. This is upon pressing the red "X" button.
+function exitFormatMode (){
+formatModal.style.position='absolute';
+formatModal.style.height='fit-content';
+formatModal.style.left='-101vw';
+keyBoard.style.position='relative';
+keyBoard.style.right='0';
+return;
+}
+const quitBtn=document.querySelector('#quit-format');
+quitBtn.addEventListener('click', exitFormatMode);
 
 // functions called by Main
 function appendDigit (){// Also appends dot
@@ -521,7 +525,7 @@ operand1=operand1.concat(keyPressed);
 operand1=operand1.concat(keyPressed);
 }
 lcd.innerHTML=operand1;
-subtotal=operand1;// @@@@
+subtotal=operand1;
 subTot.innerHTML=operand1;
 }else{
 if(keyPressed==='.' && operand2===null){
@@ -935,7 +939,7 @@ assertOperation(keyPressed);
 const assertedOperation=assertOperation(keyPressed);
 // Feed main() with restored environment:
 main();
-subtotal=operand1;// @@@@
+subtotal=operand1;
 subTot.innerHTML=operand1;
 return;
 }else if(operand1!==null && operand2!==null && finalResult===null &&!keyPressedUnary){
@@ -968,7 +972,7 @@ assertOperation(keyPressed);
 const assertedOperation=assertOperation(keyPressed);
 // calling switchCalcModes()
 switchCalcModes();
-subtotal=operand1;//@@@
+subtotal=operand1;
 subTot.innerHTML=operand1;
 return;
 // Mode3: Entry of a number after final result (in other words, after pressing the equals. This signals an intention to start a whole new calculation. 
@@ -994,7 +998,7 @@ keyPressed=preservedKeyPressed;
 
 // Process the number entry as usual
 switchCalcModes();
-subtotal=operand1;// @@@@
+subtotal=operand1;
 subTot.innerHTML=operand1;
 return;
 }else{
