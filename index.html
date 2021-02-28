@@ -1,6 +1,6 @@
 <!DOCTYPE html> 
 <html lang="en"> 
-<head> 
+<head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
@@ -15,21 +15,21 @@
    <!-- MODAL OF APP: -->
 <div id=format-modal>
   <h2>Re-format your number to:</h2>
-  
+ 
 <div id="format">
  <ul class="choices">
-   <li> <label><input type="radio" name="choice" id="none-choice" class="choice" value="" checked/> fixed format</label></li>
-   <li> <label><input type="radio" name="choice" id="round-choice" class="choice" value="" /> rounded-off format</label></li>
-   <li> <label><input type="radio" class="choice" name="choice" id="exponent-choice" value=""/> scientific notation</label></li>
+   <li> <label><input type="radio" name="choice" id="original-format-choice" class="choice" value="" checked/> original format</label></li>
+   <li> <label><input type="radio" name="choice" id="roundoff-choice" class="choice" value="" /> rounded-off format</label></li>
+   <li> <label><input type="radio" class="choice" name="choice" id="exponential-choice" value=""/> scientific notation</label></li>
    <!--   <li> <label><input type="radio" class="choice" name="choice" id="scientific-choice" value="" /> scientific notation</label></li>
-    -->
+    --> 
  </ul>
- 
- <h2>Enter Parameters for your Format</h2> 
 
-<div id="normal-panel">
- <span class="datum" id="none-decimals"> Num.</span> decimal places
-</div>
+ <h2>Enter Parameters for your Format</h2> 
+ 
+<div id="original-panel">
+ <span class="datum" id="original-format-decimals"> Num.</span> original decimal places
+</div> 
 <div id="round-panel">
  <label><input
           type="number"
@@ -37,18 +37,33 @@
           class="datum" 
           id="decimals"
           placeholder="Num."
-          value="4"
+          value=""
           min="0"
           max="13"
           step="1"
         /> round-off decimals</label>
 </div>
+<div id="scientific-panel">
+ <label><input
+          type="number"
+          name="num"
+          class="datum" 
+          id="significant"
+          placeholder="Num."
+          value=""
+          min="0"
+          max="13"
+          step="1"
+        /> significant figures</label>
+</div>
+
+
 <!--<div id="exponent-panel">
  <label><input
           type="number"
           name="num"
           class="datum" 
-          id="exponent-digits"
+          id="exponential-digits"
           placeholder="Num."
           value="3"
           min="0"
@@ -56,19 +71,7 @@
           step="1"
         /> decimal places</label>
 </div>
- <div id="scientific-panel">
- <label><input
-          type="number"
-          name="num"
-          class="datum" 
-          id="significant"
-          placeholder="Num."
-          value="7"
-          min="0"
-          max="13"
-          step="1"
-        /> significant figures</label>
-</div>
+ 
  -->
 </div>
 
