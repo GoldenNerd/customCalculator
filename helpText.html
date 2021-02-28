@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+</head>
+<body>
+  <p>Digit Keys
+Normally, each time a digit key is pressed, the corresponding digit will be added to the right hand side of the digits on display.
+
+Exeption1 - calculator is operating on Mode1 
+If digit key is pressed immediately after pressing the equals key, the result on display will be replaced by the key digit pressed. The new digit will signal start of a new calculation. Consequently then digit will be the first of the next operand.
+
+Exeption2 - calculator is operating on Mode2
+If digit key is pressed immediately after pressing a binary operator, the new digit will show on the display as the first digit of the next operand.
+
+The following are considered digit keys:
+1, 2, 3, 4, 5, 6, 7, 8, 9, 0,  .
+
+Unary Operators 
+At any point in time user can press a unary operator key. These unary operators require a single operand. The operand will always be whatever is on the calculator display. 
+The result will show on display immediately after pressing the unary operator key.
+The following are the unary operators: 
+change sign
+backspace
+1/x
+square root
+square
+
+Binary operators
+To be successful, binary operators require two operands.
+The mandatory order (from left to right) is: 
+1st operand  operator  2nd operand
+The following are considered binary operators:
++  -  x  /  %
+
+MS
+The number on display will be saved in a memory container for later retrieval to the display. Anything that is in memory at the time MS is pressed will be overwritten. 
+
+MR
+A number previously saved to the memory container will be retrieved and shown on the display. Anything that is on display at the time MR is pressed, will be overwritten.
+
+MC
+Number saved in the memory container will be erased and consequently the result will be an empty memory location. 
+
+scissors key
+Special mode to chance the format of the number on display. 
+Also used to round off numbers to the desired number of decimal places. 
+
+?
+Press to enter the calculator help mode.
+
+Operating modes of the calculator
+
+Mode0
+Calculator accepts new digits and performs unary operations.
+
+Mode1
+operand1, binary Operator key, operand2, equals key
+The equals key is pressed after every "operand operator operand" sequence.
+
+Mode3
+operand1, binary Operator key, operand2, operator key, ... and so on.
+A final result is obtained once the equals key is pressed.
+In the meantime, intermediate result is kept in a subtotal container.
+
+Automode
+By default, the calculator operates in automode. Meaning that it will switch from one mode to another according to the keys sequence presses of the user.
+
+C
+Erase all previously entered values, operators, and results.
+Memory container is not affected by this "Clear". Memory can only change using the MS or MC keys.
+
+=
+Signals the calculator to complete all pending operations and display a final result.
+Note:
+If "=" is pressed subsequently, the calculator will enter a "Recycle Mode".
+
+Recycle Mode
+Special calculator mode, that allows modifications of a final result on the display. After modified, the altered final result may be used as the first operand of next calculation.
+The possible modifications are:
+change sign
+add digits to the right
+backspace rightmost digits one at a time
+Aside:
+A special icon will display to signal calculator entry to recycle mode.
+
+last operator
+The upper left corner will show the last operator that was entered, or  programmatically executed.
+
+display
+Rectangular upper area of the calculator. Used to display numbers in process and results.
+
+notifications area
+Rectangular area at the bottom of the calculator to display error messages once they occur.
+
+List of errors that calculator detects
+- repeat dots
+- repeat binary operators
+- attempt to divide by zero
+- attempt to square root a negative number
+- very 1st key pressed was not a number key
+- pressing equals key with insufficient entries to complete a binary operation.
+
+recovery from errors 
+- Green error means it is possible to recover from the error
+- Red error means user has to press Clear key to start the calculation all over again. 
+
+subtotal display
+
+
+memory display
+
+
+fixed format
+
+
+ rounded-off format
+
+
+ scientific notation
+
+
+decimal places
+
+
+GLOSSARY:
+final result - 
+
+number - 
+
+digit -  In the context of this calculator app, a digit, as opposed to number is a single character number or a dot. A digit is injected to the calculator when the user presses a digit key. Digit keys are are labeled 0 through 9, plus the dot key. 
+
+number - A number is a group of digits that may or may not include a single dot, or a negative sign. It can also be a single digit, with or without a dot or a sign.
+
+format - 
+
+operand - 
+
+ round-off decimals - 
+</p>
+</body>
+</html>
