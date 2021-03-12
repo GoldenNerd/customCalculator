@@ -35,13 +35,13 @@ let keyPressedFormat=false;
 const currentOpKeyDebug = document.querySelector('#last-op-debug');
 const lcdDebug = document.querySelector('#lcd-debug');
 const inpBufferDebug = document.querySelector('#inpBufferDebug');
-const mainAccDebug = document.querySelector('#mainAccDebug');
+// const mainAccDebug = document.querySelector('#mainAccDebug');
 const sumAccDebug = document.querySelector('#sumAccDebug');
-const minusAccDebug = document.querySelector('#minusAccDebug');
+// const minusAccDebug = document.querySelector('#minusAccDebug');
 const multAccDebug = document.querySelector('#multAccDebug');
-const divAccDebug = document.querySelector('#divAccDebug');
+// const divAccDebug = document.querySelector('#divAccDebug');
 const percentAccDebug = document.querySelector('#prcntAccDebug');
-const dotAccDebug = document.querySelector('#dotAccDebug');
+// const dotAccDebug = document.querySelector('#dotAccDebug');
 const subTot=document.querySelector('#sub-tot');
 
 // Grab memory and format keys
@@ -360,7 +360,7 @@ const decimalCount = num => {
 let lcdBackup;
 const originalDigits=document.querySelector('#original-format-decimals');
 const backupNumDisplayed=()=>{
-console.log('lcd.innerHTML', lcd.innerHTML);
+//console.log('lcd.innerHTML', lcd.innerHTML);
 if(lcd.innerHTML===''){
 originalDigits.innerHTML=null;
 }else if (lcd.innerHTML==='0'){
@@ -387,6 +387,32 @@ backupNumDisplayed();
 stdScientificDigitCount();
 return;
 }
+// @@@
+
+// show or hide round-off panel
+const roundOffPanel=document.querySelector('#round-panel');
+const scientificPanel=document.querySelector('#scientific-panel');
+function hideScientificPanel (){
+scientificPanel.style.opacity='0';
+}
+function showRoudOffPanel (){
+roundOffPanel.style.opacity='1';
+hideScientificPanel();
+}
+const roundOffChoice=document.querySelector('#roundoff-choice');
+roundOffChoice.addEventListener('click', showRoudOffPanel);
+
+// show or hide scientific panel
+function hideRoundOffPanel (){
+roundOffPanel.style.opacity='0';
+}
+function showScientificfPanel (){
+scientificPanel.style.opacity='1';
+hideRoundOffPanel();
+}
+const scientificChoice=document.querySelector('#scientific-choice' );
+scientificChoice.addEventListener('click', showScientificfPanel);
+
 
 // Round-off for round-off format
 const roundOffDigits=document.querySelector('#decimals');
@@ -474,21 +500,38 @@ const ScientificDigitsDisplay=document. querySelector('#significant');
 function stdScientificDigitCount(){
 ScientificDigitsDisplay.value=scientificDigitsCount();}
 
+function supplantOrigOperand (changedNum){
+if(operator===null){
+operand1=changedNum.toString();
+lcd.innerHTML=operand1;
+}else{
+operand2=changedNum.toString();
+lcd.innerHTML=operand2;
+}
+updDebug();
+lastOpDispl.innerHTML = '&#x2704;';
+return;
+
+}
+
 // Change format of number displayed without altering its value.
 const originalFormatChoice=document.querySelector('#original-format-choice');
-const roudOffChoice=document.querySelector('#roundoff-choice');
-const exponentialChoice=document.querySelector('#exponential-choice');
+
+// const scientificChoice=document.querySelector('#scientific-choice');
 function applySelectedFormat(){
 if (originalFormatChoice.checked) {
-lcd.innerHTML=lcdBackup;
+// lcd.innerHTML=lcdBackup;
+supplantOrigOperand(lcdBackup);
 return;
 
-}else if(roudOffChoice.checked){
-lcd.innerHTML=roundOff(lcdBackup);
+}else if(roundOffChoice.checked){
+const roundedNum=roundOff(lcdBackup);
+supplantOrigOperand(roundedNum);
 return;
 
-}else if(exponentialChoice.checked){
-  lcd.innerHTML=parseFloat(lcdBackup).toExponential(parseInt(ScientificDigitsDisplay.value-1));
+}else if(scientificChoice.checked){
+  const scientificNum=parseFloat(lcdBackup).toExponential(parseInt(ScientificDigitsDisplay.value-1));
+supplantOrigOperand(scientificNum);
 return ;
 
 }else{
