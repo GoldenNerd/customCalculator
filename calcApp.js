@@ -152,7 +152,11 @@ keyMC.addEventListener('click', () =>{
   keyPressedMC=true;
   memory();});
   
-keyFormat.addEventListener('click', enterFormatMode);
+keyFormat.addEventListener('click', enterFormatModal);
+// Preserve the original number displayed on the LCD. Will be used latter by applySelectedFormat()
+keyFormat.addEventListener('click', backupNumDisplayed);
+keyFormat.addEventListener('click', stdScientificDigitCount);
+
 
 // Key Presses - Event listeners for unary key presses:
 clearKey.addEventListener('click', () =>{clear();});
@@ -359,7 +363,7 @@ const decimalCount = num => {
 // Preserve the number displayed on the LCD
 let lcdBackup;
 const originalDigits=document.querySelector('#original-format-decimals');
-const backupNumDisplayed=()=>{
+function backupNumDisplayed (){
 //console.log('lcd.innerHTML', lcd.innerHTML);
 if(lcd.innerHTML===''){
 originalDigits.innerHTML=null;
@@ -371,49 +375,83 @@ originalDigits.value=0;
 lcdBackup=lcd.innerHTML;
 lcd.innerHTML=lcdBackup;
 originalDigits.innerHTML=decimalCount(lcdBackup);}
-return};
+return}
 
-// Enter Format Mode display. This is upon pressing the green "Go" button.
+// Enter Format Modal. This is upon pressing the green "Go" button.
 const formatModal=document.querySelector('#format-modal');
 const keyBoard=document.querySelector('#keys');
-function enterFormatMode (){
+function enterFormatModal (){
 formatModal.style.position='relative';
 formatModal.style.height='fit-content';
 formatModal.style.left='0';
 keyBoard.style.position='absolute';
 keyBoard.style.right='101vw';
-// Preserve the original number displayed on the LCD. Will be used latter by applySelectedFormat()
-backupNumDisplayed();
-stdScientificDigitCount();
 return;
 }
-// @@@
 
-// show or hide round-off panel
+// SHOW OR HIDE CHOICES AND PANELS:
+// Firstly grab needed elements
+const originalFormatChoice=document.querySelector('li:first-child');
+const roundOffChoice=document.querySelector('#roundoff-choice');
+const scientificChoice=document.querySelector('#scientific-choice' );
+const originalPanel=document.querySelector('#original-panel');
 const roundOffPanel=document.querySelector('#round-panel');
 const scientificPanel=document.querySelector('#scientific-panel');
-function hideScientificPanel (){
-scientificPanel.style.opacity='0';
+// All hide functions:
+function hideOriginalChoice (){
+originalFormatChoice.style.opacity='0';
 }
-function showRoudOffPanel (){
-roundOffPanel.style.opacity='1';
-hideScientificPanel();
+function hideOriginalPanel (){
+originalPanel.style.opacity='0';
 }
-const roundOffChoice=document.querySelector('#roundoff-choice');
-roundOffChoice.addEventListener('click', showRoudOffPanel);
-
-// show or hide scientific panel
 function hideRoundOffPanel (){
 roundOffPanel.style.opacity='0';
 }
+function hideScientificPanel (){
+scientificPanel.style.opacity='0';
+}
+// All show functions
+function showFixedFormatChoice (){
+originalFormatChoice.style.opacity='1';
+}
+function showFixedPanel (){
+originalPanel.style.opacity='1';
+hideRoundOffPanel();
+hideScientificPanel();
+}
+originalFormatChoice.addEventListener('click', showFixedPanel);
+// @
+const originalFormatRadioBtn=document. querySelector('#original-format-choice');
+originalFormatRadioBtn.addEventListener('click', applySelectedFormat);
+
+function showRoudOffPanel (){
+roundOffPanel.style.opacity='1';
+hideOriginalPanel();
+hideScientificPanel();
+}
+roundOffChoice.addEventListener('click', showRoudOffPanel);
 function showScientificfPanel (){
 scientificPanel.style.opacity='1';
+hideOriginalPanel();
 hideRoundOffPanel();
 }
-const scientificChoice=document.querySelector('#scientific-choice' );
 scientificChoice.addEventListener('click', showScientificfPanel);
 
+// Reset panels and choices view to initial (default) state
 
+function initModalState (){
+hideOriginalChoice();
+hideOriginalPanel();
+hideRoundOffPanel();
+hideScientificPanel();
+originalFormatRadioBtn.checked=true;
+roundOffChoice.checked=false;
+scientificChoice.checked=false;
+lcdBackup='';
+originalDigits.value='';
+roundOffDigits.value='';
+ScientificDigitsDisplay.value='';
+}
 // Round-off for round-off format
 const roundOffDigits=document.querySelector('#decimals');
 function roundOff(num){
@@ -432,22 +470,22 @@ let digitsCount=(num)=>{
 num=num.toString();
 if(hasDot(num) && num<0){// -0.1
 const digitCount=num.length-2;
-console.log('digitCount: ', digitCount);
+// console.log('digitCount: ', digitCount);
 return digitCount;
 
 }else if(hasDot(num) && num>=0){// 0.4
 const digitCount=num.length-1;
-console.log('digitCount: ', digitCount);
+// console.log('digitCount: ', digitCount);
 return digitCount;
 
 }else if(!hasDot(num) && num<0){// -1
 const digitCount=num.length-1;
-console.log('digitCount: ', digitCount);
+// console.log('digitCount: ', digitCount);
 return digitCount;
 
 }else if(!hasDot(num) && num>=0){// 1
 const digitCount=num.length;
-console.log('digitCount: ', digitCount);
+// console.log('digitCount: ', digitCount);
 return digitCount;
 }else{
 // NOP
@@ -466,9 +504,9 @@ if(character==='0'){
 zeroesCount++;
 }else if(character==='0'||character==='.'){
 num=num.slice(0,1);
-console.log('num', num);
+// console.log('num', num);
 }else{
-console.log('zeroesCount', zeroesCount);
+// console.log('zeroesCount', zeroesCount);
 return zeroesCount;
 }
 }
@@ -485,7 +523,7 @@ const strNum=num.toString();
 // Reverse stringified number
 let revStrNum=reverseString(strNum);
 const rightZeroesCount=leftmostZeroCounter(revStrNum);
-console.log('rightZeroesCount: ', rightZeroesCount);
+// console.log('rightZeroesCount: ', rightZeroesCount);
 return rightZeroesCount;
 }
 
@@ -515,12 +553,13 @@ return;
 }
 
 // Change format of number displayed without altering its value.
-const originalFormatChoice=document.querySelector('#original-format-choice');
 
 // const scientificChoice=document.querySelector('#scientific-choice');
+
 function applySelectedFormat(){
-if (originalFormatChoice.checked) {
+if (originalFormatRadioBtn.checked) {
 // lcd.innerHTML=lcdBackup;
+console.log({lcdBackup});
 supplantOrigOperand(lcdBackup);
 return;
 
@@ -542,9 +581,9 @@ return ;
 }
 const goBtn=document.querySelector('#apply-format');
 goBtn.addEventListener('click', applySelectedFormat);
-
+goBtn.addEventListener('click', showFixedFormatChoice);
 // Format mode display exit behavior. This is upon pressing the red "X" button.
-function exitFormatMode (){
+function exitFormatModal (){
 formatModal.style.position='absolute';
 formatModal.style.height='fit-content';
 formatModal.style.left='-101vw';
@@ -553,7 +592,8 @@ keyBoard.style.right='0';
 return;
 }
 const quitBtn=document.querySelector('#quit-format');
-quitBtn.addEventListener('click', exitFormatMode);
+quitBtn.addEventListener('click', exitFormatModal);
+quitBtn.addEventListener('click', initModalState);
 
 // functions called by Main
 function appendDigit (){// Also appends dot
@@ -1064,7 +1104,7 @@ const strNum=num.toString();
 // Reverse stringified number
 let revStrNum=reverseString(strNum);
 const rightZeroesCount=leftmostZeroCounter(revStrNum);
-console.log('rightZeroesCount: ', rightZeroesCount);
+// console.log('rightZeroesCount: ', rightZeroesCount);
 return rightZeroesCount;
 }
 
