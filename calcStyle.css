@@ -236,3 +236,7 @@ flex-wrap:nowrap;
 justify-content:space-between;
 align-items:flex-start;
 }
+/* panel control to show/hide choices */
+li:first-child, #original-panel, #round-panel, #scientific-panel{
+opacity: 0;
+}
