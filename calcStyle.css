@@ -22,7 +22,7 @@ height: 24vw;
 margin: 0 auto;
 padding-right: 0.1em;
  background-color: rgb(11,11,95);
- color: white;
+ color: #c0c0c0;
  border: 1px solid black;
 border-radius:10%;
 font-size: 13vw;
@@ -44,10 +44,10 @@ line-height: 180%;
  display: block;
  width: 23.5vw;
  height: 15vw;
- background-color: rgb(1,1,83,1);
+ background-color: #010153;
  border: 1px solid lightgreen;
  border-radius:15%;
- color: white;
+ color: #c0c0c0;
  font-size:10vw;
  font-weight:bolder;
  text-align: center;
@@ -150,10 +150,10 @@ margin:0 auto;
 }
 
  #notification{
- color: white ;
- font-weight: normal;
+ color: white;
+ font-weight: bolder;
  font-size: 1.2rem;
- 
+ /*color: #ae35dc;*/
  }
  
  #test, #test2, #test3{
@@ -186,7 +186,7 @@ opacity:1;
 position:absolute ;
 left:-101vw;
 transition: all 0.5s;
-color:white ;
+color:#c0c0c0 ;
 font-size:1.5rem;
 margin-bottom: 2rem;
 height:105.1vw;}
@@ -213,8 +213,8 @@ list-style:none;
 
 .datum{outline: 1px solid transparent ;
 margin-left: 7rem;
-color:white ;
-background-color:rgb(0,128,0,0.3);
+color: gold;
+background-color:#0080004d;
 /*rgb(255,255,255,0.2);*/
 border:none ;
 text-align:right;
