@@ -10,6 +10,9 @@ let preservedParameter1=null;
 let currentOpKey=null;
 let memorized=null;
 let subtotal=null;
+let previousOpKey=null;
+let keyFormatListenerFlag;
+let previousOperand;
 
 // Flags used by operators event listeners
 let keyPressedUnary=null;
@@ -87,10 +90,11 @@ const lcd=document.querySelector('#lcd');
 const notif = document.querySelector ('#notification');
 const alertColor=document.querySelector ('#notification-area').style;
 
-// Reset auxiliary functions:
-function updDebug () {
+// Axiliary function of reset:
+function updDebug (){
 inpBufferDebug.innerText = operand1;
 sumAccDebug.innerHTML = operand2;
+console.log({previousOperand});
 multAccDebug.innerText = operator;
 percentAccDebug.innerHTML = finalResult;
 lastOpDispl.innerHTML = operator;
@@ -100,7 +104,12 @@ subTot.innerHTML=subtotal;
 return;
 }
 
-function clear (){
+function eraseNotification (){
+notif.innerHTML = '';
+alertColor.backgroundColor='transparent';
+}
+
+function resetCalculator (){
 operand1=null;
 operand2=null;
 operator=null;
@@ -124,18 +133,19 @@ keyPressedMR=false;
 keyPressedMC=false;
 keyPressedFormat=false;
 lcd.innerHTML = null;
-notif.innerHTML = '';
-alertColor.backgroundColor='transparent';
-// memorized=null;
+eraseNotification();
+previousOperand=null;
 subtotal=null;
 updDebug();
 lastOpDispl.innerHTML = 'C';
+keyFormat.removeEventListener('click', enterFormatModal);
+keyFormatListenerFlag=false;
 return;
 } 
 
 // Initialize calc
 window.onload = function(){
-clear();
+resetCalculator();
 notif.innerHTML=`           😁 Welcome to EASYCALC 😁
            Your arithmetics assistant.
                For help press ❔`;
@@ -151,15 +161,15 @@ keyMR.addEventListener('click', () =>{keyPressedMR=true;memory();});
 keyMC.addEventListener('click', () =>{
   keyPressedMC=true;
   memory();});
-  
-keyFormat.addEventListener('click', enterFormatModal);
+
+// The keyFormat Listener is programmatically controlled to enable or disable the Format Modal
+keyFormat.addEventListener('click', chkLCDnotBlank);
 // Preserve the original number displayed on the LCD. Will be used latter by applySelectedFormat()
 keyFormat.addEventListener('click', backupNumDisplayed);
 keyFormat.addEventListener('click', stdScientificDigitCount);
 
-
 // Key Presses - Event listeners for unary key presses:
-clearKey.addEventListener('click', () =>{clear();});
+clearKey.addEventListener('click', () =>{resetCalculator();});
 key0.addEventListener('click', ()=>{
   keyPressedUnary=true;
   keyPressedNumber=true;
@@ -263,30 +273,50 @@ sumKey.addEventListener('click', ()=>{
   keyPressedUnary=false;
   keyPressedAdd=true;
   keyPressed='+';
+  
+  previousOperand=lcd.innerHTML;
+  console.log({previousOperand});
+  
   switchCalcModes();
 });
 minusKey.addEventListener('click',  ()=>{
   keyPressedUnary=false;
   keyPressedSubstract=true;
   keyPressed='-';
+  
+  previousOperand=lcd.innerHTML;
+  console.log({previousOperand});
+  
   switchCalcModes();
 });
 multiplyKey.addEventListener('click',  ()=>{
   keyPressedUnary=false;
   keyPressedMultiply=true;
   keyPressed='&#215;';
+  
+  previousOperand=lcd.innerHTML;
+  console.log({previousOperand});
+  
   switchCalcModes();
 });
 divideKey.addEventListener('click',  ()=>{
   keyPressedUnary=false;
   keyPressedDivide=true;
   keyPressed='&#247;';
+  
+  previousOperand=lcd.innerHTML;
+  console.log({previousOperand});
+  
   switchCalcModes();
 });
 percentageKey.addEventListener('click', ()=>{
   keyPressedUnary=false;
   keyPressedPercentage=true;
   keyPressed='%';
+  
+  previousOperand=lcd.innerHTML;
+  console.log({previousOperand});
+  
   switchCalcModes();
 });
 equalKey.addEventListener('click', ()=>{
@@ -319,6 +349,16 @@ keyPressedMS=false;
 return;
 
 }else if(keyPressedMR){// Retrieve from memory
+if(memorized===null||memorized===''){
+// Error: 'Nothing in memory'.
+notif.innerHTML=`
+                   ☹️ Sorry
+       There is nothing in memory.
+       continue.`;
+alertColor.backgroundColor='#3cc4ef';
+notif.style.color='black';
+return;
+}
 if(lcd.innerHTML===''){
 memRecall();
 return;
@@ -329,7 +369,7 @@ memRecall();
 operand2=null;
 memRecall();
 }else{
-clear();
+resetCalculator();
 keyPressedMR=true;
 memory();
 return;
@@ -380,6 +420,8 @@ return}
 // Enter Format Modal. This is upon pressing the green "Go" button.
 const formatModal=document.querySelector('#format-modal');
 const keyBoard=document.querySelector('#keys');
+
+let modalStartedFlag;
 function enterFormatModal (){
 formatModal.style.position='relative';
 formatModal.style.height='fit-content';
@@ -391,62 +433,61 @@ return;
 
 // SHOW OR HIDE CHOICES AND PANELS:
 // Firstly grab needed elements
-const originalFormatChoice=document.querySelector('li:first-child');
-const roundOffChoice=document.querySelector('#roundoff-choice');
-const scientificChoice=document.querySelector('#scientific-choice' );
-const originalPanel=document.querySelector('#original-panel');
-const roundOffPanel=document.querySelector('#round-panel');
-const scientificPanel=document.querySelector('#scientific-panel');
+const originalFormatSelectorRadioBtn=document.querySelector('li:first-child');
+const roundOffRadioSelector=document.querySelector('#roundoff-choice');
+const scientificRadioSelector=document.querySelector('#scientific-choice' );
+const originalInfoPanel=document.querySelector('#original-panel');
+const roundOffInfoPanel=document.querySelector('#round-panel');
+const scientificInfoPanel=document.querySelector('#scientific-panel');
 // All hide functions:
-function hideOriginalChoice (){
-originalFormatChoice.style.opacity='0';
+function hideOriginalRadioSelector (){
+originalFormatSelectorRadioBtn.style.opacity='0';
 }
-function hideOriginalPanel (){
-originalPanel.style.opacity='0';
+function hideOriginalInfoPanel (){
+originalInfoPanel.style.opacity='0';
 }
-function hideRoundOffPanel (){
-roundOffPanel.style.opacity='0';
+function hideRoundOffInfoPanel (){
+roundOffInfoPanel.style.opacity='0';
 }
-function hideScientificPanel (){
-scientificPanel.style.opacity='0';
+function hideScientificInfoPanel (){
+scientificInfoPanel.style.opacity='0';
 }
 // All show functions
-function showFixedFormatChoice (){
-originalFormatChoice.style.opacity='1';
+function showOriginalRadioSelector (){
+originalFormatSelectorRadioBtn.style.opacity='1';
 }
-function showFixedPanel (){
-originalPanel.style.opacity='1';
-hideRoundOffPanel();
-hideScientificPanel();
+function showOriginalInfoPanel (){
+originalInfoPanel.style.opacity='1';
+hideRoundOffInfoPanel();
+hideScientificInfoPanel();
 }
-originalFormatChoice.addEventListener('click', showFixedPanel);
-// @
+originalFormatSelectorRadioBtn.addEventListener('click', showOriginalInfoPanel);
 const originalFormatRadioBtn=document. querySelector('#original-format-choice');
 originalFormatRadioBtn.addEventListener('click', applySelectedFormat);
 
 function showRoudOffPanel (){
-roundOffPanel.style.opacity='1';
-hideOriginalPanel();
-hideScientificPanel();
+roundOffInfoPanel.style.opacity='1';
+hideOriginalInfoPanel();
+hideScientificInfoPanel();
 }
-roundOffChoice.addEventListener('click', showRoudOffPanel);
+roundOffRadioSelector.addEventListener('click', showRoudOffPanel);
 function showScientificfPanel (){
-scientificPanel.style.opacity='1';
-hideOriginalPanel();
-hideRoundOffPanel();
+scientificInfoPanel.style.opacity='1';
+hideOriginalInfoPanel();
+hideRoundOffInfoPanel();
 }
-scientificChoice.addEventListener('click', showScientificfPanel);
+scientificRadioSelector.addEventListener('click', showScientificfPanel);
 
 // Reset panels and choices view to initial (default) state
 
 function initModalState (){
-hideOriginalChoice();
-hideOriginalPanel();
-hideRoundOffPanel();
-hideScientificPanel();
+hideOriginalRadioSelector();
+hideOriginalInfoPanel();
+hideRoundOffInfoPanel();
+hideScientificInfoPanel();
 originalFormatRadioBtn.checked=true;
-roundOffChoice.checked=false;
-scientificChoice.checked=false;
+roundOffRadioSelector.checked=false;
+scientificRadioSelector.checked=false;
 lcdBackup='';
 originalDigits.value='';
 roundOffDigits.value='';
@@ -554,21 +595,20 @@ return;
 
 // Change format of number displayed without altering its value.
 
-// const scientificChoice=document.querySelector('#scientific-choice');
+// const scientificRadioSelector=document.querySelector('#scientific-choice');
 
 function applySelectedFormat(){
 if (originalFormatRadioBtn.checked) {
-// lcd.innerHTML=lcdBackup;
-console.log({lcdBackup});
+lcd.innerHTML=lcdBackup;
 supplantOrigOperand(lcdBackup);
 return;
 
-}else if(roundOffChoice.checked){
+}else if(roundOffRadioSelector.checked){
 const roundedNum=roundOff(lcdBackup);
 supplantOrigOperand(roundedNum);
 return;
 
-}else if(scientificChoice.checked){
+}else if(scientificRadioSelector.checked){
   const scientificNum=parseFloat(lcdBackup).toExponential(parseInt(ScientificDigitsDisplay.value-1));
 supplantOrigOperand(scientificNum);
 return ;
@@ -581,7 +621,7 @@ return ;
 }
 const goBtn=document.querySelector('#apply-format');
 goBtn.addEventListener('click', applySelectedFormat);
-goBtn.addEventListener('click', showFixedFormatChoice);
+goBtn.addEventListener('click', showOriginalRadioSelector);
 // Format mode display exit behavior. This is upon pressing the red "X" button.
 function exitFormatModal (){
 formatModal.style.position='absolute';
@@ -589,6 +629,7 @@ formatModal.style.height='fit-content';
 formatModal.style.left='-101vw';
 keyBoard.style.position='relative';
 keyBoard.style.right='0';
+eraseNotification();
 return;
 }
 const quitBtn=document.querySelector('#quit-format');
@@ -597,6 +638,10 @@ quitBtn.addEventListener('click', initModalState);
 
 // functions called by Main
 function appendDigit (){// Also appends dot
+previousOpKey=operator; // Every numeric appended preserves the last operator (if any). Will be used for checkDivByZero() function.
+keyFormat.addEventListener('click', enterFormatModal); // Enable format modal once something is on LCD
+keyFormatListenerFlag=true;
+chgNumAppearance();
 if(operator===null){
 if(keyPressed==='.' && operand1===null){
 keyPressed='0.';
@@ -604,8 +649,10 @@ keyPressed='0.';
 if(operand1===null){// If null, concat keyPressed with empty string
 operand1='';
 operand1=operand1.concat(keyPressed);
+
 }else{
 operand1=operand1.concat(keyPressed);
+
 }
 lcd.innerHTML=operand1;
 subtotal=operand1;
@@ -617,8 +664,10 @@ keyPressed='0.';
 if(operand2===null){// on virgin location concat keyPressed with empty string
 operand2='';
 operand2=operand2.concat(keyPressed);
+
 }else{
 operand2=operand2.concat(keyPressed);
+
 }
 lcd.innerHTML=operand2;
 }
@@ -657,11 +706,12 @@ return;
 }
 
 function invert (){
-if(operand1==='0' ||operand1===null){
+if(operand1*1===0 ||operand1===null){
 notif.innerHTML=`
                    ☹️ Sorry
        Try again with a non zero value.`;
-alertColor.backgroundColor='darkgreen';
+alertColor.backgroundColor='#3cc4ef';
+notif.style.color='black';
 operand1=null;
 updDebug();
 lcd.innerHTML=null;
@@ -675,7 +725,8 @@ if(operand2==='0' ||operand2===null){
 notif.innerHTML=` ☹️ Sorry.
 Try again with a non zero value. Entry so far:
 ${operand1} ${operator}`;
-alertColor.backgroundColor='darkgreen';
+alertColor.backgroundColor='#3cc4ef';
+notif.style.color='black';
 operand2=null;
 updDebug();
 lcd.innerHTML=null;
@@ -695,8 +746,8 @@ if(operator===null){
 if(operand1<0){
 notif.innerHTML =`                   ☹️ Sorry.
  Only positive numbers for square root operator.
-              Clear and try again.`;
-alertColor.backgroundColor='darkred';
+ Modify your number to continue, or and try again.`;
+alertColor.backgroundColor='#9d0ba7';
 keyPressedSqrt=false;
 return;
 }
@@ -734,12 +785,13 @@ subtotal=finalResult;
 updDebug();
 lastOpDispl.innerHTML = '=';
 subtotal=finalResult;
+chgNumAppearance('1', 'white');
 return;
 }
 
 function recycle (){
 preservedParameter1=finalResult;
-clear();
+resetCalculator();
 keyPressedUnary=true;
 keyPressedNumber=true;
 keyPressed=preservedParameter1;
@@ -749,43 +801,102 @@ preservedParameter1=null;
 return;
 }
 
-function operandLoader (){
-operator=keyPressed;
-updDebug();
-}
-
 function performCalc (){
 if(operator==='+'){
 finalResult= parseFloat(operand1) + parseFloat(operand2);
 updDebug();
+
 }else if(operator==='-'){
 finalResult= parseFloat(operand1) - parseFloat(operand2);
 updDebug();
+
 }else if(operator==='&#215;'){// multiplication
 finalResult= parseFloat(operand1) * parseFloat(operand2);
 updDebug();
+
 }else if(operator==='&#247;'){// division
-if(operand2==='0' || operand2===null||operand2===undefined){
-alertColor.backgroundColor='darkred';
- notif.innerHTML=' ☹️ Sorry. Divide by zero is not allowed. Clear and try again.';
-return;}
+if(operand2==='0'){
+resetCalculator();
+alertColor.backgroundColor='#9d0ba7';
+ notif.innerHTML='             ☹️ Sorry.\n              Divide by zero is not allowed.\n              I had to cancel your calculation. 🤷🏻‍♂️';
+ // divByZeroFlag=false;
+}else{
 finalResult= parseFloat(operand1) / parseFloat(operand2);
+}
 updDebug();
+
 }else if(operator==='%'){
 finalResult= parseFloat(operand1) * parseFloat(operand2)/100;
 updDebug();
+
+/*
 }else if(operator==='%'){
 finalResult= parseFloat(operand1) * parseFloat(operand2)/100;
 updDebug();
+*/
 }else{// error: missing operator
-alertColor.backgroundColor='darkred';
+alertColor.backgroundColor='#9d0ba7';
  notif.innerHTML ='☹️ Sorry. Two numbers and an operator are required to perform a calculation. Clear and start all over again.';
 }
 return;
 }
 
+// let abortSwitchCalcModes;
+function checkDivByZero (){
+if(previousOpKey==='&#247;' && operand2*1===0)
+{ // Error: 'Attempt to divide by zero'
+// abortSwitchCalcModes=true;
+// console.log('flag set to: ', abortSwitchCalcModes);
+resetCalculator();
+notif.innerHTML=`
+                   ☹️ Sorry
+       Calculation canceled. You attempted to divide by zero.
+       Try again.`;
+alertColor.backgroundColor='#3cc4ef';
+notif.style.color='black';
+}else{
+// NOP
+return;
+}
+}
+
+function chkLCDnotBlank (){
+if (!keyFormatListenerFlag ||lcd.innerHTML===''){
+alertColor.backgroundColor='#3cc4ef';
+ notif.innerHTML=`
+      You need a number on display to use this feature! 👀`;
+ notif.style.color='black';
+}
+}
+
+function chkFirstKeypressIsNum(){
+if(operand1===null && isNaN(keyPressed) && keyPressed!=='.'){
+resetCalculator();
+alertColor.backgroundColor='#3cc4ef';
+ notif.innerHTML=`
+      🙂 Your first entry must be a number!`;
+ notif.style.color='black';
+ return;
+}
+} 
+
+function chgNumAppearance (intensity, color='#c0c0c0'){
+lcd.style.color=color;
+lcd.style.opacity=intensity;
+} 
+
+
+function operandLoader (){
+operator=keyPressed;
+chgNumAppearance('1','teal');
+updDebug();
+//lcd.innerHTML=previousOperand; // @
+lcd.innerHTML='';
+}
+
 // Main
 function main (){
+chkFirstKeypressIsNum();
 if(keyPressedUnary){// 0y, key press was unary?
 console.log('if 0');
 // 1 is the yes of 0
@@ -849,11 +960,13 @@ return;
 }else{//0n, key press was '=' ?
 // 8 is the else of 0
 // 8
+
+checkDivByZero();
 if(keyPressedEquals){// 8y
 console.log('if 8');
 if(operand1===null||operand2===null){
 // Error: missing operand
-alertColor.backgroundColor='darkred';
+alertColor.backgroundColor='#9d0ba7';
  notif.innerHTML='☹️ Sorry. Two numbers and an operator are required to perform a calculation. Clear and start all over again.';
 return;
 }
@@ -872,48 +985,47 @@ return;
 }else{// 8n, 
 // 10 is the else of 8
 // 10
+keyFormat.removeEventListener('click', enterFormatModal); // LCD blanks every time a binary operator is entered. Therefore no need to enter format modal.
+keyFormatListenerFlag=false;
 if(keyPressedAdd){// 10y
 console.log('if 10: ','keyPressedAdd', keyPressedAdd);
-
 if(operator!==null && operand2===null){
 // notify operator duplicity
 notif.innerHTML=`Your last operator was on error.
 Your entries so far:  ${operand1} ${keyPressed}
 To continue, enter next number, or enter correct operator.`;
-alertColor.backgroundColor='darkgreen';
+alertColor.backgroundColor='#3cc4ef';
+notif.style.color='black';
 }
-
 // call sub operandLoader.
+
 operandLoader();
-updDebug();
-lcd.innerHTML=null;
+// updDebug();
+// chgNumAppearance('green');
 }else{// 10n
 // 11
 // 11 is the else of 10
 if(keyPressedSubstract){// 11y
 console.log('if 11');
 // call sub operandLoader.
+
 operandLoader();
-updDebug();
-lcd.innerHTML=null;
 }else{// 11n
 // 12 is the else of 11
 // 12
 if(keyPressedMultiply){// 12y
 console.log('if 12');
 // call sub operandLoader.
+
 operandLoader();
-updDebug();
-lcd.innerHTML=null;
 }else{// 12n
 // 13 is the else of 12
 // 13
 if(keyPressedDivide){// 13y
 console.log('if 13');
 // call sub operandLoader.
+
 operandLoader();
-updDebug();
-lcd.innerHTML=null;
 }else{// 13n
 // 14 is the else of 13
 // 14
@@ -921,9 +1033,8 @@ if(keyPressedPercentage){// 14y
 console.log('if 14');
 // 14 is the else of 13
 // call sub operandLoader.
+
 operandLoader();
-updDebug();
-lcd.innerHTML=null;
 }else{// 14n
 // NOP is the else of 14
 return;
@@ -987,14 +1098,9 @@ return keyPressedPercentage;
 return;}
 
 function switchCalcModes (){
-if(operand1===null && isNaN(keyPressed) && keyPressed!=='.'){
-alertColor.backgroundColor='darkgreen';
- notif.innerHTML=`
-      🙂 Your first entry must be a number!`;
- return;}
-  if(alertColor.backgroundColor==='darkred'){return}
- alertColor.backgroundColor='transparent';
- notif.innerHTML='';
+if(alertColor.backgroundColor==='#9d0ba7'){return}
+
+ eraseNotification(); // @
 // Mode1: Entry of a unary or binary operator after final result (in other words, after pressing the equals key)
 if(operand1!==null && operand2!==null && finalResult!==null && isNaN(keyPressed)){
 // Preserve unary environment:
@@ -1060,7 +1166,7 @@ subTot.innerHTML=operand1;
 return;
 // Mode3: Entry of a number after final result (in other words, after pressing the equals. This signals an intention to start a whole new calculation. 
 }else if(operand1!==null && operand2!==null && finalResult!==null && !isNaN(keyPressed)){
-// Procedure: preserve the number, clear whole calculator, restore the number, and let switchCalcModes() handle it.
+// Procedure: preserve the number, whole calculator, restore the number, and let switchCalcModes() handle it.
 
 // Preserve number environment:
 // example:
@@ -1071,8 +1177,8 @@ const preservedkeyPressedUnary=keyPressedUnary;
 const preservedkeyPressedNumber=keyPressedNumber;
 const preservedKeyPressed=keyPressed;
 
-// clear whole calculator
-clear();
+// whole calculator
+resetCalculator();
 
 // Restore number and its environment
 keyPressedUnary=preservedkeyPressedUnary;
@@ -1090,26 +1196,26 @@ main();
 return;
 }
 
+function fatalError (){
+// Preserve error message
+const preservedNotif=`
+                   ☹️ Sorry
+       Calculation canceled because you divided by zero.
+       continue.`;
+const preservedColorBg='#3cc4ef';
+const preservedColor='black';
+// Clear calculator
+resetCalculator();
+// Restore error message
+notif.innerHTML=preservedNotif;
+alertColor.backgroundColor=preservedColorBg;
+notif.style.color=preservedColor;
+}
+/*
 // Test
 function test(){
-
-function reverseString(str) {
- const reversedStr=str.split("").reverse().join("");
-return reversedStr;
-}
-
-function rightmostZeroCounter(num){
-// Stringify number
-const strNum=num.toString();
-// Reverse stringified number
-let revStrNum=reverseString(strNum);
-const rightZeroesCount=leftmostZeroCounter(revStrNum);
-// console.log('rightZeroesCount: ', rightZeroesCount);
-return rightZeroesCount;
-}
-
-let num=33200000.0000;
-rightmostZeroCounter(num);
+  
 }
 const testBtn=document.querySelector ('#test');
 testBtn.addEventListener('click', test);
+*/
