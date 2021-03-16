@@ -18,6 +18,7 @@ let previousOperand;
 let keyPressedUnary=null;
 let keyPressedNumber=false;
 let keyPressedDot=false;
+let keyPressedExp=false;
 let keyPressedChgSign=false;
 let keyPressedBackspace=false;
 let keyPressedInv=false;
@@ -65,6 +66,7 @@ const key7 = document.querySelector('#key7');
 const key8 = document.querySelector('#key8');
 const key9 = document.querySelector('#key9');
 const dotKey = document.querySelector('#dotKey');
+const expKey = document.querySelector('#expKey');
 
 // Grab binary operation keys
 const sumKey = document.querySelector('#sum');
@@ -117,6 +119,7 @@ finalResult=null;
 keyPressedUnary=null;
 keyPressedNumber=false;
 keyPressedDot=false;
+keyPressedExp=false;
 keyPressedChgSign=false;
 keyPressedBackspace=false;
 keyPressedInv=false;
@@ -234,6 +237,12 @@ dotKey.addEventListener('click', ()=>{
   keyPressedUnary=true;
   keyPressedDot=true;
   keyPressed='.';
+  switchCalcModes();
+});
+expKey.addEventListener('click', ()=>{
+  keyPressedUnary=true;
+  keyPressedExp=true;
+  keyPressed='e';
   switchCalcModes();
 });
 changeSignKey.addEventListener('click', ()=>{
@@ -636,45 +645,110 @@ const quitBtn=document.querySelector('#quit-format');
 quitBtn.addEventListener('click', exitFormatModal);
 quitBtn.addEventListener('click', initModalState);
 
-// functions called by Main
-function appendDigit (){// Also appends dot
+// This function performs tasks to enable correct behavior of other functions that need various of their tasks performed at this point of the program.
+function unrelatedTasks(){
 previousOpKey=operator; // Every numeric appended preserves the last operator (if any). Will be used for checkDivByZero() function.
 keyFormat.addEventListener('click', enterFormatModal); // Enable format modal once something is on LCD
 keyFormatListenerFlag=true;
 chgNumAppearance();
-if(operator===null){
-if(keyPressed==='.' && operand1===null){
-keyPressed='0.';
+return;
 }
-if(operand1===null){// If null, concat keyPressed with empty string
+
+// To handle attempts to write multiple dots to an operand
+function chkMultiDotErr (){ 
+if(keyPressed!=='.'){ // No need to test
+// NOP
+return;
+}else{ // Need to test
+// Check if there is already a dot
+if (lcd.innerHTML.indexOf('.')<0) {
+// Display does not contain a dot. Test passed.
+// NOP
+return;
+}else{ // 
+// Test failed keyPress is a repeat dot
+keyPressed='';
+notif.style.color='darkblue';
+notif.innerHTML=`Your duplicate dot was ignored. \nContinue.`;
+alertColor.backgroundColor='darkgray';
+setTimeout(()=>eraseNotification(), 3000);
+return;
+}
+}
+}
+
+
+// To handle attempts to write multiple 'e' to an operand
+function chkMultiExpErr (){ 
+if(keyPressed!=='e'){ // No need to test
+// NOP
+return;
+}else{ // Need to test
+// Check if there is already a 'e'
+if (lcd.innerHTML.indexOf('e')<0) {
+// Display does not contain an 'e'. Test passed.
+// NOP
+return;
+}else{ // 
+// Test failed keyPress is a repeat 'e'
+keyPressed='';
+notif.innerHTML='black';
+notif.innerHTML=`Your duplicate 'e' was ignored. Continue.`;
+alertColor.backgroundColor='yellow';
+setTimeout(()=>eraseNotification(), 3000);
+return;
+}
+}
+}
+
+
+// functions called by Main:
+function appendDigit (){// Also appends dot
+// This function performs tasks to enable correct behavior of other functions that need various of their tasks performed at this point of the program:
+unrelatedTasks();
+chkMultiDotErr();
+chkMultiExpErr();
+if(operator===null){ // This case is when appendage goes against 1st operand
+if(keyPressed==='.' && operand1===null){ // More specifically, against 1st operand, with the added condition that dot is the very first character received(operand1 is empty)
+keyPressed='0.'; // suplant the dot by a zero and dot, and process as a single digit. 
+}
+
+if(operand1===null){ // If null, concat keyPressed with empty string
+  // Now the '0.' will be appended to the current content of operand1. But since the content is the null character, we load operand1 with an empty string and append the '0.' to it. Net result is we loaded the '0.' string into the operand1 variable. For a case of a single numeric digit received, the net effect is that the single digit is appended.
 operand1='';
 operand1=operand1.concat(keyPressed);
 
-}else{
+}else{ // now we handle the case when characters are directed to 1st operand, but operand is not empty. In this case, it is just a matter of appending the additional digit. Simple.
 operand1=operand1.concat(keyPressed);
-
 }
+// Now mirror the operand1 content to the LCD for user to view.
 lcd.innerHTML=operand1;
+// And update the subtotal register and it's viewable display also.
 subtotal=operand1;
 subTot.innerHTML=operand1;
+
 }else{
-if(keyPressed==='.' && operand2===null){
-keyPressed='0.';
+// Now the case when operator is not null. This means that previous processes completed loading of digits destined to the 1st operand and also loaded the desired operand to the operand register. Any subsequent digits and dot will be destined to the 2nd operand. Procedure is same as for the 1st operand. But this time performed for the operand2 variable:
+if(keyPressed==='.' && operand2===null){ // Case of 2nd operand empty
+keyPressed='0.'; // Got a dot.
 }
 if(operand2===null){// on virgin location concat keyPressed with empty string
 operand2='';
 operand2=operand2.concat(keyPressed);
 
-}else{
+}else{ // What to do if 2nd operand already had some content.
 operand2=operand2.concat(keyPressed);
 
 }
-lcd.innerHTML=operand2;
+lcd.innerHTML=operand2; // Let user see the result of the appendage procedure.
 }
+// Reset all variables to get them ready for a possible subsequent use.
 keyPressedNumber=false;
 keyPressedDot=false;
+keyPressedExp=false;
+// Update details for developer visualization while building the App. 
 updDebug();
-return;
+return; // Done! 
 }
 
 function changeSign (){
@@ -911,6 +985,15 @@ if(keyPressedDot){// 2y
 console.log('if 2');
 // call sub appendDot.
 appendDigit();
+
+}else{// 1bn
+// 2b is the else of 1b
+// 2b
+if(keyPressedExp){// 2y
+console.log('if 2');
+// call sub appendExp
+appendDigit();
+
 }else{// 2n, 
 // 3 is the else of 2
 // 3
@@ -950,6 +1033,7 @@ square();
 // return is the else of 7
 // 7
 return;
+}
 }
 }
 }
