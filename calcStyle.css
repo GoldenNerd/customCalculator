@@ -55,11 +55,13 @@ line-height: 180%;
  margin: 0.1vw 0.5vw;
 }
 
+/*
  #help{
  font-size:10vw;
  color: white;
  text-decoration: none;
  }
+ */
  
 #test, #test2, #test3{
 width: fit-content;
