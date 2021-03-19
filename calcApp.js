@@ -37,7 +37,7 @@ let keyPressedMC=false;
 let keyPressedFormat=false;
 
 // Grab debugg items
-const currentOpKeyDebug = document.querySelector('#last-op-debug');
+const lastOpDebug = document.querySelector('#last-op-debug');
 const lcdDebug = document.querySelector('#lcd-debug');
 const operand1Debug = document.querySelector('#operand1Debug');
 // const mainAccDebug = document.querySelector('#mainAccDebug');
@@ -95,14 +95,16 @@ const alertColor=document.querySelector ('#notification-area').style;
 
 // Axiliary function of reset:
 function updDebug (){
+lastOpDispl.innerHTML = operator; // magenta colored last op on LCD upper left hand corner
+// DEVELOPER DEBUG VISIBILITY:
+lastOpDebug.innerHTML =operator;
+lcdDebug.innerHTML = lcd.innerHTML;
 operand1Debug.innerText = operand1;
 operand2Debug.innerHTML = operand2;
 opNowDebug.innerText = operator;
 resultDebug.innerHTML = finalResult;
-lastOpDispl.innerHTML = operator;
-currentOpKeyDebug.innerHTML =operator;
-lcdDebug.innerHTML = lcd.innerHTML;
-subTot.innerHTML=subtotal;
+
+subTot.innerHTML=subtotal; // Part of the app
 return;
 }
 
@@ -111,13 +113,16 @@ notif.innerHTML = '';
 alertColor.backgroundColor='transparent';
 }
 
-function xternalReset (){
-resetCalculator();
-// allKeysDfaultColor(clearKey, '#c0c0c0');
-const keysArray=Array.from(document.querySelectorAll('.key'));
-for (let key of keysArray) {
+function defaultKeysColor (){
+const allOpKeys=document.querySelectorAll('.key');
+for (let key of allOpKeys) {
   key.style.color='#c0c0c0';
 }
+}
+
+function xternalReset (){
+resetCalculator();
+defaultKeysColor();
 }
 
 function resetCalculator (){
@@ -145,9 +150,8 @@ keyPressedMS=false;
 keyPressedMR=false;
 keyPressedMC=false;
 keyPressedFormat=false;
-lcd.innerHTML = null;
+lcd.innerHTML=null;
 eraseNotification();
-//previousOperand=null;
 subtotal=null;
 updDebug();
 lastOpDispl.innerHTML = 'C';
@@ -168,17 +172,35 @@ return;
 };
 
 // Key Presses - Event listeners for Memory and Format key presses:
-keyMS.addEventListener('click', () =>{keyPressedMS=true;memory();});
-
-keyMR.addEventListener('click', () =>{keyPressedMR=true;memory();});
-
+keyMS.addEventListener('click', ()=>{
+keyPressedMS=true;
+keyMS.style.color='lightgreen';
+setTimeout(()=>{
+if(numInMem===null || numInMem===''){
+keyMS.style.color='#c0c0c0';
+// @
+notif.innerHTML=`Sorry, nothing was saved.\nBut saving nothing erases memory.`;
+alertColor.backgroundColor='#3cc4ef';
+notif.style.color='black';
+}
+},0);
+memoryHandler();
+});
+keyMR.addEventListener('click', ()=>{
+keyPressedMR=true;
+memoryHandler();
+});
 keyMC.addEventListener('click', () =>{
-  keyPressedMC=true;
-  memory();});
+keyPressedMC=true;
+keyMS.style.color='#c0c0c0';
+memoryHandler();
+});
 
 // The keyFormat Listener is programmatically controlled to enable or disable the Format Modal
-keyFormat.addEventListener('click', gateToModalScreen);
-// Preserve the original number displayed on the LCD. Will be used latter by applySelectedFormat()
+keyFormat.addEventListener('click', () =>{
+  gateToModalScreen();
+  allKeysDfaultColor(keyFormat, '#c0c0c0');
+});
 keyFormat.addEventListener('click', backupNumDisplayed);
 keyFormat.addEventListener('click', stdScientificDigitCount);
 
@@ -257,28 +279,36 @@ expKey.addEventListener('click', ()=>{
   keyPressed='e-';
   switchCalcModes();
 });
-changeSignKey.addEventListener('click', ()=>{
-  keyPressedUnary=true;
-  keyPressedChgSign=true;
-  keyPressed = '&#177';
-  switchCalcModes();
-});
-backspaceKey.addEventListener('click', ()=>{
-  keyPressedUnary=true;
-  keyPressedBackspace=true;
-  keyPressed='&#x232b';
-  switchCalcModes();
-});
 
 function allKeysDfaultColor (keyTouched, keysColor){
-const keysArray=Array.from(document.querySelectorAll('.key'));
-for (let key of keysArray) {
+const allOpKeys=document.querySelectorAll('.key');
+for (let key of allOpKeys) {
   key.style.color=keysColor;
 }
 let obj=keyTouched;
 obj.style.color='lightgreen';
 }
 
+changeSignKey.addEventListener('click', ()=>{
+  keyPressedUnary=true;
+  keyPressedChgSign=true;
+  keyPressed = '&#177';
+  
+  allKeysDfaultColor(changeSignKey, '#c0c0c0');
+  // invertKey.style.color='lightgreen';
+  
+  switchCalcModes();
+});
+backspaceKey.addEventListener('click', ()=>{
+  keyPressedUnary=true;
+  keyPressedBackspace=true;
+  keyPressed='&#x232b';
+  
+  allKeysDfaultColor(backspaceKey, '#c0c0c0');
+  // invertKey.style.color='lightgreen';
+  
+  switchCalcModes();
+});
 invertKey.addEventListener('click', ()=>{
   keyPressedUnary=true;
   keyPressedInv=true;
@@ -286,7 +316,6 @@ invertKey.addEventListener('click', ()=>{
   
   allKeysDfaultColor(invertKey, '#c0c0c0');
   // invertKey.style.color='lightgreen';
-  
   
   switchCalcModes();
 });
@@ -297,7 +326,6 @@ sqrtKey.addEventListener('click', ()=>{
   
   allKeysDfaultColor(sqrtKey, '#c0c0c0');
   // sqrtKey.style.color='lightgreen';
-  
   
   switchCalcModes();
 });
@@ -317,60 +345,40 @@ sumKey.addEventListener('click', ()=>{
   keyPressedUnary=false;
   keyPressedAdd=true;
   keyPressed='+';
-  // @
-  previousOperand=lcd.innerHTML;
-  console.log('previousOperand before: ', previousOperand);
+  previousOperand=lcd.innerHTML; // ~
   allKeysDfaultColor(sumKey, '#c0c0c0');
-  //sumKey.style.color='lightgreen';
-
   switchCalcModes();
 });
 minusKey.addEventListener('click',  ()=>{
   keyPressedUnary=false;
   keyPressedSubstract=true;
   keyPressed='-';
-  
-  previousOperand=lcd.innerHTML;
-  console.log({previousOperand});
+  previousOperand=lcd.innerHTML; // ~
   allKeysDfaultColor(minusKey, '#c0c0c0');
-  // minusKey.style.color='lightgreen';
-  
   switchCalcModes();
 });
 multiplyKey.addEventListener('click',  ()=>{
   keyPressedUnary=false;
   keyPressedMultiply=true;
   keyPressed='&#215;';
-  
-  previousOperand=lcd.innerHTML;
-  console.log({previousOperand});
+  previousOperand=lcd.innerHTML; // ~
   allKeysDfaultColor(multiplyKey, '#c0c0c0');
-  // multiplyKey.style.color='lightgreen';
-  
   switchCalcModes();
 });
 divideKey.addEventListener('click',  ()=>{
   keyPressedUnary=false;
   keyPressedDivide=true;
   keyPressed='&#247;';
-  
-  previousOperand=lcd.innerHTML;
-  console.log({previousOperand});
+  previousOperand=lcd.innerHTML; // ~
   allKeysDfaultColor(divideKey, '#c0c0c0');
-  // divideKey.style.color='lightgreen';
-  
   switchCalcModes();
 });
 percentageKey.addEventListener('click', ()=>{
   keyPressedUnary=false;
   keyPressedPercentage=true;
   keyPressed='%';
-  
-  previousOperand=lcd.innerHTML;
-  console.log({previousOperand});
+  previousOperand=lcd.innerHTML; // ~
   allKeysDfaultColor(percentageKey, '#c0c0c0');
-  // percentageKey.style.color='lightgreen';
-  
   switchCalcModes();
 });
 equalKey.addEventListener('click', ()=>{
@@ -382,7 +390,9 @@ equalKey.addEventListener('click', ()=>{
   main();
 });
 
-function memRecall (){
+// ################################
+// MR with empty LCD. Treat memory content as a new single number entry.
+function treatAsDigitKeyPress (){
 // Preset the environment
 keyPressedUnary=true;
 keyPressedNumber=true;
@@ -393,19 +403,28 @@ switchCalcModes();
 keyPressedMR=false;
 return;
 }
-
-// Memory behavior (MS, MC, MR)
 let memoryOnLCD=document.querySelector('#memoryOnLCD');
-function memory (){
-// Save LCD to memory
-if(keyPressedMS){
+
+// ################################
+// Memory behavior (MS, MC, MR)
+function memoryHandler (){
+// OK ********************************
+if(keyPressedMS){ // MS: Save LCD to memory (override numInMem with LCD contents)
 numInMem=lcd.innerHTML;
 memoryOnLCD.innerHTML=numInMem;
 keyPressedMS=false;
 return;
 
-}else if(keyPressedMR){// Retrieve from memory
-if(numInMem===null||numInMem===''){
+// OK ********************************
+}else if(keyPressedMC){ // MC: Clear memory
+numInMem='';
+memoryOnLCD.innerHTML=''; // Non-debug item. It is part of Calc.
+keyPressedMC=false; // Reset flag
+
+// MEMORY RECALL BEHAVIOR
+}else if(keyPressedMR){
+// OK ********************************
+if(numInMem===null||numInMem===''){// Forbidden: Attempting retrieval from memory when numInMem is empty.
 // Error: 'Nothing in memory'.
 notif.innerHTML=`
                    ☹️ Sorry
@@ -413,36 +432,52 @@ notif.innerHTML=`
        continue.`;
 alertColor.backgroundColor='#3cc4ef';
 notif.style.color='black';
-return;
-}
-if(lcd.innerHTML===''){
-memRecall();
-return;
-}else if(lcd.innerHTML===operand1) {
-operand1=null;
-memRecall();
-}else if(lcd.innerHTML===operand2) {
-operand2=null;
-memRecall();
-}else{
-resetCalculator();
-keyPressedMR=true;
-memory();
-return;
-}
-// Clear memory
-}else if(keyPressedMC){
-numInMem='';
-memoryOnLCD.innerHTML='';
-// Reset flag
-keyPressedMC=false;
-}else{
-// NOP
-}
-return;
-}
+keyPressedMR=false;
+return;}
 
-//  **** FORMAT MODE BEHAVIOR ****
+// OK ********************************
+if(operand1==='' || operand1===null){ // MR with empty LCD. Treat memory content as a new single number entry.
+treatAsDigitKeyPress();
+return;
+
+// OK ********************************
+}else if(operand1!==null && operator===null) { // If just a number on display with no subsequent operator, supplant number with numInMem. Simple
+operand1=null;
+treatAsDigitKeyPress();
+return;
+
+// OK ********************************
+}else if(operand1!==null && operator!==null && operand2===null) { // This is when user has already entered 1st operand, operator, and rather than entering a next number, user retrieves memory. In this case is like numInMem is a new digit key pressed. 
+treatAsDigitKeyPress();
+return;
+
+// OK ********************************
+}else if(operand1!==null && operator!==null && operand2!==null && finalResult===null) { // This is when user has already entered 1st operand, operator, and 2nd operand,and rather than entering a next operator, or an equal sign, user retrieves memory. This tells calc to supplant the 2nd operand (on LCD) with numInMem content.
+operand2=null;
+treatAsDigitKeyPress();
+return;
+
+// DEVELOPER DEBUG VISIBILITY:
+//lastOpDebug.innerHTML =operator;
+//lcdDebug.innerHTML = lcd.innerHTML;
+//operand1Debug.innerText = operand1;
+//operand2Debug.innerHTML = operand2;
+//opNowDebug.innerText = operator;
+//resultDebug.innerHTML = finalResult;
+
+// ********************************
+// Remaining case is when there is a final result on display. Next digit pressed would start a whole new calculation. So, it's easier to reset Calculator and treat numInMem as though it is a result of pressing a single digit key. This last rule also applies to Recycle state,since number one display is also a final result.
+ }else{
+// quals(); // to hammer it to work after a single equals. It does not work unless equals is pressed a second time. I don't know why.
+xternalReset();
+treatAsDigitKeyPress();
+return;
+}
+}
+}
+// ################################
+
+//  **** FORMAT MODAL BEHAVIOR ****
 
 // Count the decimal places of a number
 const decimalCount = num => {
@@ -732,8 +767,10 @@ return;
 }else{ // Need to test
 // Check if there is already a 'e'
 if (lcd.innerHTML.indexOf('e')<0) {
-// Display does not contain an 'e'. Test passed.
-// NOP
+// Display does not contain an 'e'. Test passed. An 'e-' will be appended.
+notif.style.color='darkblue';
+notif.innerHTML=`For a positive exponent delete negative sign using backspace key.`;
+alertColor.backgroundColor='darkgray';
 return;
 }else{ // 
 // Test failed keyPress is a repeat 'e'
@@ -804,7 +841,7 @@ lcd.innerHTML=operand2; // Let user see the result of the appendage procedure.
 keyPressedNumber=false;
 keyPressedDot=false;
 keyPressedExp=false;
-// Update details for developer visualization while building the App. 
+// Update details for developer visualization while building the App.
 updDebug();
 return; // Done! 
 }
@@ -912,15 +949,11 @@ return;
 function equals (){
 performCalc();
 lcd.innerHTML=finalResult;
-
 preservedEqualsResult=finalResult;
-// console.log({preservedEqualsResult});
-
 keyPressedEquals=false;
 subtotal=finalResult;
 updDebug();
 lastOpDispl.innerHTML = '=';
-//subtotal=finalResult; // @
 chgNumAppearance('1', 'gold');
 return;
 }
@@ -975,6 +1008,7 @@ updDebug();
 alertColor.backgroundColor='#9d0ba7';
  notif.innerHTML ='☹️ Sorry. Two numbers and an operator are required to perform a calculation. Clear and start all over again.';
 }
+
 return;
 }
 
@@ -1011,8 +1045,10 @@ if(operand1===null && isNaN(keyPressed) && keyPressed!=='.'){
 resetCalculator();
 alertColor.backgroundColor='#3cc4ef';
  notif.innerHTML=`
-      🙂 Your first entry must be a number!`;
+      🙂 Your first entry must be a number or a dot!`;
  notif.style.color='black';
+ 
+ defaultKeysColor();
  return;
 }
 } 
@@ -1027,9 +1063,6 @@ function operandLoader (){
 operator=keyPressed;
 chgNumAppearance('1','lightgreen');
 updDebug();
-//lcd.innerHTML=previousOperand; 
-// @
-// lcd.innerHTML='';
 }
 
 function chkMultiOps (){
@@ -1318,9 +1351,7 @@ const assertedOperation=assertOperation(keyPressed);
 switchCalcModes();
 subtotal=operand1;
 subTot.innerHTML=operand1;
-// @
-console.log('previousOperand after: ', previousOperand);
-lcd.innerHTML=previousOperand;
+lcd.innerHTML=previousOperand; // Purpose of this line is to keep on display the number that was entered even after entering the subsequent operator. Originally the behavior was number disappearance from display. Now it stays but changes color to signal number accepted in calculator.
 return;
 // Mode3: Entry of a number after final result (in other words, after pressing the equals. This signals an intention to start a whole new calculation. 
 }else if(operand1!==null && operand2!==null && finalResult!==null && !isNaN(keyPressed)){
@@ -1376,4 +1407,44 @@ function test(){
 }
 const testBtn=document.querySelector ('#test');
 testBtn.addEventListener('click', test);
+*/
+let settingsModalOn=false;
+const settingsModal=document.querySelector('#settings-wrapper');
+function toggleAppSettings(){
+if(settingsModalOn){
+settingsModal.style.top='-22.6vw';
+settingsModal.style.left='101%';
+settingsModalOn=false;
+}else{
+settingsModal.style.top='0.2rem';
+settingsModal.style.left='3rem';
+settingsModalOn=true ;
+} 
+return;
+}
+const menu=document.querySelector('#settings');
+menu.addEventListener('click', toggleAppSettings);
+
+const debugPanel=document.querySelector('#debug-data-grill');
+const wholeInnerDataPanel=document.querySelector('#inner-data-wrapper');
+function toggleDevInfo (){
+if (devChkbox==='checked') {
+// show dev parameters 
+debugPanel.style.opacity='1';
+wholeInnerDataPanel.style.position=('static');
+}else{
+// hide dev parameters 
+debugPanel.style.opacity='0';
+wholeInnerDataPanel.style.position=('relative');
+wholeInnerDataPanel.style.bottom=('7.5rem');
+wholeInnerDataPanel.style.left=('0');
+}
+}
+const devChkbox=document.querySelector('#show-details');
+devChkbox.addEventListener('click', toggleDevInfo);
+/*
+#debug-data-grill{opacity: 0;}
+#inner-data-wrapper{
+bottom: 7.5rem;
+left: 0;}
 */
