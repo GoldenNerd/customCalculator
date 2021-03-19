@@ -3,7 +3,7 @@ font-size: 62.5%;
 }
 
 body{
-  background-color: rgb(11,11,95); /* #5d0505 */
+  background-color: #0b0b5f; /* #5d0505 */
   margin: 0;
 }
 
@@ -40,7 +40,7 @@ line-height: 180%;
   left:-0.2rem;
 }
 
-.key{
+.key, .mem-key{
  display: block;
  width: 23.5vw;
  height: 15vw;
@@ -66,7 +66,7 @@ line-height: 180%;
 #test, #test2, #test3{
 width: fit-content;
 height: fit-content;
-font-size: 1em;
+font-size: 2em;
 background-color: #010153;
  border: 1px solid lightgreen;
  border-radius:15%;
@@ -74,6 +74,22 @@ background-color: #010153;
  font-weight:normal;
  text-align: center;
  margin: 0.1vw 0.5vw;
+}
+
+#settings{
+width: fit-content ;
+height: 5rem;
+font-size: 2.5em;
+background-color: #010153;
+ border: 1px solid lightgreen;
+ border-radius:15%;
+ color: white;
+ font-weight:bold;
+ text-align: center;
+ margin: 0.1vw 0.5vw;
+ position: absolute;
+  top: 3rem;
+  left:0.2rem;
 }
 
 #keys{
@@ -90,11 +106,12 @@ background-color: #010153;
 right:0;
 transition: all 0.5s;
 }
-
-.top-clue{
+/*
+.debug-pair, .calc-pair{
   outline: 1px solid transparent ;
   width:100%;
 }
+*/
 
 span, p{
  height:1.3rem;
@@ -104,7 +121,7 @@ span, p{
  margin-bottom:0.1rem;
 }
 
-.visual-top {
+.debug-element, .calc-element{
   border: 1px solid #90ee9080;
   border-radius: 0.3rem;
   width: 49%;
@@ -114,17 +131,24 @@ span, p{
   justify-content:space-between;
   align-items: center;
   margin-left: 0.5rem;
-}
+  }
 
-.top-clue{/*outline: 1px solid red; */
+.debug-pair, .calc-pair{/*outline: 1px solid red; */
   width: 99%;
   display: flex;
   flex-direction:row;
   flex-wrap:nowrap;
   justify-content:space-between;
 }
+/*
+#debug-grill{
+outline: 1px solid yellow ;
+opacity: 1;
+}
+*/
 
-#debug{outline: 1px solid transparent ;
+#debug-data-grill{outline: 1px solid magenta ;
+
  font-size: 1.2rem;
  /* margin-top:3vw;
   margin-left:0; */
@@ -134,6 +158,15 @@ span, p{
   flex-wrap: nowrap;
   justify-content: flex-start;
   align-items: flex-start;
+  /* */
+  opacity: 0;
+}
+
+#inner-data-wrapper{
+position: relative; 
+z-index: -1;
+bottom: 7.5rem;
+left: 0;
 }
 
 #notification-area{
@@ -194,6 +227,17 @@ margin-bottom: 2rem;
 height:105.1vw;}
 
 #apply-format, #quit-format{
+/* @ */
+
+ display: block;
+ background-color: #010153;
+ border: 1px solid lightgreen;
+ border-radius:15%;
+ font-weight:bolder;
+ text-align: center;
+ line-height: 150%;
+ margin: 0.1vw 0.5vw;
+
 opacity:1;
 font-size: 5vw;
 width:fit-content;
@@ -242,3 +286,65 @@ align-items:flex-start;
 li:first-child, #original-panel, #round-panel, #scientific-panel{
 opacity: 0;
 }
+
+/* SETTINGS MODAL */
+
+#settings-wrapper{
+font-size:0.9rem;
+outline: 1px solid transparent ;
+width: 90vw;
+height: 22vw;
+background-color:  #0b0b5f;
+position: absolute ;
+/*
+top: 0.4rem; / -22.6vw;
+left: 3rem; / 101%;
+*/
+top: -22.6vw;
+left: 101%;
+z-index: 2;
+transition: all 0.5s;
+}
+
+h3{
+font-weight: bolder;
+font-size: 1.3rem;
+color: white;
+margin-top :0;
+margin-left: 0.75rem;
+margin-bottom :0;
+}
+
+#app-settings.li{
+display: block;
+width: 35%;
+}
+
+#app-settings.li:last-child{
+padding-bottom: 1rem;
+}
+
+hr{
+width: 100%;
+border: 1px solid #11117c ;
+}
+
+.setting-txt{
+color: white;
+font-weight: bolder;
+font-size: 1rem;
+}
+
+#app-settings{
+outline: 1px solid  #2626c2 ;
+height: fit-content ;
+text-decoration: none;
+margin: 0 auto ;
+padding: 0;
+display: flex;
+flex-direction: row;
+flex-wrap: wrap;
+justify-content: space-between;
+align-items: stretch;
+}
+
