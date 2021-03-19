@@ -1,6 +1,6 @@
 <!DOCTYPE html> 
 <html lang="en"> 
-<head> 
+<head>  
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
@@ -8,6 +8,7 @@
   <title>Simple Calculator</title>
 </head>
 <body> 
+
  <div id="lcd-frame">
   <span id="lastOpDispl"></span>
   <span id="lcd" value=""></span>
@@ -76,8 +77,8 @@
 </div>
 
 <div id="format-buttons">
-<input type="button" class="key" id="apply-format" value="Go">
-<input type="button" class="key" id="quit-format" value="&#x2718;">
+<input type="button" class="modal-key" id="apply-format" value="Go">
+<input type="button" class="modal-key" id="quit-format" value="&#x2718;">
 <!-- &#x2704; -->
 </div>
 
@@ -112,50 +113,55 @@
  <input type="button" class="key" id="invert" value="1/x">
    <!-- x&#x207b;&#xb9; -->
   <input type="button" class="key" id="backspace" value="&#x232b;">
- <input type="button" class="key" id="clear" value="C">
-    <input type="button" class="key" id="ms" value="MS">
-  <input type="button" class="key" id="mr" value="MR">
-  <input type="button" class="key" id="mc" value="MC">
+  <input type="button" class="key" id="clear" value="C">
+  <input type="button" class="mem-key" id="ms" value="MS">
+  <input type="button" class="mem-key" id="mr" value="MR">
+  <input type="button" class="mem-key" id="mc" value="MC">
   <input type="button" class="key" id="scissors1" value="&#x2704;">
  </div>
  
-
  <!-- DEBUG SECTION: -->
-<div id="debug">
- <div class="top-clue" >
-    <p class="visual-top">
+<div id="inner-data-wrapper">
+<div id="debug-data-grill">
+  
+ <div class="debug-pair" >
+    <p class="debug-element">
      lastOp:
      <span id="last-op-debug"></span>
-    <p class="visual-top">
+    </p>
+    <p class="debug-element">
      LCD: 
      <span id="lcd-debug"></span>
     </p>
    </div> 
- <div class="top-clue" >
-    <p class="visual-top">
+ <div class="debug-pair" >
+    <p class="debug-element">
      operand1: 
      <span id="operand1Debug"></span>
     </p>
-    <p class="visual-top">
+    <p class="debug-element">
      operand2:  
      <span id="operand2Debug"></span>
     </p>
-   </div>
+  </div>
  <!--  -->
- <div class="top-clue">
-   <p class="visual-top">
+ <div class="debug-pair">
+   <p class="debug-element">
     opNow: <span id="opNowDebug"></span>
    </p>
-   <p class="visual-top">
+   <p class="debug-element">
     RESULT: <span id="resultDebug"></span>
    </p>
-  </div> 
+  </div>
+  </div>
+
   <!--  -->
- <div class="top-clue">
-   <p class="visual-top">
+  
+ <div class="calc-pair">
+   <p class="calc-element">
   subTot: <span id="sub-tot"></span>
    </p>
-   <p class="visual-top">
+   <p class="calc-element">
     Mem: <span id="memoryOnLCD"></span>
    </p>
   </div>
@@ -168,8 +174,43 @@
   <!-- 
 <input type="button" name="debug2" id="test2" value="1/x" />
 <input type="button" name="debug2" id="test3" value="x²" /> 
-<input type="button" name="debug" id="test" value="&#x267d; TEST" />
+<input type="button" name="debug" id="test" value="&#x267d; x2026 &#x22ee; TEST" />
 -->
+
+<div id='settings-wrapper'>
+ <ul id="app-settings">
+ <h3>Settings:</h3>
+ <hr/> 
+  <li><label >
+  <input type="radio" name="theme" class="setting" id="high-contrast-theme" /><span class="setting-txt" > Dark Theme</span>
+  </label></li>
+  
+  <li><label >
+  <input type="radio" name="theme" class="setting" id="blue-theme" checked /><span class="setting-txt"> Blue Theme</span>
+  </label></li>
+  
+  <li><label >
+  <input type="radio" name="theme" class="setting" id="green-theme"/><span class="setting-txt"> Green Theme</span>
+  </label></li>
+  <hr/>
+  <li><label >
+  <input type="radio" name="language" class="setting" id="english-language" checked /><span class="setting-txt"> English</span>
+  </label></li>
+ 
+  <li><label >
+  <input type="radio" name="language" class="setting" id="spanish-language"  /><span class="setting-txt"> Spanish</span>
+  </label></li>
+ 
+  <li><label >
+  <input type="checkbox" name="developer" class="setting" id="show-details" checked /><span class="setting-txt"> Developer</span>
+  </label></li>
+
+ </ul>
+</div>
+
+
+<input type="button" name="debug" id="settings" value="&#x22ee;" />
+
 
  <script type="text/javascript" charset="utf-8" src="calcApp.js"></script>
 </body>
