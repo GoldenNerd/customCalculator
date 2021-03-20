@@ -2,8 +2,26 @@ html{
 font-size: 62.5%;
 }
 
+:root{
+--background-color: #04043f;
+--borders-color: lightgreen;
+--keys-symbols-color: #c0c0c0;
+--notifications-text-color: black;
+--notifications-background-color: darkgrey;
+--greeting-background-color: darkgreen;
+--greeting-text-color: white;
+--notification-fatal-error-background-color  : #9d0ba7;
+/*
+--background-color: black;
+--borders-color: white;
+--keys-symbols-color: #c0c0c0;
+--notifications-text-color: black;
+--notifications-background-color: darkgrey;
+*/
+}
+
 body{
-  background-color: #0b0b5f; /* #5d0505 */
+  background-color: var(--background-color); /* #5d0505 #0b0b5f */
   margin: 0;
 }
 
@@ -21,9 +39,9 @@ width: 95%;
 height: 24vw;
 margin: 0 auto;
 padding-right: 0.1em;
- background-color: rgb(11,11,95);
- color: #c0c0c0;
- border: 1px solid black;
+ background-color: var(--background-color); /* #010153 */
+ color: var(--keys-symbols-color);
+ border: 1px solid transparent ;
 border-radius:10%;
 font-size: 13vw;
 text-align:right;
@@ -32,22 +50,22 @@ line-height: 180%;
 
 #lastOpDispl{
   display: block;
-  color:magenta;
+  color:green ;
   font-weight: bold;
   font-size: 2.5rem;
   position: absolute;
-  top: -0.7rem;
-  left:-0.2rem;
+  top: -0.5rem;
+  left:0.3rem;
 }
 
 .key, .mem-key{
  display: block;
  width: 23.5vw;
  height: 15vw;
- background-color: #010153;
- border: 1px solid lightgreen;
+ background-color: var(--background-color); /* #010153 */
+ border: 1px solid var(--borders-color);
  border-radius:15%;
- color: #c0c0c0;
+ color: var(--keys-symbols-color);
  font-size:10vw;
  font-weight:bolder;
  text-align: center;
@@ -67,8 +85,8 @@ line-height: 180%;
 width: fit-content;
 height: fit-content;
 font-size: 2em;
-background-color: #010153;
- border: 1px solid lightgreen;
+background-color: var(--background-color);
+ border: 1px solid var(--borders-color);
  border-radius:15%;
  color: white;
  font-weight:normal;
@@ -76,20 +94,26 @@ background-color: #010153;
  margin: 0.1vw 0.5vw;
 }
 
-#settings{
+#app-settings-menu{
 width: fit-content ;
 height: 5rem;
 font-size: 2.5em;
-background-color: #010153;
- border: 1px solid lightgreen;
+background-color: var(--background-color);
+ border: 1px solid var(--borders-color);
  border-radius:15%;
- color: white;
+ color: var(--keys-symbols-color);
  font-weight:bold;
  text-align: center;
  margin: 0.1vw 0.5vw;
  position: absolute;
-  top: 3rem;
-  left:0.2rem;
+  top: -1.2rem;
+  left: 2rem;
+  transform: rotate(-90deg);
+  transition: all 0.4s;
+  /*
+   top: 3rem;
+  left: 0.2rem;
+  */
 }
 
 #keys{
@@ -103,26 +127,20 @@ background-color: #010153;
   font-weight: bold;
   margin: 0 auto;
   position: relative;
-right:0;
-transition: all 0.5s;
+  right:0;
+  transition: all 0.75s;
 }
-/*
-.debug-pair, .calc-pair{
-  outline: 1px solid transparent ;
-  width:100%;
-}
-*/
 
 span, p{
  height:1.3rem;
  padding: 0.3rem;
- color: yellow;
+ color: var(--keys-symbols-color);
  margin-top:0.1rem;
  margin-bottom:0.1rem;
 }
 
 .debug-element, .calc-element{
-  border: 1px solid #90ee9080;
+  border: 1px solid var(--borders-color);
   border-radius: 0.3rem;
   width: 49%;
   display: flex;
@@ -140,38 +158,35 @@ span, p{
   flex-wrap:nowrap;
   justify-content:space-between;
 }
-/*
-#debug-grill{
-outline: 1px solid yellow ;
-opacity: 1;
-}
-*/
-
-#debug-data-grill{outline: 1px solid magenta ;
-
- font-size: 1.2rem;
- /* margin-top:3vw;
-  margin-left:0; */
-  margin: 0.3rem auto;
-  display:flex;
-  flex-direction: column;
-  flex-wrap: nowrap;
-  justify-content: flex-start;
-  align-items: flex-start;
-  /* */
-  opacity: 0;
-}
 
 #inner-data-wrapper{
-position: relative; 
+position: relative ; 
 z-index: -1;
-bottom: 7.5rem;
-left: 0;
+/* bottom: 7.5rem;
+left: 0; bottom: 0;*/
+transition: bottom 0.5s  ease-out ; 
+}
+
+#debug-data-grill{
+outline: 1px solid transparent ;
+font-size: 1.2rem;
+ /* margin-top:3vw;
+  margin-left:0; */
+margin: 0.3rem auto;
+display:flex;
+flex-direction: column;
+flex-wrap: nowrap;
+justify-content: flex-start;
+align-items: flex-start;
+  /*  ;*/
+opacity: 0;
+transition: opacity 0.75s ease-in;
 }
 
 #notification-area{
-border: 1px solid #90ee90cc;
+border: 1px solid var(--borders-color);
 border-radius: 0.3rem;
+background-color: var(--notifications-background-color);
 display: flex;
 flex-direction:row ;
 flex-wrap:nowrap;
@@ -185,7 +200,7 @@ margin:0 auto;
 }
 
  #notification{
- color: white;
+ color: var(--keys-symbols-color);
  font-weight: bolder;
  font-size: 1.2rem;
  /*color: #ae35dc;*/
@@ -221,7 +236,7 @@ opacity:1;
 position:absolute ;
 left:-101vw;
 transition: all 0.5s;
-color:#c0c0c0 ;
+color:var(--keys-symbols-color) ;
 font-size:1.5rem;
 margin-bottom: 2rem;
 height:105.1vw;}
@@ -230,8 +245,8 @@ height:105.1vw;}
 /* @ */
 
  display: block;
- background-color: #010153;
- border: 1px solid lightgreen;
+ background-color: var(--background-color);
+ border: 1px solid var(--borders-color);
  border-radius:15%;
  font-weight:bolder;
  text-align: center;
@@ -248,7 +263,12 @@ color: lightgreen;
 color: red;
 }
 
-h2{
+#choose-format-hether{
+text-align:center;
+}
+
+#new-format-hether{
+opacity:0;
 text-align:center;
 }
 
@@ -257,7 +277,7 @@ margin-left:7rem ;
 list-style:none;
 }
 
-.datum{outline: 1px solid transparent ;
+.datum{outline: 1px solid var(--borders-color) ;
 margin-left: 7rem;
 color: gold;
 background-color:#0080004d;
@@ -289,12 +309,12 @@ opacity: 0;
 
 /* SETTINGS MODAL */
 
-#settings-wrapper{
+#settings-modal-wrapper{
 font-size:0.9rem;
 outline: 1px solid transparent ;
 width: 90vw;
 height: 22vw;
-background-color:  #0b0b5f;
+background-color: var(--background-color); /* #5d0505 */
 position: absolute ;
 /*
 top: 0.4rem; / -22.6vw;
@@ -303,7 +323,7 @@ left: 3rem; / 101%;
 top: -22.6vw;
 left: 101%;
 z-index: 2;
-transition: all 0.5s;
+transition: all 0.5s ease-out;
 }
 
 h3{
@@ -315,18 +335,13 @@ margin-left: 0.75rem;
 margin-bottom :0;
 }
 
-#app-settings.li{
-display: block;
-width: 35%;
-}
-
-#app-settings.li:last-child{
-padding-bottom: 1rem;
-}
-
 hr{
 width: 100%;
-border: 1px solid #11117c ;
+border-top: 1px solid #140707;
+border-bottom: 0;
+border-left: 0;
+border-right: 0 ;
+/* #11117c */
 }
 
 .setting-txt{
@@ -335,8 +350,18 @@ font-weight: bolder;
 font-size: 1rem;
 }
 
-#app-settings{
-outline: 1px solid  #2626c2 ;
+#app-settings-modal.li{
+display: block;
+width: 35%;
+}
+
+#app-settings-modal.li:last-child{
+padding-bottom: 1rem;
+}
+
+#app-settings-modal{
+outline: 1px solid  #140707;
+/*  #2626c2 */
 height: fit-content ;
 text-decoration: none;
 margin: 0 auto ;
