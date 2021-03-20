@@ -8,25 +8,25 @@
   <title>Simple Calculator</title>
 </head>
 <body> 
-
+ 
  <div id="lcd-frame">
   <span id="lastOpDispl"></span>
   <span id="lcd" value=""></span>
 </div>
    <!-- MODAL OF APP: -->
 <div id=format-modal>
-  <h2>Re-format your number to:</h2>
+  <h2 id="choose-format-hether">Change number format to:</h2>
  
 <div id="format">
  <ul class="choices">
-   <li> <label><input type="radio" name="choice" id="original-format-choice" class="choice" value="" checked/> original format</label></li>
+   <li> <label><input type="radio" name="choice" id="original-format-choice" class="choice" value="" unchecked/> original format</label></li>
    <li> <label><input type="radio" name="choice" id="roundoff-choice" class="choice" value="" /> rounded-off format</label></li>
    <li> <label><input type="radio" class="choice" name="choice" id="scientific-choice" value=""/> scientific notation</label></li>
    <!--   <li> <label><input type="radio" class="choice" name="choice" id="scientific-choice" value="" /> scientific notation</label></li>
     --> 
  </ul>
 
- <h2>Enter Parameters for your Format</h2> 
+ <h2 id="new-format-hether">Parameters for new Format:</h2> 
  
 <div id="original-panel">
  <span class="datum" id="original-format-decimals"> Num.</span> decimal places
@@ -177,8 +177,10 @@
 <input type="button" name="debug" id="test" value="&#x267d; x2026 &#x22ee; TEST" />
 -->
 
-<div id='settings-wrapper'>
- <ul id="app-settings">
+<input type="button" name="debug" id="app-settings-menu" value="&#x22ee;" />
+
+<div id='settings-modal-wrapper'>
+ <ul id="app-settings-modal">
  <h3>Settings:</h3>
  <hr/> 
   <li><label >
@@ -209,7 +211,7 @@
 </div>
 
 
-<input type="button" name="debug" id="settings" value="&#x22ee;" />
+
 
 
  <script type="text/javascript" charset="utf-8" src="calcApp.js"></script>
