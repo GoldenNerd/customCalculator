@@ -116,14 +116,16 @@ alertColor.backgroundColor='transparent';
 function defaultKeysColor (){
 const allOpKeys=document.querySelectorAll('.key');
 for (let key of allOpKeys) {
-  key.style.color='#c0c0c0';
+  key.style.color='var(--key-symb)';
 }
 }
 
-function xternalReset (){
-resetCalculator();
-defaultKeysColor();
-toggleDevelopmentDataPanel();
+function greet (){
+notif.innerHTML=`           😁 Welcome to EASYCALC 😁
+           Your arithmetics assistant.
+               For help press ❔`;
+notif.style.color='var(--noti-greeting-txt-color)';
+alertColor.backgroundColor='var(--noti-greeting-bg-color)';
 }
 
 function resetCalculator (){
@@ -162,31 +164,32 @@ hideAppSettingsModal();
 return;
 } 
 
+function xtenddedCalcReset (){
+resetCalculator();
+defaultKeysColor();
+fetchPersistentUserConfiguration();
+applyTheme();
+toggleDevelopmentDataPanel();
+
+}
+
 // Initialize calc
 window.onload = function(){
-fetchPersistentUserConfiguration();
-xternalReset();
-const root=document.querySelector(':root');
-root.style.setProperty('--background-color', '#2e0c0cff');
-notif.innerHTML=`           😁 Welcome to EASYCALC 😁
-           Your arithmetics assistant.
-               For help press ❔`;
-notif.style.color='var(--greeting-text-color)';
-alertColor.backgroundColor='var(--greeting-background-color)';
+xtenddedCalcReset();
+greet();
 return;
 };
 
 // Key Presses - Event listeners for Memory and Format key presses:
 keyMS.addEventListener('click', ()=>{
 keyPressedMS=true;
-keyMS.style.color='lightgreen';
+keyMS.style.color='var(--key-ms)';
 setTimeout(()=>{
 if(numInMem===null || numInMem===''){
-keyMS.style.color='#c0c0c0';
-// @
-notif.innerHTML=`Sorry, nothing was saved.\nBut saving nothing erases memory.`;
-alertColor.backgroundColor='var(--notifications-background-color)'; // '#3cc4ef';
-notif.style.color='black';
+keyMS.style.color='var(--key-symb)';
+notif.innerHTML=`Error, nothing was saved.\nBut saving nothing erases memory.`;
+alertColor.backgroundColor='var(--noti-board-bg)'; // '#3cc4ef';
+notif.style.color='var(--noti-board-txt)';
 }
 },0);
 memoryHandler();
@@ -197,20 +200,20 @@ memoryHandler();
 });
 keyMC.addEventListener('click', () =>{
 keyPressedMC=true;
-keyMS.style.color='#c0c0c0';
+keyMS.style.color='var(--key-symb)';
 memoryHandler();
 });
 
 // The keyFormat Listener is programmatically controlled to enable or disable the Format Modal
 keyFormat.addEventListener('click', () =>{
   gateToModalScreen();
-  allKeysDfaultColor(keyFormat, '#c0c0c0');
+  allKeysDfaultColor(keyFormat, 'var(--key-symb)');
 });
 keyFormat.addEventListener('click', backupNumDisplayed);
 keyFormat.addEventListener('click', stdScientificDigitCount);
 
 // Key Presses - Event listeners for unary key presses:
-clearKey.addEventListener('click', () =>{xternalReset();
+clearKey.addEventListener('click', () =>{xtenddedCalcReset();
 });
 key0.addEventListener('click', ()=>{
   keyPressedUnary=true;
@@ -291,7 +294,8 @@ for (let key of allOpKeys) {
   key.style.color=keysColor;
 }
 let obj=keyTouched;
-obj.style.color='lightgreen';
+//obj.style.color='#20b2d8';
+obj.style.color='var(--op-key-touched)';
 }
 
 changeSignKey.addEventListener('click', ()=>{
@@ -299,8 +303,8 @@ changeSignKey.addEventListener('click', ()=>{
   keyPressedChgSign=true;
   keyPressed = '&#177';
   
-  allKeysDfaultColor(changeSignKey, '#c0c0c0');
-  // invertKey.style.color='lightgreen';
+  allKeysDfaultColor(changeSignKey, 'var(--key-symb)');
+  // invertKey.style.color='#20b2d8';
   
   switchCalcModes();
 });
@@ -309,8 +313,8 @@ backspaceKey.addEventListener('click', ()=>{
   keyPressedBackspace=true;
   keyPressed='&#x232b';
   
-  allKeysDfaultColor(backspaceKey, '#c0c0c0');
-  // invertKey.style.color='lightgreen';
+  allKeysDfaultColor(backspaceKey, 'var(--key-symb)');
+  // invertKey.style.color='#20b2d8';
   
   switchCalcModes();
 });
@@ -319,8 +323,8 @@ invertKey.addEventListener('click', ()=>{
   keyPressedInv=true;
   keyPressed='1/x';
   
-  allKeysDfaultColor(invertKey, '#c0c0c0');
-  // invertKey.style.color='lightgreen';
+  allKeysDfaultColor(invertKey, 'var(--key-symb)');
+  // invertKey.style.color='#20b2d8';
   
   switchCalcModes();
 });
@@ -329,8 +333,8 @@ sqrtKey.addEventListener('click', ()=>{
   keyPressedSqrt=true;
   keyPressed='&#x221a;';
   
-  allKeysDfaultColor(sqrtKey, '#c0c0c0');
-  // sqrtKey.style.color='lightgreen';
+  allKeysDfaultColor(sqrtKey, 'noti-fatal-error-bg-color  : #000000(--key-symb)');
+  // sqrtKey.style.color='#20b2d8';
   
   switchCalcModes();
 });
@@ -339,8 +343,8 @@ squareKey.addEventListener('click', ()=>{
   keyPressedSquare=true;
   keyPressed='x²';
   
-  allKeysDfaultColor(squareKey, '#c0c0c0');
-  // squareKey.style.color='lightgreen';
+  allKeysDfaultColor(squareKey, 'noti-fatal-error-bg-color  : #000000(--key-symb)');
+  // squareKey.style.color='#20b2d8';
   
   switchCalcModes();
 });
@@ -351,7 +355,7 @@ sumKey.addEventListener('click', ()=>{
   keyPressedAdd=true;
   keyPressed='+';
   previousOperand=lcd.innerHTML; // ~
-  allKeysDfaultColor(sumKey, '#c0c0c0');
+  allKeysDfaultColor(sumKey, 'var(--key-symb)');
   switchCalcModes();
 });
 minusKey.addEventListener('click',  ()=>{
@@ -359,7 +363,7 @@ minusKey.addEventListener('click',  ()=>{
   keyPressedSubstract=true;
   keyPressed='-';
   previousOperand=lcd.innerHTML; // ~
-  allKeysDfaultColor(minusKey, '#c0c0c0');
+  allKeysDfaultColor(minusKey, 'var(--key-symb)');
   switchCalcModes();
 });
 multiplyKey.addEventListener('click',  ()=>{
@@ -367,7 +371,7 @@ multiplyKey.addEventListener('click',  ()=>{
   keyPressedMultiply=true;
   keyPressed='&#215;';
   previousOperand=lcd.innerHTML; // ~
-  allKeysDfaultColor(multiplyKey, '#c0c0c0');
+  allKeysDfaultColor(multiplyKey, 'var(--key-symb)');
   switchCalcModes();
 });
 divideKey.addEventListener('click',  ()=>{
@@ -375,7 +379,7 @@ divideKey.addEventListener('click',  ()=>{
   keyPressedDivide=true;
   keyPressed='&#247;';
   previousOperand=lcd.innerHTML; // ~
-  allKeysDfaultColor(divideKey, '#c0c0c0');
+  allKeysDfaultColor(divideKey, 'var(--key-symb)');
   switchCalcModes();
 });
 percentageKey.addEventListener('click', ()=>{
@@ -383,15 +387,15 @@ percentageKey.addEventListener('click', ()=>{
   keyPressedPercentage=true;
   keyPressed='%';
   previousOperand=lcd.innerHTML; // ~
-  allKeysDfaultColor(percentageKey, '#c0c0c0');
+  allKeysDfaultColor(percentageKey, 'var(--key-symb)');
   switchCalcModes();
 });
 equalKey.addEventListener('click', ()=>{
   keyPressedUnary=false;
   keyPressedEquals=true;
   keyPressed='=';
-  allKeysDfaultColor(equalKey, '#c0c0c0');
-  equalKey.style.color='gold';
+  allKeysDfaultColor(equalKey, 'var(--key-symb)');
+  equalKey.style.color='var(--key-equal-symb)';
   main();
 });
 
@@ -433,11 +437,11 @@ keyPressedMC=false; // Reset flag
 if(numInMem===null||numInMem===''){// Forbidden: Attempting retrieval from memory when numInMem is empty.
 // Error: 'Nothing in memory'.
 notif.innerHTML=`
-                   ☹️ Sorry
+                   ⚠  Error
        There is nothing in memory.
        continue.`;
-alertColor.backgroundColor='var(--notifications-background-color)'; // '#3cc4ef';
-notif.style.color='black';
+alertColor.backgroundColor='var(--noti-board-bg)'; // '#3cc4ef';
+notif.style.color='var(--noti-board-txt)';
 keyPressedMR=false;
 return;}
 
@@ -475,7 +479,7 @@ return;
 // Remaining case is when there is a final result on display. Next digit pressed would start a whole new calculation. So, it's easier to reset Calculator and treat numInMem as though it is a result of pressing a single digit key. This last rule also applies to Recycle state,since number one display is also a final result.
  }else{
 // quals(); // to hammer it to work after a single equals. It does not work unless equals is pressed a second time. I don't know why.
-xternalReset();
+xtenddedCalcReset();
 treatAsDigitKeyPress();
 return;
 }
@@ -738,6 +742,7 @@ function unrelatedTasks(){
 previousOpKey=operator; // Every numeric appended preserves the last operator (if any). Will be used for checkDivByZero() function.
 keyFormat.addEventListener('click', enterFormatModal); // Enable format modal once something is on LCD
 keyFormatListenerFlag=true;
+console.log({keyFormatListenerFlag});
 chgNumAppearance();
 return;
 }
@@ -756,9 +761,9 @@ return;
 }else{ // 
 // Test failed keyPress is a repeat dot
 keyPressed='';
-notif.style.color='var(--notifications-text-color)';
+notif.style.color='var(--noti-board-txt)';
 notif.innerHTML=`Your duplicate dot was ignored. \nContinue.`;
-alertColor.backgroundColor='var(--notifications-background-color)';
+alertColor.backgroundColor='var(--noti-board-bg)';
 // setTimeout(()=>eraseNotification(), 3000);
 return;
 }
@@ -774,16 +779,16 @@ return;
 // Check if there is already a 'e'
 if (lcd.innerHTML.indexOf('e')<0) {
 // Display does not contain an 'e'. Test passed. An 'e-' will be appended.
-notif.style.color='var(--notifications-text-color)';
+notif.style.color='var(--noti-board-txt)';
 notif.innerHTML=`For a positive exponent delete negative sign using backspace key.`;
-alertColor.backgroundColor='var(--notifications-background-color)';
+alertColor.backgroundColor='var(--noti-board-bg)';
 return;
 }else{ // 
 // Test failed keyPress is a repeat 'e'
 keyPressed='';
-notif.style.color='var(--notifications-text-color)';
+notif.style.color='var(--noti-board-txt)';
 notif.innerHTML=`Your duplicate 'e' was ignored. Continue.`;
-alertColor.backgroundColor='var(--notifications-background-color)';
+alertColor.backgroundColor='var(--noti-board-bg)';
 // setTimeout(()=>eraseNotification(), 3000);
 return;
 }
@@ -793,9 +798,10 @@ return;
 function chkForbidExp (){
 //console.log({keyPressed});
 if ((keyPressed==='e-' || keyPressed==='.') && preservedEqualsResult!==null) {
-setTimeout(()=>{notif.innerHTML=`Now in Recycle Mode. Press your key again to modify the final result.`;
-alertColor.backgroundColor='var(--notifications-background-color)'; // '#3cc4ef';
-notif.style.color='black';}, 0);
+setTimeout(()=>{
+  notif.innerHTML=`Now in Recycle Mode. Press your key again to modify the final result.`;
+alertColor.backgroundColor='var(--noti-board-bg)';
+notif.style.color='var(--noti-board-txt)';}, 0);
 }
 preservedEqualsResult=null;
 return;
@@ -883,10 +889,10 @@ return;
 function invert (){
 if(operand1*1===0 ||operand1===null){
 notif.innerHTML=`
-                   ☹️ Sorry
+                   ⚠  Error
        Try again with a non zero value.`;
-alertColor.backgroundColor='var(--notifications-background-color)'; // '#3cc4ef';
-notif.style.color='black';
+alertColor.backgroundColor='var(--noti-board-bg)'; // '#3cc4ef';
+notif.style.color='var(--noti-board-txt)';
 operand1=null;
 updDebug();
 lcd.innerHTML=null;
@@ -897,11 +903,11 @@ operand1=(1/operand1).toString();
 lcd.innerHTML=operand1;
 }else{
 if(operand2==='0' ||operand2===null){
-notif.innerHTML=` ☹️ Sorry.
+notif.innerHTML=` ⚠  Error.
 Try again with a non zero value. Entry so far:
 ${operand1} ${operator}`;
-alertColor.backgroundColor='var(--notifications-background-color)'; // '#3cc4ef';
-notif.style.color='black';
+alertColor.backgroundColor='var(--noti-board-bg)'; // '#3cc4ef';
+notif.style.color='var(--noti-board-txt)';
 operand2=null;
 updDebug();
 lcd.innerHTML=null;
@@ -919,10 +925,10 @@ return;
 function sqrt (){
 if(operator===null){
 if(operand1<0){
-notif.innerHTML =`                   ☹️ Sorry.
+notif.innerHTML =`                   ⚠  Error.
  Only positive numbers for square root operator.
  Modify your number, or clear to try again.`;
-alertColor.backgroundColor='var(--notification-fatal-error-background-color)'; // '#9d0ba7';
+alertColor.backgroundColor='var(--noti-fatal-error-bg-color)'; // '#9d0ba7';
 keyPressedSqrt=false;
 return;
 }
@@ -960,7 +966,7 @@ keyPressedEquals=false;
 subtotal=finalResult;
 updDebug();
 lastOpDispl.innerHTML = '=';
-chgNumAppearance('1', 'gold');
+chgNumAppearance('1', 'var(--num-result)');
 return;
 }
 
@@ -993,8 +999,8 @@ updDebug();
 }else if(operator==='&#247;'){// division
 if(operand2==='0'){
 resetCalculator();
-alertColor.backgroundColor='var(--notification-fatal-error-background-color)';
- notif.innerHTML='             ☹️ Sorry.\n              Divide by zero is not allowed.\n              I had to cancel your calculation. 🤷🏻‍♂️';
+alertColor.backgroundColor='var(--noti-board-bg)';
+ notif.innerHTML='             ⚠  Error.\n              Divide by zero is not allowed.\n              I had to cancel your calculation.';
  // divByZeroFlag=false;
  return;
 }else{
@@ -1012,8 +1018,8 @@ finalResult= parseFloat(operand1) * parseFloat(operand2)/100;
 updDebug();
 */
 }else{// error: missing operator
-alertColor.backgroundColor='var(--notification-fatal-error-background-color)';
- notif.innerHTML ='☹️ Sorry. Two numbers and an operator are required to perform a calculation. Clear and start all over again.';
+alertColor.backgroundColor='var(--noti-fatal-error-bg-color)';
+ notif.innerHTML ='⚠  Error. Two numbers and an operator are required to perform a calculation. Clear and start all over again.';
 }
 
 return;
@@ -1027,11 +1033,11 @@ if(previousOpKey==='&#247;' && operand2*1===0)
 // console.log('flag set to: ', abortSwitchCalcModes);
 resetCalculator();
 notif.innerHTML=`
-                   ☹️ Sorry
+                   ⚠  Error
        Calculation canceled. You attempted to divide by zero.
        Enter a number a for new calculation.`;
-alertColor.backgroundColor='var(--notification-fatal-error-background-color)'; // '#3cc4ef';
-notif.style.color='black';
+alertColor.backgroundColor='var(--noti-board-bg)'; // '#3cc4ef';
+notif.style.color='var(--noti-board-txt)';
 }else{
 // NOP
 return;
@@ -1040,35 +1046,34 @@ return;
 
 function gateToModalScreen (){
 if (!keyFormatListenerFlag ||lcd.innerHTML===''){
-alertColor.backgroundColor='var(--notifications-background-color)'; // '#3cc4ef';
+alertColor.backgroundColor='var(--noti-board-bg)'; // '#3cc4ef';
  notif.innerHTML=`
-      You need a number on display to use this feature! 👀`;
- notif.style.color='black';
+      You need a number on display to use this feature!`;
+ notif.style.color='var(--noti-board-txt)';
 }
 }
 
 function chkFirstKeypressIsNum(){
 if(operand1===null && isNaN(keyPressed) && keyPressed!=='.'){
 resetCalculator();
-alertColor.backgroundColor='var(--notifications-background-color)'; // '#3cc4ef';
+alertColor.backgroundColor='var(--noti-board-bg)'; // '#3cc4ef';
  notif.innerHTML=`
-      🙂 Your first entry must be a number or a dot!`;
- notif.style.color='black';
+      ⚠ Your first entry must be a number or a dot!`;
+ notif.style.color='var(--noti-board-txt)';
  
  defaultKeysColor();
  return;
 }
 } 
 
-function chgNumAppearance (intensity, color='#c0c0c0'){
+function chgNumAppearance (intensity, color='var(--key-symb)'){
 lcd.style.color=color;
 lcd.style.opacity=intensity;
 } 
 
-
 function operandLoader (){
 operator=keyPressed;
-chgNumAppearance('1','lightgreen');
+chgNumAppearance('1','var(--num-entered)');
 updDebug();
 }
 
@@ -1077,8 +1082,8 @@ if(operator!==null && operand2===null){
 // notify operator duplicity
 notif.innerHTML=`ERROR! You had already entered an operator. Entries so far:\n${operand1} ${keyPressed}
 To continue: Enter your next number, OR\nPress the operator you really wanted.`;
-alertColor.backgroundColor='var(--notifications-background-color)'; // '#3cc4ef';
-notif.style.color='black';
+alertColor.backgroundColor='var(--noti-board-bg)'; // '#3cc4ef';
+notif.style.color='var(--noti-board-txt)';
 }
 }
 
@@ -1164,8 +1169,8 @@ if(keyPressedEquals){// 8y
 console.log('if 8');
 if(operand1===null||operand2===null){
 // Error: missing operand
-alertColor.backgroundColor='var(--notification-fatal-error-background-color)';
- notif.innerHTML='☹️ Sorry. Two numbers and an operator are required to perform a calculation. Clear and start all over again.';
+alertColor.backgroundColor='var(--noti-fatal-error-bg-color)';
+ notif.innerHTML='⚠  Error. Two numbers and an operator are required to perform a calculation. Clear and start all over again.';
 return;
 }
 // 9 is the yes of 8
@@ -1294,7 +1299,7 @@ return;}
 
 function switchCalcModes (){
 hideAppSettingsModal();
-if(alertColor.backgroundColor==='var(--notification-fatal-error-background-color) '){return} // @ Fatal error. Reject all key presses until user resets calculator.
+if(alertColor.backgroundColor==='var(--noti-fatal-error-bg-color)'){return} // @ Fatal error. Reject all key presses until user resets calculator.
 
  eraseNotification();
 // Mode1: Entry of a unary or binary operator after final result (in other words, after pressing the equals key)
@@ -1396,11 +1401,11 @@ return;
 function fatalError (){
 // Preserve error message
 const preservedNotif=`
-                   ☹️ Sorry
+                   ⚠  Error
        Calculation canceled because you divided by zero.
        Enter number for new calculation.`;
-const preservedColorBg='var(--notifications-background-color)'; // '#3cc4ef';
-const preservedColor='black';
+const preservedColorBg='var(--noti-board-bg)'; // '#3cc4ef';
+const preservedColor='var(--noti-board-txt)';
 // Clear calculator
 resetCalculator();
 // Restore error message
@@ -1411,14 +1416,21 @@ notif.style.color=preservedColor;
 
 // ### BEHAVIOR OF USER SETTINGS: ###
 // Save user settings to persistent memory
-let devPanelVaultedState;
+let devPanelVaultedState; // @
+let vaultedThemeChoice;  
 function vaultUserConfiguration (){
 window.localStorage.setItem('devPanelVaultedState', JSON.stringify(devPanelVaultedState));
+window.localStorage.setItem('vaultedThemeChoice',JSON.stringify(vaultedThemeChoice));
+
 }
 
 // Restore user settings from persistent memory
 function fetchPersistentUserConfiguration (){
 devPanelVaultedState=JSON.parse(window.localStorage.getItem('devPanelVaultedState'));
+vaultedThemeChoice=JSON.parse(window.localStorage.getItem('vaultedThemeChoice'));
+// const persistentSettings={devPanelVaultedState: devPanelVaultedState, vaultedThemeChoice: vaultedThemeChoice};
+// return persistentSettings;
+return;
 }
 
 function verticalSettingsMenu (){
@@ -1433,6 +1445,8 @@ function showAppSettingsModal (){
 settingsModal.style.top='0.2rem';
 settingsModal.style.left='3rem';
 settingsModalOn=true;
+lcd.style.opacity='0';
+lastOpDispl.style.opacity='0'; // @
 verticalSettingsMenu();
 return;
 }
@@ -1442,12 +1456,14 @@ appSettingsMenu.style.transform='rotate(-90deg)';
 appSettingsMenu.style.top='-1.2rem';
 appSettingsMenu.style.left='2rem';
 
-
 }
+
 function hideAppSettingsModal (){
 settingsModal.style.top='-22.6vw';
 settingsModal.style.left='101%';
 settingsModalOn=false;
+lcd.style.opacity='1';
+lastOpDispl.style.opacity='1';
 horizontalSettingsMenu();
 return;
 }
@@ -1461,7 +1477,7 @@ showAppSettingsModal();
 return;
 }
 
-const appSettingsMenu=document.querySelector('#app-settings-menu');
+const appSettingsMenu=document.querySelector('#app-settings-menu-btn');
 appSettingsMenu.addEventListener('click', toggleAppSettingsModal);
 
 // ### BEHAVIOR OF DEVELOPER PANEL: ###
@@ -1503,6 +1519,56 @@ vaultDevPanelOnOffState();
 toggleDevelopmentDataPanel();
 });
 
+// ## BEHAVIOR OF THEMES: ##
+// Grab choices radio buttons
+const allAppSettings=document.querySelector('#app-settings-modal');
+const contrastThemeRadio=document.querySelector('#contrast-theme-choice');
+const blueThemeRadio=document.querySelector('#blue-theme-choice');
+const smoothThemeRadio=document.querySelector('#smooth-theme-choice');
+// Grab theme root element
+const root=document.querySelector(':root');
+function vaultChosenTheme (){
+let chosenTheme;
+if(contrastThemeRadio.checked===true){
+chosenTheme='contrast-theme';  
+}
+if(blueThemeRadio.checked===true){
+chosenTheme='blue-theme';
+}
+if(smoothThemeRadio.checked===true){
+chosenTheme='smooth-theme';
+}
+vaultedThemeChoice=chosenTheme;
+vaultUserConfiguration();
+return;
+}
+
+function tickActiveThemeRadioBtn (){
+if(vaultedThemeChoice==='contrast-theme'){
+contrastThemeRadio.checked=true;
+}
+if(vaultedThemeChoice==='blue-theme'){
+blueThemeRadio.checked=true;
+}
+if(vaultedThemeChoice==='smooth-theme'){
+smoothThemeRadio.checked=true;
+}
+}
+function applyTheme (){ // @
+fetchPersistentUserConfiguration();
+const currentClass=root.classList[0];
+console.log({currentClass});
+root.classList.remove(`${currentClass}`);
+root.classList.add(`${vaultedThemeChoice}`);
+tickActiveThemeRadioBtn();
+return;
+}
+ 
+allAppSettings.addEventListener('click', () =>{
+vaultChosenTheme();
+applyTheme();
+// window.location.reload();
+});
 
 
 /*
