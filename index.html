@@ -8,11 +8,12 @@
   <title>Simple Calculator</title>
 </head>
 <body> 
- 
- <div id="lcd-frame">
+<div id="main-wrapper">
+<!--  
+ <div id="lcd-frame"></div> -->
   <span id="lastOpDispl"></span>
   <span id="lcd" value=""></span>
-</div>
+
    <!-- MODAL OF APP: -->
 <div id=format-modal>
   <h2 id="choose-format-hether">Change number format to:</h2>
@@ -106,7 +107,7 @@
   <input type="button" class="key" id="dotKey" value="&middot;">
   <input type="button" class="key" id="change-sign" value="&#177;">
  <input type="button" class="key" id="equal" value="=">
- 
+
  <!-- <button class="key"><a href="help.html" id="help">&#x3f;</a></button> -->
  <input type="button" class="key" id="expKey" value="e">
  
@@ -177,24 +178,24 @@
 <input type="button" name="debug" id="test" value="&#x267d; x2026 &#x22ee; TEST" />
 -->
 
-<input type="button" name="debug" id="app-settings-menu" value="&#x22ee;" />
+<input type="button" name="debug" id="app-settings-menu-btn" value="&#x22ee;" />
 
 <div id='settings-modal-wrapper'>
  <ul id="app-settings-modal">
  <h3>Settings:</h3>
  <hr/> 
   <li><label >
-  <input type="radio" name="theme" class="setting" id="high-contrast-theme" /><span class="setting-txt" > Dark Theme</span>
+  <input type="radio" name="theme" class="setting" id="contrast-theme-choice"  /><span class="setting-txt" > Contrast Theme</span>
   </label></li>
   
   <li><label >
-  <input type="radio" name="theme" class="setting" id="blue-theme" checked /><span class="setting-txt"> Blue Theme</span>
+  <input type="radio" name="theme" class="setting" id="blue-theme-choice" /><span class="setting-txt"> Soothing Theme</span>
   </label></li>
   
   <li><label >
-  <input type="radio" name="theme" class="setting" id="green-theme"/><span class="setting-txt"> Green Theme</span>
+  <input type="radio" name="theme" class="setting" id="smooth-theme-choice" /><span class="setting-txt"> Smooth Theme</span>
   </label></li>
-  <hr/>
+  <hr/> 
   <li><label >
   <input type="radio" name="language" class="setting" id="english-language" checked /><span class="setting-txt"> English</span>
   </label></li>
@@ -209,10 +210,7 @@
 
  </ul>
 </div>
-
-
-
-
+</div>
 
  <script type="text/javascript" charset="utf-8" src="calcApp.js"></script>
 </body>
