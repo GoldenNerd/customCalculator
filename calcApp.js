@@ -116,7 +116,7 @@ alertColor.backgroundColor='transparent';
 function defaultKeysColor (){
 const allOpKeys=document.querySelectorAll('.key');
 for (let key of allOpKeys) {
-  key.style.color='var(--key-symb)';
+  key.style.color='var(--all-key-symbols-default-color)';
 }
 }
 
@@ -186,7 +186,7 @@ keyPressedMS=true;
 keyMS.style.color='var(--key-ms)';
 setTimeout(()=>{
 if(numInMem===null || numInMem===''){
-keyMS.style.color='var(--key-symb)';
+keyMS.style.color='var(--all-key-symbols-default-color)';
 notif.innerHTML=`Error, nothing was saved.\nBut saving nothing erases memory.`;
 alertColor.backgroundColor='var(--noti-board-bg)'; // '#3cc4ef';
 notif.style.color='var(--noti-board-txt)';
@@ -200,14 +200,14 @@ memoryHandler();
 });
 keyMC.addEventListener('click', () =>{
 keyPressedMC=true;
-keyMS.style.color='var(--key-symb)';
+keyMS.style.color='var(--all-key-symbols-default-color)';
 memoryHandler();
 });
 
 // The keyFormat Listener is programmatically controlled to enable or disable the Format Modal
 keyFormat.addEventListener('click', () =>{
   gateToModalScreen();
-  allKeysDfaultColor(keyFormat, 'var(--key-symb)');
+  applyColorToAllKeySymbols(keyFormat, 'var(--all-key-symbols-default-color)');
 });
 keyFormat.addEventListener('click', backupNumDisplayed);
 keyFormat.addEventListener('click', stdScientificDigitCount);
@@ -288,14 +288,16 @@ expKey.addEventListener('click', ()=>{
   switchCalcModes();
 });
 
-function allKeysDfaultColor (keyTouched, keysColor){
+function applyColorToAllKeySymbols (opKeyTouched, defaultColorForAllKeySymbols){
+/*The color of all symbols of all keys (elements with the class of ".key") will be colored to the color held by the "defaultColorForAllKeySymbols" variable. This color is the normal (default) color of all keys after app initialization.
+*/
 const allOpKeys=document.querySelectorAll('.key');
 for (let key of allOpKeys) {
-  key.style.color=keysColor;
+  key.style.color=defaultColorForAllKeySymbols;
 }
-let obj=keyTouched;
-//obj.style.color='#20b2d8';
-obj.style.color='var(--op-key-touched)';
+/* However, the symbol of the key that was touched, will be set to the color of that particular key in its actuated state. Actuated state is only be visible for unary and binary operator keys. Numbers, dot, and, e do not change symbol's color when actuated.
+*/
+opKeyTouched.style.color='var(--color-for-actuated-op-key)';
 }
 
 changeSignKey.addEventListener('click', ()=>{
@@ -303,7 +305,7 @@ changeSignKey.addEventListener('click', ()=>{
   keyPressedChgSign=true;
   keyPressed = '&#177';
   
-  allKeysDfaultColor(changeSignKey, 'var(--key-symb)');
+  applyColorToAllKeySymbols(changeSignKey, 'var(--all-key-symbols-default-color)');
   // invertKey.style.color='#20b2d8';
   
   switchCalcModes();
@@ -313,7 +315,7 @@ backspaceKey.addEventListener('click', ()=>{
   keyPressedBackspace=true;
   keyPressed='&#x232b';
   
-  allKeysDfaultColor(backspaceKey, 'var(--key-symb)');
+  applyColorToAllKeySymbols(backspaceKey, 'var(--all-key-symbols-default-color)');
   // invertKey.style.color='#20b2d8';
   
   switchCalcModes();
@@ -323,7 +325,7 @@ invertKey.addEventListener('click', ()=>{
   keyPressedInv=true;
   keyPressed='1/x';
   
-  allKeysDfaultColor(invertKey, 'var(--key-symb)');
+  applyColorToAllKeySymbols(invertKey, 'var(--all-key-symbols-default-color)');
   // invertKey.style.color='#20b2d8';
   
   switchCalcModes();
@@ -333,7 +335,7 @@ sqrtKey.addEventListener('click', ()=>{
   keyPressedSqrt=true;
   keyPressed='&#x221a;';
   
-  allKeysDfaultColor(sqrtKey, 'noti-fatal-error-bg-color  : #000000(--key-symb)');
+  applyColorToAllKeySymbols(sqrtKey, 'var(--all-key-symbols-default-color)');
   // sqrtKey.style.color='#20b2d8';
   
   switchCalcModes();
@@ -343,7 +345,7 @@ squareKey.addEventListener('click', ()=>{
   keyPressedSquare=true;
   keyPressed='x²';
   
-  allKeysDfaultColor(squareKey, 'noti-fatal-error-bg-color  : #000000(--key-symb)');
+  applyColorToAllKeySymbols(squareKey, 'var(--all-key-symbols-default-color)');
   // squareKey.style.color='#20b2d8';
   
   switchCalcModes();
@@ -355,7 +357,7 @@ sumKey.addEventListener('click', ()=>{
   keyPressedAdd=true;
   keyPressed='+';
   previousOperand=lcd.innerHTML; // ~
-  allKeysDfaultColor(sumKey, 'var(--key-symb)');
+  applyColorToAllKeySymbols(sumKey, 'var(--all-key-symbols-default-color)');
   switchCalcModes();
 });
 minusKey.addEventListener('click',  ()=>{
@@ -363,7 +365,7 @@ minusKey.addEventListener('click',  ()=>{
   keyPressedSubstract=true;
   keyPressed='-';
   previousOperand=lcd.innerHTML; // ~
-  allKeysDfaultColor(minusKey, 'var(--key-symb)');
+  applyColorToAllKeySymbols(minusKey, 'var(--all-key-symbols-default-color)');
   switchCalcModes();
 });
 multiplyKey.addEventListener('click',  ()=>{
@@ -371,7 +373,7 @@ multiplyKey.addEventListener('click',  ()=>{
   keyPressedMultiply=true;
   keyPressed='&#215;';
   previousOperand=lcd.innerHTML; // ~
-  allKeysDfaultColor(multiplyKey, 'var(--key-symb)');
+  applyColorToAllKeySymbols(multiplyKey, 'var(--all-key-symbols-default-color)');
   switchCalcModes();
 });
 divideKey.addEventListener('click',  ()=>{
@@ -379,7 +381,7 @@ divideKey.addEventListener('click',  ()=>{
   keyPressedDivide=true;
   keyPressed='&#247;';
   previousOperand=lcd.innerHTML; // ~
-  allKeysDfaultColor(divideKey, 'var(--key-symb)');
+  applyColorToAllKeySymbols(divideKey, 'var(--all-key-symbols-default-color)');
   switchCalcModes();
 });
 percentageKey.addEventListener('click', ()=>{
@@ -387,14 +389,14 @@ percentageKey.addEventListener('click', ()=>{
   keyPressedPercentage=true;
   keyPressed='%';
   previousOperand=lcd.innerHTML; // ~
-  allKeysDfaultColor(percentageKey, 'var(--key-symb)');
+  applyColorToAllKeySymbols(percentageKey, 'var(--all-key-symbols-default-color)');
   switchCalcModes();
 });
 equalKey.addEventListener('click', ()=>{
   keyPressedUnary=false;
   keyPressedEquals=true;
   keyPressed='=';
-  allKeysDfaultColor(equalKey, 'var(--key-symb)');
+  applyColorToAllKeySymbols(equalKey, 'var(--all-key-symbols-default-color)');
   equalKey.style.color='var(--key-equal-symb)';
   main();
 });
@@ -524,6 +526,7 @@ const keyBoard=document.querySelector('#keys');
 
 let modalStartedFlag;
 function enterFormatModal (){
+formatModal.style.opacity='1';
 formatModal.style.position='relative';
 formatModal.style.height='fit-content';
 formatModal.style.left='0';
@@ -725,6 +728,7 @@ goBtn.addEventListener('click', applySelectedFormat);
 goBtn.addEventListener('click', showOriginalRadioSelector);
 // Format mode display exit behavior. This is upon pressing the red "X" button.
 function exitFormatModal (){
+formatModal.style.opacity='0';
 formatModal.style.position='absolute';
 formatModal.style.height='fit-content';
 formatModal.style.left='-101vw';
@@ -906,6 +910,7 @@ if(operand2==='0' ||operand2===null){
 notif.innerHTML=` ⚠  Error.
 Try again with a non zero value. Entry so far:
 ${operand1} ${operator}`;
+notif.style.color='var(--noti-fatal-error-txt)';
 alertColor.backgroundColor='var(--noti-board-bg)'; // '#3cc4ef';
 notif.style.color='var(--noti-board-txt)';
 operand2=null;
@@ -928,6 +933,7 @@ if(operand1<0){
 notif.innerHTML =`                   ⚠  Error.
  Only positive numbers for square root operator.
  Modify your number, or clear to try again.`;
+ notif.style.color='var(--noti-fatal-error-txt)';
 alertColor.backgroundColor='var(--noti-fatal-error-bg-color)'; // '#9d0ba7';
 keyPressedSqrt=false;
 return;
@@ -1020,6 +1026,7 @@ updDebug();
 }else{// error: missing operator
 alertColor.backgroundColor='var(--noti-fatal-error-bg-color)';
  notif.innerHTML ='⚠  Error. Two numbers and an operator are required to perform a calculation. Clear and start all over again.';
+notif.style.color='var(--noti-fatal-error-txt)';
 }
 
 return;
@@ -1066,7 +1073,7 @@ alertColor.backgroundColor='var(--noti-board-bg)'; // '#3cc4ef';
 }
 } 
 
-function chgNumAppearance (intensity, color='var(--key-symb)'){
+function chgNumAppearance (intensity, color='var(--all-key-symbols-default-color)'){
 lcd.style.color=color;
 lcd.style.opacity=intensity;
 } 
@@ -1171,6 +1178,7 @@ if(operand1===null||operand2===null){
 // Error: missing operand
 alertColor.backgroundColor='var(--noti-fatal-error-bg-color)';
  notif.innerHTML='⚠  Error. Two numbers and an operator are required to perform a calculation. Clear and start all over again.';
+notif.style.color='var(--noti-fatal-error-txt)';
 return;
 }
 // 9 is the yes of 8
@@ -1402,14 +1410,14 @@ function fatalError (){
 // Preserve error message
 const preservedNotif=`
                    ⚠  Error
-       Calculation canceled because you divided by zero.
+       Calculation canceled because "xyz".
        Enter number for new calculation.`;
 const preservedColorBg='var(--noti-board-bg)'; // '#3cc4ef';
-const preservedColor='var(--noti-board-txt)';
+const preservedColor='var(--noti-fatal-error-txt)';
 // Clear calculator
 resetCalculator();
 // Restore error message
-notif.innerHTML=preservedNotif;
+notif.innerHTML=`Sorry for this inconvenience. I had to reset. I could not recover from an input error of yours. Error:\n${preservedNotif}`;
 alertColor.backgroundColor=preservedColorBg;
 notif.style.color=preservedColor;
 }
@@ -1432,7 +1440,7 @@ vaultedThemeChoice=JSON.parse(window.localStorage.getItem('vaultedThemeChoice'))
 // return persistentSettings;
 return;
 }
-
+ 
 function verticalSettingsMenu (){
 // Default position is horizontal
 appSettingsMenu.style.transform='rotate(0)';
