@@ -2,8 +2,404 @@ html{
 font-size: 62.5%;
 }
 /* CONTAINER USED TO APPLY A THEME UTILITY CLASS */
-:root {}
+:root {
 
+--main-bg-grad-stop1: #80808044 ;
+--main-bg-grad-stop2: #d3d3d344;
+
+--settings-menu-btn-bg: transparent ;
+
+  --settings-modal-bg: transparent;
+  --settings-modal-wf: #aaa;
+  --settings-modal-txt: #000;
+
+  --lcd-bg: transparent;
+  --num-displayed: rgba(0,0,0,0.66);
+  --num-entered: #7c7c7c;
+  --num-result: rgb(16,16,144);
+  --last-op-txt: #68340e;
+
+  --dev-panel-cell-bg: transparent;
+  --dev-panel-cell-border: rgba(0,0,0,0.60);
+  --dev-panel-cell-txt: #000;
+
+  --noti-board-bg: transparent ;
+  --noti-greeting-bg-color: transparent;
+  --noti-fatal-error-bg-color: transparent;
+  --noti-board-border: #000;
+  --noti-board-txt: #000;
+  --noti-greeting-txt-color: 000;
+  --noti-fatal-error-txt: #9b1a1a;
+   
+ /* --key-bg: transparent; */
+  --key-border: #000;
+  --all-key-symbols-default-color: rgba(0,0,0,ff);
+  --key-equal-symb: #2323a7;
+  --key-ms: #68340e;
+  --color-for-actuated-op-key: #68340e;
+
+  /* --main-bg: red; */
+  --format-modal-heather: #000;
+  --format-modal-txt: #000;
+  --format-modal-param: #000;
+  --modal-datum-bg: #fff;
+  --modal-go-btn: darkgreen;
+  --modal-exit-btn: #9b1a1a;  
+}
+
+body{
+margin: 0;
+width: 100vw ;
+height:100vh;
+background-image: linear-gradient(to bottom, var(--main-bg-grad-stop1) 0%, var(--main-bg-grad-stop2) 20%, var(--main-bg-grad-stop1) 40%, var(--main-bg-grad-stop2) 60%, var(--main-bg-grad-stop1) 80%, var(--main-bg-grad-stop2) 100%); 
+}
+
+#whole-app-container {
+
+/* 
+background-image: url(/16_9.jpg);
+*/
+
+/*
+  background-color: var(--modal-bg); 
+  
+  */
+}
+
+/* SETTINGS MODAL SUBASSEMBLY */
+#app-settings-menu-btn{
+width: fit-content ;
+height: 5rem;
+font-size: 2.5em;
+background-color: var(--settings-menu-btn-bg);
+ border: 1px solid var(--key-border);
+ border-radius:15%;
+ color: var(--settings-modal-txt);
+ font-weight:bold;
+ text-align: center;
+ /* margin: 0.1vw 0.5vw; */ 
+ transition: all 0.4s;
+ position: absolute ;
+   transform: rotate(-90deg);
+top: -1.2rem;
+  left: 2rem;
+  z-index:1;
+  /* 
+   top: 3rem;
+  left: 0.2rem;
+  */
+}
+
+h3{
+font-weight: bolder;
+font-size: 1.3rem;
+color: inherit;
+margin-top :0;
+margin-left: 0.75rem;
+margin-bottom :0;
+}
+
+hr{
+width: 100%;
+border-top: 1px solid var(--settings-modal-wf);
+border-bottom: 0;
+border-left: 0;
+border-right: 0 ;
+}
+
+.user-settings-radio-btn-names{
+color: var(--settings-modal-txt);
+font-weight: bolder;
+font-size: 1rem;
+}
+
+#app-settings-modal.li:last-child{
+padding-bottom: 1rem;
+}
+
+#app-settings-modal.li{
+display: block;
+width: 35%;
+}
+
+#app-settings-modal{
+outline: 1px solid var(--settings-modal-wf);
+height: fit-content ;
+text-decoration: none;
+margin: 0 auto ;
+padding: 0;
+display: flex;
+flex-direction: row;
+flex-wrap: wrap;
+justify-content: space-between;
+align-items: stretch;
+}
+ 
+#settings-modal-wrapper{
+outline: 1px solid var(--settings-modal-wf);  
+background-color: var(--settings-modal-bg); /* #5d0505 */
+color: var(--settings-modal-txt);
+font-size:0.9rem;
+width: 90vw;
+height: 22vw;
+position: absolute ;
+top: -22.6vw;
+left: 101%;
+transition: all 0.5s ease-out;
+z-index:1;
+/*
+top: 0.4rem; / -22.6vw;
+left: 3rem; / 101%;
+z-index: 2;
+*/
+}
+
+/* LCD SUBASSEMBLY */
+#lcd-dev-container{outline: 1px solid transparent ;
+width: 100vw;
+height: 22.5vw;
+/* height: fit-content;*/
+margin: 0;
+margin-bottom: 4px;
+padding: 0;
+background-color: transparent;
+}
+
+#lastOpDispl{outline: 1px solid transparent ;
+  display: block;
+  height:fit-content ;
+  padding:0;
+  margin: 0;
+  color: var(--last-op-txt);
+  font-weight: bold;
+  font-size: 2.5rem;
+  position: absolute ;
+  /* */
+  top:  5.7rem;
+  left:0.3rem;
+}
+ 
+#lcd{outline: 1px solid transparent ;
+display: block;
+padding-top: 1.7rem;
+/*margin:0;
+width: 95%;*/
+position:relative ;
+height:fit-content;
+/* margin: 0 auto; */
+/*padding-right: 0.1em;*/
+background-color: var(--lcd-bg);
+color: var(--num-displayed);
+border-radius:10%;
+font-size: 13vw;
+text-align:right;
+/*line-height: 180%;*/
+}
+
+/* KEYBOARD SUBASSEMBLY */
+.key, .mem-key{
+ display: block;
+ width: 23.5vw;
+ height: 15vw;
+ background-image: linear-gradient(to bottom, var(--main-bg-grad-stop1), var(--main-bg-grad-stop2));
+  /*background-color: var(--key-bg); #010153 */
+ border: 1px solid var(--key-border);
+ border-radius:15%;
+ color: var(--all-key-symbols-default-color);
+ font-size:10vw;
+ font-weight:bolder;
+ text-align: center;
+ line-height: 150%;
+ margin: 0.1vw 0.5vw;
+}
+ 
+/*
+ #help{
+ font-size:10vw;
+ color: white;
+ text-decoration: none;
+ }
+ */
+
+#keys{outline: 1px solid transparent ;
+  width: 98vw;
+  height: fit-content;
+  display:flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content:flex-start;
+  align-items: center ;
+  font-weight: bold;
+  margin: 0 auto;
+  position: static;
+  right:0;
+  transition: all 0.75s;
+}
+
+span, p{
+ height:1.3rem;
+ padding: 0.3rem;
+ color: var(--dev-panel-cell-txt);
+ margin-top:0.1rem;
+ margin-bottom:0.1rem;
+}
+
+.debug-element, .calc-element{
+  border: 1px solid var(--dev-panel-cell-border);
+  border-radius: 0.3rem;
+  width: 49%;
+  display: flex;
+  flex-direction:row;
+  flex-wrap:nowrap;
+  justify-content:space-between;
+  align-items: center;
+  margin-left: 0.5rem;
+  }
+
+.debug-pair, .calc-pair{/*outline: 1px solid red; */
+  width: 99%;
+  display: flex;
+  flex-direction:row;
+  flex-wrap:nowrap;
+  justify-content:space-between;
+}
+
+#inner-data-wrapper{outline: 1px solid transparent ;
+position: relative ;
+z-index: -1; 
+/*bottom: 7.5rem;
+left: 0; bottom: 0;*/
+
+transition: all 0.5s ; 
+}
+
+#debug-data-grill{
+outline: 1px solid transparent ;
+font-size: 1.2rem;
+ /* margin-top:3vw;
+  margin-left:0; */
+margin: 0.3rem auto;
+display:flex;
+flex-direction: column;
+flex-wrap: nowrap;
+justify-content: flex-start;
+align-items: flex-start;
+  /*  ;*/
+opacity: 0;
+transition: opacity 0.75s ease-in;
+}
+
+#notification-area{
+border: 1px solid var(--noti-board-border);
+border-radius: 0.3rem;
+background-color: var(--noti-board-bg);
+display: flex;
+flex-direction:row ;
+flex-wrap:nowrap;
+justify-content:flex-start ;
+align-items:flex-start ;
+width: 98%;
+height: 6.5rem;
+text-align: left;
+white-space: pre-wrap;
+margin:0 auto;
+}
+
+ #notification{
+ color: var(--noti-board-txt);
+ font-weight: bolder;
+ font-size: 1.2rem;
+ /*color: #ae35dc;*/
+ }
+ 
+ #help-page{
+ font-size: 2rem;
+ color: var(--format-modal-txt);
+ }
+ 
+ 
+/* MODAL OF APP */
+
+/*  PROPERTIES FOR FORMAT MODAL  */
+#format-modal{outline: 1px solid transparent ;
+margin: 0;
+transition: all 0.5s;
+color:var(--format-modal-txt);
+font-size:1.5rem;
+opacity:1;
+/* margin-bottom: 2rem; height:105.1vw; */
+position: absolute ;
+right:100%;
+top: 0;
+}
+
+#apply-format, #quit-format{
+/*  */
+ display: block;
+ background-color: var(--key-bg);
+ border: 1px solid var(--key-border);
+ border-radius:15%;
+ font-weight:bolder;
+ text-align: center;
+ line-height: 150%;
+ margin: 0.1vw 0.5vw;
+opacity:1;
+font-size: 5vw;
+width:fit-content;
+height:fit-content;
+color: var(--modal-go-btn);
+}
+
+#quit-format{
+color: var(--modal-exit-btn);
+}
+
+#choose-format-hether{
+text-align:center;
+}
+
+#new-format-hether{
+/* opacity:0; */
+text-align:center;
+}
+
+ul{
+margin-left:7rem ;
+list-style:none;
+}
+
+.datum{/*
+outline: 1px solid var(--borders-color);
+*/
+margin-left: 7rem;
+color: gold;
+background-color: var(--modal-datum-bg); /* #0080004d; */
+/*rgb(255,255,255,0.2);*/
+border:none ;
+text-align:right;
+margin-right: 1rem;
+font-weight:bold;
+}
+
+#original-format-decimals{
+display:inline-block;
+min-width: 4.46rem;
+padding-right:0;
+}
+
+#format-buttons{
+margin-top:2rem;
+display:flex;
+flex-direction:row;
+flex-wrap:nowrap;
+justify-content:space-between;
+align-items:flex-start;
+}
+/* panel control to show/hide choices */
+li:first-child, #original-panel, #round-panel, #scientific-panel{
+opacity: 0;
+}
+ 
 /* UTILITY CLASSES FOR THEMES */
 .contrast-theme {
 /* Two variables for gradient implementation */
@@ -75,6 +471,7 @@ var(--settings-menu-btn-bg) transparent
   --noti-board-border: #f8efbe;
   --noti-board-txt: yellow;
   --noti-greeting-txt-color: white;
+  --noti-fatal-error-txt: red;
 /*
 1 
 - background of each key
@@ -82,15 +479,15 @@ var(--settings-menu-btn-bg) transparent
 - symbols on keys
   var(--key-bg: #120c11)
   var(--key-border: #fefceeff)
-  var(--key-symb: #fefceeff)
+  var(--all-key-symbols-default-color: #fefceeff)
   var(--key-equal-symb)
-  var(--op-key-touched)
+  var(--color-for-actuated-op-key)
 */
   --key-bg: #120c11;
   --key-border: #fefceeff;
-  --key-symb: #fefceeff;
+  --all-key-symbols-default-color: #fefceeff;
   --key-equal-symb: gold;
-  --op-key-touched: #04c867;
+  --color-for-actuated-op-key: #04c867;
   --key-ms: #04c867;
 /*
 1
@@ -145,13 +542,14 @@ What I called the Soothing Theme:
   --noti-board-border: lightgreen;
   --noti-board-txt: #fff;
   --noti-greeting-txt-color: lightgreen;
-
+  --noti-fatal-error-txt: red;
+  
   --key-bg: #0c3a11;
   --key-border: lightgreen;
-  --key-symb: #fff;
+  --all-key-symbols-default-color: #c0c0c0;
   --key-equal-symb: gold;
   --key-ms: #04c867;
-  --op-key-touched: #04c867;
+  --color-for-actuated-op-key: #04c867;
 
   /* --main-bg: red; */
   --format-modal-heather: #fff;
@@ -189,13 +587,15 @@ What I called the Soothing Theme:
   --noti-board-border: #000;
   --noti-board-txt: #000;
   --noti-greeting-txt-color: 000;
-
+  --noti-fatal-error-txt: #9b1a1a;
+   
  /* --key-bg: transparent; */
   --key-border: #000;
-  --key-symb: rgba(0,0,0,ff);
+  --all-key-symbols-default-color: rgba(0,0,0,ff);
   --key-equal-symb: #2323a7;
   --key-ms: #68340e;
-  --op-key-touched: #68340e;
+  --color-for-actuated-op-key: #68340e;
+  --color-for-actuated-op-key: #68340e;
 
   /* --main-bg: red; */
   --format-modal-heather: #000;
@@ -203,84 +603,9 @@ What I called the Soothing Theme:
   --format-modal-param: #000;
   --modal-datum-bg: #fff;
   --modal-go-btn: darkgreen;
-  --modal-exit-btn: #68340e;
+  --modal-exit-btn: #9b1a1a;
 }
 
-#main-wrapper {
-  /*   z-index: 5; */
-}
-
-body{
-width: 100vw ;
-height:100vh;
-background-image: linear-gradient(to bottom, var(--main-bg-grad-stop1) 0%, var(--main-bg-grad-stop2) 20%, var(--main-bg-grad-stop1) 40%, var(--main-bg-grad-stop2) 60%, var(--main-bg-grad-stop1) 80%, var(--main-bg-grad-stop2) 100%); 
-/* 
-background-image: url(/16_9.jpg);
-*/
-margin: 0;
-/*
-  background-color: var(--modal-bg); 
-  
-  */
-}
-/*
-#lcd-frame{
-display: block;
-width: 100%;
-margin: 0 auto;
-height: 24vw;
-background-color: transparent;
-}
-*/
-#lcd{
-display: block;
-width: 95%;
-height: 24vw;
-margin: 0 auto;
-padding-right: 0.1em;
-background-color: var(--lcd-bg);
- color: var(--num-displayed);
- border: 1px solid transparent ;
-border-radius:10%;
-font-size: 13vw;
-text-align:right;
-line-height: 180%;
-}
-
-#lastOpDispl{
-  display: block;
-  color: var(--last-op-txt);
-  font-weight: bold;
-  font-size: 2.5rem;
-  position: absolute;
-  top: 5.4rem;
-  left:0.3rem;
-}
-
-.key, .mem-key{
- display: block;
- width: 23.5vw;
- height: 15vw;
- background-image: linear-gradient(to bottom, var(--main-bg-grad-stop1), var(--main-bg-grad-stop2));
-  /*background-color: var(--key-bg); #010153 */
- border: 1px solid var(--key-border);
- border-radius:15%;
- color: var(--key-symb);
- font-size:10vw;
- font-weight:bolder;
- text-align: center;
- line-height: 150%;
- margin: 0.1vw 0.5vw;
-}
- 
-/*
- #help{
- font-size:10vw;
- color: white;
- text-decoration: none;
- }
- */
- 
 #test, #test2, #test3{
 width: fit-content;
 height: fit-content;
@@ -294,97 +619,6 @@ background-color: var(--key-bg);
  margin: 0.1vw 0.5vw;
 }
 
-
-#keys{
-  width: 98vw;
-  height: fit-content;
-  display:flex;
-  flex-direction: row;
-  flex-wrap: wrap;
-  justify-content:flex-start;
-  align-items: center ;
-  font-weight: bold;
-  margin: 0 auto;
-  position: relative;
-  right:0;
-  transition: all 0.75s;
-}
-
-span, p{
- height:1.3rem;
- padding: 0.3rem;
- color: var(--dev-panel-cell-txt);
- margin-top:0.1rem;
- margin-bottom:0.1rem;
-}
-
-.debug-element, .calc-element{
-  border: 1px solid var(--dev-panel-cell-border);
-  border-radius: 0.3rem;
-  width: 49%;
-  display: flex;
-  flex-direction:row;
-  flex-wrap:nowrap;
-  justify-content:space-between;
-  align-items: center;
-  margin-left: 0.5rem;
-  }
-
-.debug-pair, .calc-pair{/*outline: 1px solid red; */
-  width: 99%;
-  display: flex;
-  flex-direction:row;
-  flex-wrap:nowrap;
-  justify-content:space-between;
-}
-
-#inner-data-wrapper{
-position: relative ;
-/*z-index: -1; bottom: 7.5rem;
-left: 0; bottom: 0;*/
-
-transition: all 0.5s ; 
-}
-
-#debug-data-grill{
-outline: 1px solid transparent ;
-font-size: 1.2rem;
- /* margin-top:3vw;
-  margin-left:0; */
-margin: 0.3rem auto;
-display:flex;
-flex-direction: column;
-flex-wrap: nowrap;
-justify-content: flex-start;
-align-items: flex-start;
-  /*  ;*/
-opacity: 0;
-transition: opacity 0.75s ease-in;
-}
-
-#notification-area{
-border: 1px solid var(--noti-board-border);
-border-radius: 0.3rem;
-background-color: var(--noti-board-bg);
-display: flex;
-flex-direction:row ;
-flex-wrap:nowrap;
-justify-content:flex-start ;
-align-items:flex-start ;
-width: 98%;
-height: 6.5rem;
-text-align: left;
-white-space: pre-wrap;
-margin:0 auto;
-}
-
- #notification{
- color: var(--noti-board-txt);
- font-weight: bolder;
- font-size: 1.2rem;
- /*color: #ae35dc;*/
- }
- 
  #test, #test2, #test3{
    margin:1vw;
    position: absolute;
@@ -392,186 +626,11 @@ margin:0 auto;
    bottom: 1rem;
  }
  
- #test{
+#test{
  padding:0.5rem;
  display:block;
  margin:3rem auto;
  text-decoration: none;
  }
  
- #help-page{
- font-size: 2rem;
- color: var(--format-modal-txt);
- }
  
- 
-/* MODAL OF APP */
-
-/*  PROPERTIES FOR FORMAT MODAL  */
-#format-modal{ /* duplicate rule */
-margin: 0;
-/*height:15vw;*/
-opacity:1;
-position:absolute ;
-left:-101vw;
-transition: all 0.5s;
-color:var(--format-modal-txt);
-font-size:1.5rem;
-margin-bottom: 2rem;
-height:105.1vw;}
-
-#apply-format, #quit-format{
-/*  */
- display: block;
- background-color: var(--key-bg);
- border: 1px solid var(--key-border);
- border-radius:15%;
- font-weight:bolder;
- text-align: center;
- line-height: 150%;
- margin: 0.1vw 0.5vw;
-opacity:1;
-font-size: 5vw;
-width:fit-content;
-height:fit-content;
-color: var(--modal-go-btn);
-}
-
-#quit-format{
-color: var(--modal-exit-btn);
-}
-
-#choose-format-hether{
-text-align:center;
-}
-
-#new-format-hether{
-/* opacity:0; */
-text-align:center;
-}
-
-ul{
-margin-left:7rem ;
-list-style:none;
-}
-
-.datum{/*
-outline: 1px solid var(--borders-color);
-*/
-margin-left: 7rem;
-color: gold;
-background-color: var(--modal-datum-bg); /* #0080004d; */
-/*rgb(255,255,255,0.2);*/
-border:none ;
-text-align:right;
-margin-right: 1rem;
-font-weight:bold;
-}
-
-#original-format-decimals{
-display:inline-block;
-min-width: 4.46rem;
-padding-right:0;
-}
-
-#format-buttons{
-margin-top:2rem;
-display:flex;
-flex-direction:row;
-flex-wrap:nowrap;
-justify-content:space-between;
-align-items:flex-start;
-}
-/* panel control to show/hide choices */
-li:first-child, #original-panel, #round-panel, #scientific-panel{
-opacity: 0;
-}
-
-/* SETTINGS MODAL */
-#app-settings-menu-btn{
-width: fit-content ;
-height: 5rem;
-font-size: 2.5em;
-background-color: var(--settings-menu-btn-bg);
- border: 1px solid var(--key-border);
- border-radius:15%;
- color: var(--settings-modal-txt);
- font-weight:bold;
- text-align: center;
- margin: 0.1vw 0.5vw;
- position: absolute;
-  top: -1.2rem;
-  left: 2rem;
-  transform: rotate(-90deg);
-  transition: all 0.4s;
-  /*
-   top: 3rem;
-  left: 0.2rem;
-  */
-}
-
-#settings-modal-wrapper{
-outline: 1px solid var(--settings-modal-wf);  
-background-color: var(--settings-modal-bg); /* #5d0505 */
-color: var(--settings-modal-txt);
-font-size:0.9rem;
-width: 90vw;
-height: 22vw;
-position: absolute ;
-/*
-top: 0.4rem; / -22.6vw;
-left: 3rem; / 101%;
-*/
-top: -22.6vw;
-left: 101%;
-z-index: 2;
-transition: all 0.5s ease-out;
-}
-
-h3{
-font-weight: bolder;
-font-size: 1.3rem;
-color: inherit;/* var(--format-modal-heather);*/
-margin-top :0;
-margin-left: 0.75rem;
-margin-bottom :0;
-}
-
-hr{
-width: 100%;
-border-top: 1px solid var(--settings-modal-wf); /* #140707 */
-border-bottom: 0;
-border-left: 0;
-border-right: 0 ;
-/* #11117c */
-}
-
-.setting-txt{
-color: var(--settings-modal-txt);
-font-weight: bolder;
-font-size: 1rem;
-}
-
-#app-settings-modal.li{
-display: block;
-width: 35%;
-}
-
-#app-settings-modal.li:last-child{
-padding-bottom: 1rem;
-}
-
-#app-settings-modal{
-outline: 1px solid var(--settings-modal-wf); /* #140707;
- #2626c2 */
-height: fit-content ;
-text-decoration: none;
-margin: 0 auto ;
-padding: 0;
-display: flex;
-flex-direction: row;
-flex-wrap: wrap;
-justify-content: space-between;
-align-items: stretch;
-}
-
