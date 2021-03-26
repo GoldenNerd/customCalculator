@@ -403,7 +403,7 @@ equalKey.addEventListener('click', ()=>{
 
 // ################################
 // MR with empty LCD. Treat memory content as a new single number entry.
-function treatAsDigitKeyPress (){
+function treatAsDigitKeyPress (num=numInMem){
 // Preset the environment
 keyPressedUnary=true;
 keyPressedNumber=true;
@@ -527,11 +527,13 @@ const keyBoard=document.querySelector('#keys');
 let modalStartedFlag;
 function enterFormatModal (){
 formatModal.style.opacity='1';
-formatModal.style.position='relative';
-formatModal.style.height='fit-content';
-formatModal.style.left='0';
-keyBoard.style.position='absolute';
-keyBoard.style.right='101vw';
+formatModal.style.zIndex='1';
+//formatModal.style.position='relative';
+//formatModal.style.height='fit-content';
+//formatModal.style.left='0';
+//keyBoard.style.position='absolute';
+//keyBoard.style.right='101vw';
+keyBoard.style.opacity='0';
 return;
 }
 
@@ -729,11 +731,13 @@ goBtn.addEventListener('click', showOriginalRadioSelector);
 // Format mode display exit behavior. This is upon pressing the red "X" button.
 function exitFormatModal (){
 formatModal.style.opacity='0';
-formatModal.style.position='absolute';
-formatModal.style.height='fit-content';
-formatModal.style.left='-101vw';
-keyBoard.style.position='relative';
-keyBoard.style.right='0';
+formatModal.style.zIndex='0';
+//formatModal.style.position='absolute';
+//formatModal.style.height='fit-content';
+//formatModal.style.right='0';
+//keyBoard.style.position='relative';
+//keyBoard.style.right='0';
+keyBoard.style.opacity='1';
 eraseNotification();
 return;
 }
@@ -746,7 +750,6 @@ function unrelatedTasks(){
 previousOpKey=operator; // Every numeric appended preserves the last operator (if any). Will be used for checkDivByZero() function.
 keyFormat.addEventListener('click', enterFormatModal); // Enable format modal once something is on LCD
 keyFormatListenerFlag=true;
-console.log({keyFormatListenerFlag});
 chgNumAppearance();
 return;
 }
@@ -1024,6 +1027,8 @@ finalResult= parseFloat(operand1) * parseFloat(operand2)/100;
 updDebug();
 */
 }else{// error: missing operator
+console.log('1031',{subtotal}); // @
+treatAsDigitKeyPress(subtotal);
 alertColor.backgroundColor='var(--noti-fatal-error-bg-color)';
  notif.innerHTML ='⚠  Error. Two numbers and an operator are required to perform a calculation. Clear and start all over again.';
 notif.style.color='var(--noti-fatal-error-txt)';
@@ -1176,6 +1181,10 @@ if(keyPressedEquals){// 8y
 console.log('if 8');
 if(operand1===null||operand2===null){
 // Error: missing operand
+console.log('1185',{subtotal}); // @
+let preservedSubtotal=subtotal;
+resetCalculator();
+treatAsDigitKeyPress(preservedSubtotal);
 alertColor.backgroundColor='var(--noti-fatal-error-bg-color)';
  notif.innerHTML='⚠  Error. Two numbers and an operator are required to perform a calculation. Clear and start all over again.';
 notif.style.color='var(--noti-fatal-error-txt)';
@@ -1565,7 +1574,6 @@ smoothThemeRadio.checked=true;
 function applyTheme (){ // @
 fetchPersistentUserConfiguration();
 const currentClass=root.classList[0];
-console.log({currentClass});
 root.classList.remove(`${currentClass}`);
 root.classList.add(`${vaultedThemeChoice}`);
 tickActiveThemeRadioBtn();
