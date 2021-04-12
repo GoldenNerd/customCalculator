@@ -1,6 +1,6 @@
 <!DOCTYPE html> 
 <html lang="en"> 
-<head>  
+<head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
@@ -8,11 +8,13 @@
   <title>Simple Calculator</title>
 </head> 
 <body>
-<div id="whole-app-container">
  
+<div id="whole-app-container">
+  
  <!-- MODAL FOR USER SETTINGS: -->
+ 
 <input type="button" name="debug" id="app-settings-menu-btn" value="&#x22ee;" />
-<div id='settings-modal-wrapper'>
+ <div id='settings-modal-wrapper'>
  <ul id="app-settings-modal">
  <h3>Settings:</h3>
  <hr/> 
@@ -23,7 +25,7 @@
   <li><label >
   <input type="radio" name="theme" class="setting" id="blue-theme-choice" /><span class="user-settings-radio-btn-names"> Soothing Theme</span>
   </label></li>
-  
+   
   <li><label >
   <input type="radio" name="theme" class="setting" id="smooth-theme-choice" /><span class="user-settings-radio-btn-names"> Smooth Theme</span>
   </label></li>
@@ -55,13 +57,13 @@
 
 <div id="format">
  <ul class="choices">
-   <li> <label><input type="radio" name="choice" id="original-format-choice" class="choice" value="" unchecked/> original format</label></li>
-   <li> <label><input type="radio" name="choice" id="roundoff-choice" class="choice" value="" /> rounded-off format</label></li>
+   <li> <label><input type="radio" name="choice" id="original-format-choice" class="choice" value="" unchecked/> back to original format</label></li>
+   <li> <label><input type="radio" name="choice" id="roundoff-choice" class="choice" value="" /> fixed rounded-off format</label></li>
    <li> <label><input type="radio" class="choice" name="choice" id="scientific-choice" value=""/> scientific notation</label></li>
    <!--   <li> <label><input type="radio" class="choice" name="choice" id="scientific-choice" value="" /> scientific notation</label></li>
     --> 
  </ul>
-
+  
  <h2 id="new-format-hether">Parameters for new Format:</h2> 
  
 <div id="original-panel">
@@ -154,8 +156,7 @@
   <input type="button" class="mem-key" id="mc" value="MC">
   <input type="button" class="key" id="scissors1" value="&#x2704;">
  </div>
- 
- 
+  
  <!-- DEV INNER DATA PANEL: -->
 <div id="inner-data-wrapper">
 <div id="debug-data-grill">
@@ -202,20 +203,23 @@
    </p>
   </div>
 </div>
-
+ 
  <!-- NOTIFICATION BILLBOARD: -->
 <div id= "notification-area">
- <span id= "notification"></span>
+ <span id= "notification-text"></span>
+
+<input type="button" name="test" id="test" value="❔">
 </div>
 
+ 
 </div>
 
   <!-- 
 <input type="button" name="debug2" id="test2" value="1/x" />
-<input type="button" name="debug2" id="test3" value="x²" /> 
-<input type="button" name="debug" id="test" value="&#x267d; x2026 &#x22ee; TEST" />
+<input type="button" name="debug2" id="test3" value="x²" />   
+<input type="button" name="test" id="test" value="&#x267d; x2026 &#x22ee; TEST" />
 -->
  
- <script type="text/javascript" charset="utf-8" src="calcApp.js"></script>
+ <script type="text/javascript" charset="utf-8" src="calcAppTest.js"></script>
 </body>
 </html>
