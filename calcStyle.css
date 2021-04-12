@@ -23,12 +23,12 @@ font-size: 62.5%;
   --dev-panel-cell-border: rgba(0,0,0,0.60);
   --dev-panel-cell-txt: #000;
 
-  --noti-board-bg: transparent ;
-  --noti-greeting-bg-color: transparent;
-  --noti-fatal-error-bg-color: transparent;
   --noti-board-border: #000;
-  --noti-board-txt: #000;
+  --noti-greeting-bg-color: transparent;
   --noti-greeting-txt-color: 000;
+  --noti-board-bg: transparent ;
+  --noti-board-txt: #000;
+  --noti-fatal-error-bg-color: transparent;
   --noti-fatal-error-txt: #9b1a1a;
    
  /* --key-bg: transparent; */
@@ -83,7 +83,7 @@ background-color: var(--settings-menu-btn-bg);
    transform: rotate(-90deg);
 top: -1.2rem;
   left: 2rem;
-  z-index:1;
+  z-index:2;
   /* 
    top: 3rem;
   left: 0.2rem;
@@ -177,6 +177,7 @@ background-color: transparent;
   /* */
   top:  5.7rem;
   left:0.3rem;
+  z-index:1;
 }
  
 #lcd{outline: 1px solid transparent ;
@@ -305,6 +306,8 @@ height: 6.5rem;
 text-align: left;
 white-space: pre-wrap;
 margin:0 auto;
+font-size: 1.3rem;
+font-weight: bold;
 }
 
  #notification{
@@ -478,7 +481,7 @@ var(--settings-menu-btn-bg) transparent
   --noti-fatal-error-bg-color: #000000ff;
   --noti-board-border: #f8efbe;
   --noti-board-txt: yellow;
-  --noti-greeting-txt-color: white;
+  --noti-greeting-txt-color: lightgreen;
   --noti-fatal-error-txt: red;
 /*
 1 
@@ -582,20 +585,22 @@ What I called the Soothing Theme:
   --lcd-bg: transparent;
   --num-displayed: rgba(0,0,0,0.66);
   --num-entered: #7c7c7c;
-  --num-result: rgb(16,16,144);
+  --num-result: #101090;
   --last-op-txt: #68340e;
 
   --dev-panel-cell-bg: transparent;
   --dev-panel-cell-border: rgba(0,0,0,0.60);
   --dev-panel-cell-txt: #000;
 
-  --noti-board-bg: transparent ;
-  --noti-greeting-bg-color: transparent;
-  --noti-fatal-error-bg-color: transparent;
+
+
+  --noti-board-bg: #68340e ;
+  --noti-greeting-bg-color: #68340e;
+  --noti-fatal-error-bg-color: red;
   --noti-board-border: #000;
-  --noti-board-txt: #000;
-  --noti-greeting-txt-color: 000;
-  --noti-fatal-error-txt: #9b1a1a;
+  --noti-board-txt: lightgreen;
+  --noti-greeting-txt-color: lightgreen;
+  --noti-fatal-error-txt: red;
    
  /* --key-bg: transparent; */
   --key-border: #000;
@@ -639,6 +644,5 @@ background-color: var(--key-bg);
  display:block;
  margin:3rem auto;
  text-decoration: none;
+ background-color: #101090 ;
  }
- 
- 
