@@ -8,9 +8,11 @@
   <title>Simple Calculator</title>
 </head> 
 <body>
- 
+
 <div id="whole-app-container">
   
+<input type="button" id="help" value="HELP"/>
+ 
  <!-- MODAL FOR USER SETTINGS: -->
  
 <input type="button" name="debug" id="app-settings-menu-btn" value="&#x22ee;" />
@@ -39,7 +41,7 @@
   </label></li>
  
   <li><label >
-  <input type="checkbox" name="developer" class="setting" id="show-details" checked /><span class="user-settings-radio-btn-names"> Developer</span>
+  <input type="checkbox" name="developer" class="setting" id="show-details" checked /><span class="user-settings-radio-btn-names"> More</span>
   </label></li>
 
  </ul>
@@ -207,11 +209,11 @@
  <!-- NOTIFICATION BILLBOARD: -->
 <div id= "notification-area">
  <span id= "notification-text"></span>
-
-<input type="button" name="test" id="test" value="❔">
+<!--
+<input type="button" id="help" value="&#x3f;">
+-->
 </div>
 
- 
 </div>
 
   <!-- 
@@ -220,6 +222,6 @@
 <input type="button" name="test" id="test" value="&#x267d; x2026 &#x22ee; TEST" />
 -->
  
- <script type="text/javascript" charset="utf-8" src="calcApp.js"></script>
+ <script type="text/javascript" charset="utf-8" src="calcAppTest.js"></script>
 </body>
 </html>
