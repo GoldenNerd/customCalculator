@@ -3,7 +3,7 @@ font-size: 62.5%;
 }
 /* CONTAINER USED TO APPLY A THEME UTILITY CLASS */
 :root {
-
+--quest-mark-bg-hue: 240;
 --main-bg-grad-stop1: #80808044 ;
 --main-bg-grad-stop2: #d3d3d344;
 
@@ -80,8 +80,8 @@ background-color: var(--settings-menu-btn-bg);
  /* margin: 0.1vw 0.5vw; */ 
  transition: all 0.4s;
  position: absolute ;
-   transform: rotate(-90deg);
-top: -1.2rem;
+ transform: rotate(-90deg);
+ top: -1.2rem;
   left: 2rem;
   z-index:2;
   /* 
@@ -293,27 +293,35 @@ transition: opacity 0.75s ease-in;
 }
 
 #notification-area{
+/*
+outline:3px solid red;
+*/
+width: 98%;
+height: 6.5rem;
 border: 1px solid var(--noti-board-border);
 border-radius: 0.3rem;
 background-color: var(--noti-board-bg);
 display: flex;
 flex-direction:row ;
 flex-wrap:nowrap;
-justify-content:flex-start ;
-align-items:flex-start ;
-width: 98%;
-height: 6.5rem;
-text-align: left;
-white-space: pre-wrap;
+justify-content: center ;
+align-items: center ;
 margin:0 auto;
-font-size: 1.3rem;
-font-weight: bold;
+position: relative;
 }
-
- #notification{
+ 
+ #notification-text{
+ /*
+ outline:3px solid yellow ;
+display: block;
+ */
+ width: fit-content;
+ height: fit-content;
  color: var(--noti-board-txt);
- font-weight: bolder;
- font-size: 1.2rem;
+ font-weight: bold;
+ font-size: 1.3rem;
+white-space: pre-wrap;
+text-align: center;
  /*color: #ae35dc;*/
  }
  
@@ -494,7 +502,7 @@ var(--settings-menu-btn-bg) transparent
   var(--key-equal-symb)
   var(--color-for-actuated-op-key)
 */
-  --key-bg: #120c11;
+  --key-bg: hsl(310,20%,5.9%);
   --key-border: #fefceeff;
   --all-key-symbols-default-color: #fefceeff;
   --key-equal-symb: gold;
@@ -619,7 +627,7 @@ What I called the Soothing Theme:
   --modal-exit-btn: #9b1a1a;
 }
 
-#test, #test2, #test3{
+#test2, #test3{
 width: fit-content;
 height: fit-content;
 font-size: 2em;
@@ -630,19 +638,67 @@ background-color: var(--key-bg);
  font-weight:normal;
  text-align: center;
  margin: 0.1vw 0.5vw;
+   
 }
 
- #test, #test2, #test3{
+ #test2, #test3{
    margin:1vw;
    position: absolute;
    right:.5rem;
-   bottom: 1rem;
+   top: 1rem;
  }
  
-#test{
- padding:0.5rem;
- display:block;
- margin:3rem auto;
+ /* 
+#help{
+margin: 0.1vw 0.5vw;
+margin:3rem auto;
+margin:1vw;
+background-color: #101090 
+display: block;
+--quest-mark-bg-hue
+
+font-weight: bold;
+*/
+/*
+width: fit-content;
+height: fit-content;
+font-size: 3rem;
+color: hsl(calc(var(--quest-mark-bg-hue) - 180),100%,49%);
+ background-color: darkblue;
+ border: 1px solid var(--key-border);
+ border-radius:15%;
+ font-weight:normal;
+ text-align: center;
+ padding:0 0.75rem;
  text-decoration: none;
- background-color: #101090 ;
+ position: absolute ;
+ right: 3px;
+ bottom: 3px;
+transition: all ease-in 2s;
  }
+ */
+ 
+ 
+#help{
+/* transition: all 0.4s;
+transform: rotate(-90deg);
+border: 1px solid var(--key-border);
+ 
+*/
+width: fit-content ;
+height:  fit-content;
+font-size: 1.5em;
+padding: 0 0.5rem;
+background-color: darkblue;
+ 
+ color: hsl(calc(var(--quest-mark-bg-hue) - 180),100%,49%);
+ font-weight:bold;
+ text-align: center;
+ /* margin: 0.1vw 0.5vw; */ 
+ border-radius:15%;
+ position: relative ;
+
+ top: 0.4rem;
+  left: 0.5rem;
+  z-index:3;
+}
