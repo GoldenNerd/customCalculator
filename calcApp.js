@@ -102,42 +102,26 @@ fat - Fatal: Calc detected anomaly in the user entries and is unable to recover 
 clr - Clear the notification area.
 tst - Test message for debugging purposes
 */
-inf00: `           😁 Welcome to EASYCALC 😁
-           Your arithmetics assistant.
-               For help press ❔`,
-inf01: `Error, nothing was saved.\nBut saving nothing erases memory.`,
-inf02: `
-                   ⚠  Error
-       There is nothing in memory.
-       continue.`,
-inf03: `Your duplicate dot was ignored. \nContinue.`,
-inf04: `Your duplicate 'e' was ignored. Continue.`,
-int00: `Error. The number of decimal digits of your original number was not that large. \n Please try with a smaller number.`,
-int01: `For a positive exponent delete negative sign using backspace key.`,
+inf00: `😁 Welcome to EASYCALC 😁\nYour arithmetics assistant.\nFor help press ❔`,
+inf01: `Oops! Nothing was saved.\nBut beware!\nSaving nothing to memory erases the memory content.`,
+inf02: `Oops! Nothing was retrieved.\nMemory was empty. Continue.`,
+inf03: `That last dot was redundant.\nI ignored it. Continue.`,
+inf04: `That last "e" was redundant.\nI ignored it. Continue.`,
+int00: `Can't do it. Try with a smaller number\nThe amount of decimal digits of your original number was not that large.`,
+int01: `CALC tip:\nFor a positive exponent delete the negative sign using the backspace key.`,
 int02: `Now in Recycle Mode. Press your key again to modify the final result.`,
-int03: `
-                   ⚠  Error
-       Try again with a non zero value.`,
-int04: ` ⚠  Error.
-Try again with a non zero value. Entry so far:
+int03: `Oops! Couldn't do it.\nTry again with a non zero value.`,
+int04: `Oops! Try again with a non zero value. Entries so far:\n
 ${operand1} ${operator}`,
-int05: `                   ⚠  Error.
- Only positive numbers for square root operator.
- Modify your number, or clear to try again.`,
-int06: `
-      You need a number on display to use this feature!`,
-int07: `
-      ⚠ Your first entry must be a number or a dot!`,
-int08: `ERROR! You had already entered an operator. Entries so far:\n${operand1} ${keyPressed}
-To continue: Enter your next number, OR\nPress the operator you really wanted.`,
-fat00: `             ⚠  Error.\n              Divide by zero is not allowed.\n              I had to cancel your calculation.`,
-fat01: `⚠  Error. Two numbers and an operator are required to perform a calculation. Clear and start all over again.`,
-fat02: `
-                   ⚠  Error
-       Calculation canceled. You attempted to divide by zero.
-       Enter a number a for new calculation.`,
-fat03: `⚠  Error. Two numbers and an operator are required to perform a calculation. Clear and start all over again.`,
-fat04: `Error:\nThis Calculator  version can only handle integer exponentials.`,
+int05: `Sorry! Change number sign, or clear to start afresh. This version of CALC can't determine square roots of negative numbers.`,
+int06: `Not possible! You need a number on the display to use this feature.`,
+int07: `Not possible! All new calculations must start with a number or a dot!`,
+int08: `Can't do! Your previous key press was also an operator. Entries so far:\n${operand1} ${keyPressed}\nEither enter your next number, OR\nPress now the desired operator to continue.`,
+fat00: `Sorry! I can't divide by zero.\n I had to cancel and clear.`,
+fat01: `Wrong! Two numbers and an operator are needed to determine a final result. You must clear before proceeding.`,
+fat02: `Sorry! Calculation canceled.\nYou attempted to divide by zero. Enter a number a for new calculation.`,
+fat03: `Sorry! Two numbers and an operator are required to perform a calculation. You must clear before proceeding.`,
+fat04: `I'm sorry!\nThis CALC version can not handle the exponential value you entered.`,
 clr00: ``,
 tst00: `Notice!\nThis is a mocked error message\nIt is for test purposes only.`
 };
@@ -177,9 +161,8 @@ int06: `
       ¡Se requiere un número en pantalla para utilizar esta función!`,
 int07: `
       ⚠ ¡Lo primero que escriba debe ser un número o un punto!`,
-int08: `Error. Usted ya había entrado un operador. Lo que ha entrado hasta ahora es:\n${operand1} ${keyPressed}\n
-Para continuar: Entre su próximo número, O\nPresione el operador que necesitaba.`,
-
+int08: "Error. Usted ya había entrado un operador. Lo que ha entrado hasta ahora es: " + operand1 + " " + keyPressed + 
+" . Para continuar: Entre su próximo número O presione el operador que necesitaba.",
 fat00: '             ⚠  Error.\n              No es posible dividir por cero.\n              Tuve que cancelar su cálculo.',
 fat01: '⚠  Error. Se requieren dos números y un operador para obtener un resultado final. Oprima la tecla "C", y comience de nuevo.',
 fat02: `
@@ -205,9 +188,9 @@ greetColor: {bgColor: 'var(--noti-greeting-bg-color)', fontColor: 'var(--noti-gr
 // Post a notification
 function postANotification (msgCode, bgColr, fontColr){
 if(englishLanguageRadio.checked){
-notificationText.innerHTML=engMsgs[ `${msgCode}`];
+notificationText.innerText=engMsgs[ msgCode];
 }else if(spanishLanguageRadio.checked){
-notificationText.innerHTML=spaMsgs[ `${msgCode}`];
+notificationText.innerText=spaMsgs[ msgCode];
 }else{
 //NOP
 }
@@ -217,6 +200,7 @@ notificationText.style.color='yellow';
 */
 notificationAreaStyle.backgroundColor=bgColr;
 notificationText.style.color=fontColr;
+showHelpBtn();
 return;}
  
 // Axiliary function of reset:
@@ -245,6 +229,27 @@ const allOpKeys=document.querySelectorAll('.key');
 for (let key of allOpKeys) {
   key.style.color='var(--all-key-symbols-default-color)';
 }
+}
+const helpBtn=document.querySelector('#help');
+
+function showHelpBtn (){
+setTimeout(function() {
+appSettingsMenu.style.zIndex='1';
+helpBtn.style.zIndex='3';
+  helpBtn.style.opacity='1';
+  appSettingsMenu.style.opacity='0';
+  helpBtn.style.transition='all ease-in 1s';
+  setTimeout(function() {
+    helpBtn.style.transition='all 4s ease-out';
+helpBtn.style.opacity='0';
+appSettingsMenu.style.opacity='1';
+  setTimeout(function() {
+helpBtn.style.transition= 'all ease-in 1s';
+helpBtn.style.zIndex='1';
+appSettingsMenu.style.zIndex='3';
+  }, 4010);
+  }, 4000);
+}, 0);
 }
 
 function greet (){
@@ -288,7 +293,7 @@ eraseNotification();
 subtotal=null;
 updDebug();
 lastOpDispl.innerHTML = 'C';
-keyFormat.removeEventListener('click', enterFormatModal);
+keyFormat.removeEventListener('click',enterFormatModal);
 keyFormatListenerFlag=false;
 hideAppSettingsModal();
 return;
@@ -580,7 +585,7 @@ notificationText.innerHTML=`
        continue.`;
 */
 // notificationAreaStyle.backgroundColor='var(--noti-board-bg)'; // '#3cc4ef';
-notificationText.style.color='var(--noti-board-txt)';
+//notificationText.style.color='var(--noti-board-txt)';
 keyPressedMR=false;
 return;}
 
@@ -1005,7 +1010,8 @@ function chkMultiExpErr (){
 if(keyPressed!=='e-'){ // No need to test
 // NOP
 return;
-}else{ // Need to test
+} 
+// Need to test
 // Check if there is already a 'e'
 if (lcd.innerHTML.indexOf('e')<0) {
 // Display does not contain an 'e'. Test passed. An 'e-' will be appended.
@@ -1015,8 +1021,7 @@ notificationText.innerHTML=`For a positive exponent delete negative sign using b
 */
 // notificationText.style.color='var(--noti-board-txt)';
 // notificationAreaStyle.backgroundColor='var(--noti-board-bg)';
-return;
-}else{ // 
+return;}// 
 // Test failed keyPress is a repeat 'e'
 keyPressed='';
 postANotification('inf04', notifColors.infColor.bgColor, notifColors.infColor.fontColor);
@@ -1025,10 +1030,8 @@ notificationText.innerHTML=`Your duplicate 'e' was ignored. Continue.`;
 */
 // notificationText.style.color='var(--noti-board-txt)';
 // notificationAreaStyle.backgroundColor='var(--noti-board-bg)';
-return;
-}
-}
-}
+return;}
+
 
 function chkForbidExp (){
 //console.log({keyPressed});
@@ -1345,10 +1348,11 @@ updDebug();
 function chkMultiOps (){
 if(operator!==null && operand2===null){
 // notify operator duplicity
+console.log({operand1});
+console.log({keyPressed});
 postANotification('int08', notifColors.intColor.bgColor, notifColors.intColor.fontColor);
 /*
-notificationText.innerHTML=`ERROR! You had already entered an operator. Entries so far:\n${operand1} ${keyPressed}
-To continue: Enter your next number, OR\nPress the operator you really wanted.`;
+notificationText.innerHTML=`Can't do! Your previous key press was also an operator. Entries so far: ${operand1} ${keyPressed}\nEither enter your next number, OR, Press now the desired operator to continue.`;
 */
 // notificationAreaStyle.backgroundColor='var(--noti-board-bg)'; // '#3cc4ef';
 // notificationText.style.color='var(--noti-board-txt)';
@@ -2239,9 +2243,11 @@ if(!xtract.hasAnE(lcdBackup)) {
 const fxdNumDigFigCnt=fixedNumSigFigCnt();
 return fxdNumDigFigCnt;}  
 // Test the applicability of this function. It's only valid for exponential numbers, with integer exponential values.
-if(!Number.isInteger(1*xtract.exponentialValue(lcdBackup))){ // error: This Calculator  version can only handle integer exponentials.
+if(!Number.isInteger(1*xtract.exponentialValue(lcdBackup))){
+postANotification('fat04', notifColors.fatColor.bgColor, notifColors.fatColor.fontColor); // §v
+// error: This Calculator  version can only handle integer exponentials.
 // console.log('error: This Calculator  version can only handle integer exponentials.'); 
-postANotification('fat04', notifColors.fatColor.bgColor, notifColors.fatColor.fontColor); // §
+
 return;} 
 // Case 1: exponentialValue=0
 if(xtract.exponentialValue(lcdBackup)==='0'){
@@ -2334,7 +2340,7 @@ return fixedSigFigsCnt;}
 const fixedSigFigsCnt=xtract.sigFiguresCount(lcdBackup) + xtract.leadingZeroesCount(lcdBackup);
 return fixedSigFigsCnt;}
 
-
+/*
 // Test
 function test(){
 // Post a notification
@@ -2342,7 +2348,7 @@ function postANotification (msgCode, bgColr, fontColr){
 if(englishLanguageRadio.checked){
 notificationText.innerHTML=engMsgs[ `${msgCode}`];
 }else if(spanishLanguageRadio.checked){
-notificationText.innerHTML=spaMsgs[ `${msgCode}`];
+notificationText.innerHTML=spaMsgs[ msgCode];
 }else{
 //NOP
 }
@@ -2354,7 +2360,7 @@ return;}
  
 
 postANotification('clr00', notifColors.clrColor.bgColor, notifColors.clrColor.fontColor);
-}
+} 
 const testBtn=document.querySelector ('#test');
 testBtn.addEventListener('click', test);
-
+*/
