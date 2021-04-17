@@ -2,7 +2,7 @@ html{
 font-size: 62.5%;
 }
 /* CONTAINER USED TO APPLY A THEME UTILITY CLASS */
-:root {
+:root{
 --quest-mark-bg-hue: 240;
 --main-bg-grad-stop1: #80808044 ;
 --main-bg-grad-stop2: #d3d3d344;
@@ -16,35 +16,34 @@ font-size: 62.5%;
   --lcd-bg: transparent;
   --num-displayed: rgba(0,0,0,0.66);
   --num-entered: #7c7c7c;
-  --num-result: rgb(16,16,144);
+  --num-result: #101090;
   --last-op-txt: #68340e;
 
   --dev-panel-cell-bg: transparent;
   --dev-panel-cell-border: rgba(0,0,0,0.60);
   --dev-panel-cell-txt: #000;
 
-  --noti-board-border: #000;
-  --noti-greeting-bg-color: transparent;
-  --noti-greeting-txt-color: 000;
-  --noti-board-bg: transparent ;
-  --noti-board-txt: #000;
-  --noti-fatal-error-bg-color: transparent;
-  --noti-fatal-error-txt: #9b1a1a;
+  --noti-board-border: #68340e ;
+  --noti-greeting-bg-color: #68340e;
+  --noti-greeting-txt-color: red;
+  --noti-board-bg: #000;
+  --noti-board-txt: lightgreen;
+  --noti-fatal-error-bg-color: lightgreen;
+  --noti-fatal-error-txt: red;
    
- /* --key-bg: transparent; */
+  --key-bg: transparent;
   --key-border: #000;
   --all-key-symbols-default-color: rgba(0,0,0,ff);
   --key-equal-symb: #2323a7;
-  --key-ms: #68340e;
   --color-for-actuated-op-key: #68340e;
+  --key-ms: #68340e;
 
-  /* --main-bg: red; */
   --format-modal-heather: #000;
   --format-modal-txt: #000;
   --format-modal-param: #000;
   --modal-datum-bg: #fff;
   --modal-go-btn: darkgreen;
-  --modal-exit-btn: #9b1a1a;  
+  --modal-exit-btn: #9b1a1a;
 }
 
 body{
@@ -292,7 +291,7 @@ opacity: 0;
 transition: opacity 0.75s ease-in;
 }
 
-#notification-area{
+#bulletin-board{
 /*
 outline:3px solid red;
 */
@@ -310,7 +309,7 @@ margin:0 auto;
 position: relative;
 }
  
- #notification-text{
+ #bullet-text{
  /*
  outline:3px solid yellow ;
 display: block;
@@ -420,70 +419,27 @@ opacity: 0;
 }
  
 /* UTILITY CLASSES FOR THEMES */
-.contrast-theme {
-/* Two variables for gradient implementation */
+.dark-theme {
+--quest-mark-bg-hue: 240;
 --main-bg-grad-stop1: #000;
 --main-bg-grad-stop2: #000;
 
-/*
-settings menu button background
-
-var(--settings-menu-btn-bg) transparent
-*/
 --settings-menu-btn-bg: #000000ff;
-/*
-4
-- settings modal background 
-- settings modal wire frame
-- settings modal text
 
-   var(--settings-modal-bg: #120c11)
-  var(--settings-modal-wf: #123b55)
-   var(--settings-modal-txt: #white)
-*/
   --settings-modal-bg: #120c11;
   --settings-modal-wf: #123b55;
   --settings-modal-txt: white;
-/*
-3
-- LCD background 
-- numbers on display
-- last operation text
-  var(--lcd-bg: #120c11)
-  var(--num-displayed: #fefceeff)
-  var(--num-entered: #90ea9c)
-  var(--num-result: #f8efbedd)
-  var(--last-op-txt: #20b2d8) 
-*/
+
     --lcd-bg: #000000ff;
     --num-displayed: #fefceeff;
     --num-entered: #90ea9c;
     --num-result: #edd037dd;
     --last-op-txt: #0f9956;
-/*
-2
-- Developer panel cells background
-- Developer panel cell borders 
-- Developer panel cells text
-  var(--dev-panel-cell-bg: #120c11)
-  var(--dev-panel-cell-border: #fefceeff)
-  var(--dev-panel-cell-txt: #fefceeff) 
-*/
+
   --dev-panel-cell-bg: #120c11;
   --dev-panel-cell-border: #fefceeff;
   --dev-panel-cell-txt: #fefceeff;
-/*
-2
-- notification board background
-- notification board border
-- notification board text
-  var(--noti-board-bg: #120c11)
-  var(--noti-greeting-bg-color: #darkgreen)
-  var(--noti-fatal-error-bg-color: #000000ff)
-  var(--noti-board-border: #f8efbe)
-  var(--noti-board-txt: yellow)
-  var(--noti-greeting-txt-color: #white)
-*/
+
   --noti-board-bg: #120c11;
   --noti-greeting-bg-color: #darkgreen;
   --noti-fatal-error-bg-color: #000000ff;
@@ -491,36 +447,14 @@ var(--settings-menu-btn-bg) transparent
   --noti-board-txt: yellow;
   --noti-greeting-txt-color: lightgreen;
   --noti-fatal-error-txt: red;
-/*
-1 
-- background of each key
-- borders of each key
-- symbols on keys
-  var(--key-bg: #120c11)
-  var(--key-border: #fefceeff)
-  var(--all-key-symbols-default-color: #fefceeff)
-  var(--key-equal-symb)
-  var(--color-for-actuated-op-key)
-*/
+
   --key-bg: hsl(310,20%,5.9%);
   --key-border: #fefceeff;
   --all-key-symbols-default-color: #fefceeff;
   --key-equal-symb: gold;
   --color-for-actuated-op-key: #04c867;
   --key-ms: #04c867;
-/*
-1
--  background - (baseline) 
-- format modal Heathers
-- format modal all descriptive texts
-- format modal parameters text
-  var(---bg: #000000ff)
-  var(--format-modal-heather: #fefceeff)
-  var(--format-modal-txt: #fefceeff) 
-  var(--format-modal-param: #f8efbe)
-var(--modal-datum-bg: #0080004d) */
 
-  /* --main-bg: red; */
   --format-modal-heather: #fefceeff;
   --format-modal-txt: #fefceeff;
   --format-modal-param: #f8efbe;
@@ -529,13 +463,8 @@ var(--modal-datum-bg: #0080004d) */
   --modal-exit-btn: red;
 }
 
-.blue-theme{
-/* Two variables for gradient implementation */
-/*
-What I called the Soothing Theme:
---main-bg-grad-stop1: #00336c;
---main-bg-grad-stop2: #006052;
-*/
+.soothing-theme{
+--quest-mark-bg-hue: 240;
 --main-bg-grad-stop1: #00336c;
 --main-bg-grad-stop2: #006052;
 
@@ -567,10 +496,9 @@ What I called the Soothing Theme:
   --key-border: lightgreen;
   --all-key-symbols-default-color: #c0c0c0;
   --key-equal-symb: gold;
-  --key-ms: #04c867;
   --color-for-actuated-op-key: #04c867;
+  --key-ms: #04c867;
 
-  /* --main-bg: red; */
   --format-modal-heather: #fff;
   --format-modal-txt: #fff;
   --format-modal-param: #fff;
@@ -579,8 +507,8 @@ What I called the Soothing Theme:
   --modal-exit-btn: red;
 }
 
-.smooth-theme{
-/* Two variables for gradient implementation */
+.light-theme{
+--quest-mark-bg-hue: 240;
 --main-bg-grad-stop1: #80808044 ;
 --main-bg-grad-stop2: #d3d3d344;
 
@@ -600,8 +528,6 @@ What I called the Soothing Theme:
   --dev-panel-cell-border: rgba(0,0,0,0.60);
   --dev-panel-cell-txt: #000;
 
-
-
   --noti-board-bg: #68340e ;
   --noti-greeting-bg-color: #68340e;
   --noti-fatal-error-bg-color: red;
@@ -610,15 +536,13 @@ What I called the Soothing Theme:
   --noti-greeting-txt-color: lightgreen;
   --noti-fatal-error-txt: red;
    
- /* --key-bg: transparent; */
+  --key-bg: transparent;
   --key-border: #000;
   --all-key-symbols-default-color: rgba(0,0,0,ff);
   --key-equal-symb: #2323a7;
+  --color-for-actuated-op-key: #68340e;
   --key-ms: #68340e;
-  --color-for-actuated-op-key: #68340e;
-  --color-for-actuated-op-key: #68340e;
 
-  /* --main-bg: red; */
   --format-modal-heather: #000;
   --format-modal-txt: #000;
   --format-modal-param: #000;
@@ -671,9 +595,6 @@ color: hsl(calc(var(--quest-mark-bg-hue) - 180),100%,49%);
  text-align: center;
  padding:0 0.75rem;
  text-decoration: none;
- position: absolute ;
- right: 3px;
- bottom: 3px;
 transition: all ease-in 2s;
  }
  */
@@ -697,8 +618,14 @@ background-color: darkblue;
  /* margin: 0.1vw 0.5vw; */ 
  border-radius:15%;
  position: relative ;
-
+/*
  top: 0.4rem;
   left: 0.5rem;
   z-index:3;
+  */
+  
+ position: absolute ;
+ right: 3px;
+ bottom: 3px;
+  
 }
