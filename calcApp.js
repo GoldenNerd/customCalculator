@@ -15,6 +15,8 @@ let subtotal = null;
 let previousOpKey = null;
 let keyFormatListenerFlag;
 let previousOperand;
+let calcFatalLock;
+let preventRecycleBullet;
 
 // Flags used by operators event listeners
 let keyPressedUnary = null;
@@ -110,6 +112,8 @@ tst - Test message for debugging purposes
   inf04: `That last "e" was redundant.\nI ignored it. Continue.`,
   inf05: `Nothing was done! CALC does not invert zero. Continue.`,
   inf06: `Nothing done! CALC expects a number after an operator. Continue.`,
+  inf07: `Now in Recycle Mode. Permission to edit result is enabled.`,
+  inf08: `Sorry. This version of CALC does not process either negative or positive zero`,
   int00: `Can't do it. Try with a smaller number\nThe amount of decimal digits of your original number was not that large.`,
   int01: `CALC tip:\nFor a positive exponent delete the negative sign using the backspace key.`,
   int02: `Now in Recycle Mode. Press your key again to modify the final result.`,
@@ -123,11 +127,13 @@ tst - Test message for debugging purposes
   int08: `Can't do! Your previous key press was also an operator. Entries so far:\n${operand1} ${operator}\nEither enter your next number now, OR\nPress now the desired operator to continue.`,
   */
   int08: `Can't do! Your previous key press was also an operator. Either enter your next number now, OR Press now the desired operator to continue.`,
+  int09: `I ignored that last dot! \nThis CALC version can not handle decimal exponential. Continue.`,
   fat00: `Sorry! I can't divide by zero.\n I had to cancel and clear.`,
   fat01: `Wrong! Two numbers and an operator are needed to determine a final result. You must clear before proceeding.`,
   fat02: `Sorry! Calculation canceled.\nYou attempted to divide by zero. Enter a number a for new calculation.`,
   fat03: `Sorry! Two numbers and an operator are required to perform a calculation. You must clear before proceeding.`,
   fat04: `I'm sorry!\nThis CALC version can not handle the exponential value you entered.`,
+  fat05: `Apologies. You must press the clear key to resume CALC. There was an attempt to divide by zero.`,
   clr00: ``,
   tst00: `Notice!\nThis is a mocked error message\nIt is for test purposes only.`
 };
@@ -148,6 +154,8 @@ tst - Test message for debugging purposes
   inf04: `Su número ya contenía una "e".\nPor tanto ignoré esta última "e".\nContinue.`,
   inf05: `No se hizo nada. CALC no invierte cero. Continue.`,
   inf06: `No se hizo nada. CALC requiere un number después de un operador. Continue.`,
+  inf07: `Modo de reciclaje. Se permite modificar el resultado en pantalla.`,
+  inf08: `Disculpe. Esta versión de CALC no procesa ceros negativos ni positivos. Continue.`,
   int00: `No es posible. Use un número menor. La cantidad de lugares decimales de su número original no era tan grande. \n Intente otra vez con un número más pequeño.`,
   int01: `Para un exponencial positivo, borre el signo negativo con la tecla de borrar.`,
   int02: `Calc entró al Modo de Reciclaje.  Presione su tecla nuevamente para modificar el resultado en pantalla.`,
@@ -162,11 +170,13 @@ tst - Test message for debugging purposes
   Para continuar: Entre su próximo número, O Presione el operador deseado ahora.`,
   */
   int08: `Error. Usted ya había entrado un operador. Para continuar: Entre su próximo número, O Presione el operador deseado ahora.`,
+  int09: `Ignoré ese último punto. \nEsta versión de CALC version no puede procesar exponenciales decimales. Continue.`,
   fat00: `Lo lamento. No es posible dividir por cero.\nTuve que cancelar su cálculo. Comience un nuevo cálculo`,
   fat01: 'Error. Se requieren dos números y un operador para obtener un resultado final. Debe oprimir la tecla "C", y comenzar de nuevo.',
   fat02: `Error. Operación cancelada. Usted intentó dividir por cero. Entre un número para iniciar un nuevo cálculo.`,
   fat03: 'Error. Se requieren dos números y un operador para realizar un cálculo. Tendrá que oprimir la tecla "C", y comenzar de nuevo.',
   fat04: `No es posible.\nEsta version de CALC solo puede manejar exponenciales enteros.`,
+  fat05: `Lo lamento. Tendrá que oprimir la tecla "C" para poder continuar.`,
   clr00: ``,
   tst00: `¡Atención!\nEste es la simulación de un mensaje de error.\nTan solo con propósitos de prueba.`
 };
@@ -201,7 +211,6 @@ const bulletStyles = {
 
 // Func that posts a bullet:
 function postABullet (bulletCode, bulletinBoardColor, bulletColor) {
-  bulletText.style.color = bulletColor;
   // Select language for bullet
   let bulletLang;
   if (englishLanguageRadio.checked) {
@@ -211,8 +220,12 @@ function postABullet (bulletCode, bulletinBoardColor, bulletColor) {
   } else {
     // NOP same pattern as above for future languages
   }
-  console.log(eval("`${".concat(bulletLang) + ".".concat(bulletCode) + "}`"));
+bulletText.style.color = bulletColor;
+//  console.log(eval("`${".concat(bulletLang) + ".".concat(bulletCode) + "}`"));
   bulletText.textContent = eval("`${".concat(bulletLang) + ".".concat(bulletCode) + "}`");
+  if (bulletCode.includes('fat')){
+calcFatalLock=true;
+  }
 }
 
 // Axiliary function of reset:
@@ -230,7 +243,7 @@ function updDebug () {
   return;
 }
 
-function eraseBullet () {
+function eraseBillBoard () {
   postABullet('clr00', bulletStyles.clr.bg, bulletStyles.clr.font);
   // bulletText.innerHTML = '';
   // bulletinBoard.style.backgroundColor='transparent';
@@ -276,7 +289,6 @@ bulletText.innerHTML=`           😁 Welcome to EASYCALC 😁
 }
 
 function resetCalculator () {
-  console.log("resetCalculator() invoked");
   numColorsOnLCD_default = true;
   operand1 = null;
   operand2 = null;
@@ -303,8 +315,9 @@ function resetCalculator () {
   keyPressedMC = false;
   keyPressedFormat = false;
   lcd.innerHTML = null;
-  eraseBullet();
+  eraseBillBoard();
   subtotal = null;
+calcFatalLock=false ;
   updDebug();
   lastOpDispl.innerHTML = 'C';
   keyFormat.removeEventListener('click', enterFormatModal);
@@ -696,6 +709,15 @@ const keyBoard = document.querySelector('#keys');
 
 let modalStartedFlag;
 function enterFormatModal () {
+
+  // Test the applicability of this function. It's only valid for exponential numbers, with integer exponential values.
+  if (!Number.isInteger(1*xtract.exponentialValue(lcdBackup))) {
+    postABullet('fat04', bulletStyles.fat.bg, bulletStyles.fat.font);
+    // error: This Calculator  version can only handle integer exponentials.
+    // console.log('error: This Calculator  version can only handle integer exponentials.');
+
+    return;
+  }
   formatModal.style.opacity = '1';
   formatModal.style.zIndex = '1';
   //formatModal.style.position='relative';
@@ -963,7 +985,7 @@ function supplantOrigOperand (changedNum) {
 // const scientificRadioSelector=document.querySelector('#scientific-choice');
 
 function applySelectedFormat() {
-  eraseBullet();
+  eraseBillBoard();
   if (originalFormatRadioBtn.checked) {
     lcd.innerHTML = lcdBackup;
     supplantOrigOperand(lcdBackup);
@@ -1000,7 +1022,7 @@ function exitFormatModal () {
   //keyBoard.style.position='relative';
   //keyBoard.style.right='0';
   keyBoard.style.opacity = '1';
-  eraseBullet();
+  eraseBillBoard();
   return;
 }
 const quitBtn = document.querySelector('#quit-format');
@@ -1017,83 +1039,81 @@ function unrelatedTasks() {
 }
 
 // To handle attempts to write multiple dots to an operand
-function multipleDotsErr (){
-  const lcdContent = lcd.innerHTML;
-  let outcome;
-  console.log({
-    keyPressed
-  }, {
-    lcdContent
-  });
+function multipleDotsErr () {
+  const numOnLCD = lcd.innerHTML;
+  let ignoreDot;
   if (keyPressed !== '.') {
-    outcome=false;
-    console.log(`Error: ${outcome} \nkeyPressed not a dot. Don't test.`);
-    // Not a dot. No need to test
-    return outcome;
+  // Not a dot. No need to test
+    ignoreDot = false;
+    return ignoreDot;
   }
-
-  if (keyPressed === '.' && lcdContent.indexOf('.') >= 0 && numColorsOnLCD_default) {
+  if (keyPressed === '.' &&  numOnLCD.indexOf('e')>=0) {
+    // Attempt to input a decimal exponentialValue
+    ignoreDot = true;
+    postABullet('int09', bulletStyles.inf.bg, bulletStyles.inf.font);
+    /*
+int09: `I ignored that last dot! \nThis CALC version can not handle decimal exponential. Continue.
+    */
+     // Reset variable to get it ready for subsequent use
+keyPressedDot = false;
+    return ignoreDot;} 
+    
+  if (keyPressed === '.' && numOnLCD.indexOf('.') >= 0 && numColorsOnLCD_default) {
     // keyPressed is a dot. Test for dot repetition:
-    outcome=true; 
-    console.log(`Error: ${outcome} Repeated dot. Reject dot.`);
-    keyPressed = ''; // Cancel dot appendage
-    postABullet('inf03', bulletStyles.inf.bg, bulletStyles.inf.font);
-    return outcome;}
-   
-    // Accept all other dots.
-    outcome=false;
-    console.log(`Error: ${outcome} First dot occurrence. Append the dot.`);
-    return outcome;}
-/*
-    (lcdContent.indexOf('.') >= 0 && !numColorsOnLCD_default) {
-    // Test failed keyPress is a repeat dot
-    console.log('Dot is repeated');
+    ignoreDot = true;
     postABullet('inf03', bulletStyles.inf.bg, bulletStyles.inf.font);
     /*
 bulletText.innerHTML=`Your duplicate dot was ignored. \nContinue.`;
 
-    // bulletText.style.color='var(--noti-board-txt)';
-    // bulletinBoard.style.backgroundColor='var(--noti-board-bg)';
-    return true;
-  } else if (lcdContent.indexOf('.') >= 0 && numColorsOnLCD_default) {
-    // Accept dots if there is a dot when color of number is altered
-    return false;
+     bulletText.style.color='var(--noti-board-txt)';
+     bulletinBoard.style.backgroundColor='var(--noti-board-bg)';
+    */
+    // Reset variable to get it ready for subsequent use
+    keyPressedDot = false;
+    return ignoreDot;
   }
+  if (keyPressed === '.' && numOnLCD.indexOf('.') >= 0 && !numColorsOnLCD_default) {
+    // A dot that belongs to a next number entry; number that is expected after last operator entry.
+    ignoreDot = false;
+    return ignoreDot;
+  }
+  // For all other non dot keyPressed.
+  ignoreDot = false; // Allow normal execution of appendDigit()
+  return ignoreDot;
 }
-*/
 
 // To handle attempts to write multiple 'e' to an operand
-function chkMultiExpErr () {
+function multipleExpsErr () {
+  const numOnLCD = lcd.innerHTML;
+  let ignoreE;
   if (keyPressed !== 'e-') {
-    // No need to test
-    // NOP
-    return;
+    // Not an e. No need to test
+    ignoreE = false;
+    return ignoreE;
   }
-  // Need to test
-  // Check if there is already a 'e'
-  if (lcd.innerHTML.indexOf('e') < 0) {
-    // Display does not contain an 'e'. Test passed. An 'e-' will be appended.
-    postABullet('int01', bulletStyles.int.bg, bulletStyles.int.font);
+  if (keyPressed === 'e-' && numOnLCD.indexOf('e') >= 0 && numColorsOnLCD_default) {
+    // keyPressed is an e. Test for e repetition:
+    ignoreE = true;
+    postABullet('inf04', bulletStyles.inf.bg, bulletStyles.inf.font);
     /*
-bulletText.innerHTML=`For a positive exponent delete negative sign using backspace key.`;
-*/
-    // bulletText.style.color='var(--noti-board-txt)';
-    // bulletinBoard.style.backgroundColor='var(--noti-board-bg)';
-    return;
-  }//
-  // Test failed keyPress is a repeat 'e'
-  keyPressed = '';
-  postABullet('inf04', bulletStyles.inf.bg, bulletStyles.inf.font);
-  /*
 bulletText.innerHTML=`Your duplicate 'e' was ignored. Continue.`;
-*/
-  // bulletText.style.color='var(--noti-board-txt)';
-  // bulletinBoard.style.backgroundColor='var(--noti-board-bg)';
-  return;
+  bulletText.style.color='var(--noti-board-txt)';
+  bulletinBoard.style.backgroundColor='var(--noti-board-bg)';
+  */
+    // Reset variable to get it ready for subsequent use
+    keyPressedExp = false;
+    return ignoreE;
+  }
+  if (keyPressed === 'e-' && numOnLCD.indexOf('e') >= 0 && !numColorsOnLCD_default) {
+    // An e that belongs to a next number entry; number that is expected after last operator entry.
+    ignoreE = false;
+    return ignoreE;
+  }
+  // For all other non e keyPressed.
+  ignoreE = false; // Allow normal execution of appendDigit()
+  return ignoreE;
 }
-
-
-function chkForbidExp () {
+function chkForbidExp () { // § function not used
   //console.log({keyPressed});
   if ((keyPressed === 'e-' || keyPressed === '.') && preservedEqualsResult !== null) {
     setTimeout(()=> {
@@ -1109,16 +1129,20 @@ function chkForbidExp () {
   return;
 }
 
-
 // functions called by Main:
 function appendDigit () {
   // Also appends dot
-  // The following functions perform tasks to enable correct behavior of other functions that need various of their tasks performed at this point of the program:
   if (multipleDotsErr()) {
-    return;} // Don't append redundant dot.
+    return;
+  } // Don't append redundant dot.
+  if (multipleExpsErr()) {
+    return;
+  } // Don't append redundant 'e-'.
+  
+  // The following functions perform tasks to enable correct behavior of other functions that need various of their tasks performed at this point of the program:
   unrelatedTasks();
-  chkMultiExpErr();
-  chkForbidExp ();
+  //chkForbidExp ();
+
   if (operator === null) {
     // This case is when appendage goes against 1st operand
     if (keyPressed === '.' && operand1 === null) {
@@ -1160,7 +1184,7 @@ function appendDigit () {
     }
     lcd.innerHTML = operand2; // Let user see the result of the appendage procedure.
   }
-  // Reset all variables to get them ready for a possible subsequent use.
+  // Reset all variables to get them ready for a possible subsequent use
   keyPressedNumber = false;
   keyPressedDot = false;
   keyPressedExp = false;
@@ -1171,11 +1195,46 @@ function appendDigit () {
 
 function changeSign () {
   if (operator === null) {
-    operand1 = (operand1*(-1)).toString();
-    lcd.innerHTML = operand1;
+  if (1*operand1===0) {
+  // Do nothing. operand1 is zero. §
+  postABullet('inf08', bulletStyles.inf.bg, bulletStyles.inf.font)
+  return;}
+  const signOfNum=xtract.fetchTheSign(operand1);
+  if (signOfNum==='') {
+operand1 = '-'.concat(operand1);
+lcd.innerHTML=operand1;
+  return;}
+  if (signOfNum==='+') {
+operand1=operand1.slice(1);
+operand1 = '-'.concat(operand1);
+lcd.innerHTML=operand1;
+  return;}
+if (signOfNum==='-') {
+operand1=operand1.slice(1);
+operand1 = '+'.concat(operand1);
+lcd.innerHTML=operand1;
+  return;}
+  //  operand1 = (operand1*(-1)).toString();
   } else {
-    operand2 = (operand2*(-1)).toString();
-    lcd.innerHTML = operand2;
+ if (1*operand2===0) {
+  // Do nothing. operand1 is zero. §
+  postABullet('inf08', bulletStyles.inf.bg, bulletStyles.inf.font)
+  return;}
+  const signOfNum=xtract.fetchTheSign(operand2);
+  if (signOfNum==='') {
+operand2 = '-'.concat(operand2);
+lcd.innerHTML=operand2;
+  return;}
+  if (signOfNum==='+') {
+operand2=operand2.slice(1);
+operand2 = '-'.concat(operand2);
+lcd.innerHTML=operand2;
+  return;}
+if (signOfNum==='-') {
+operand2=operand2.slice(1);
+operand2 = '+'.concat(operand2);
+lcd.innerHTML=operand2;
+  return;}
   }
   keyPressedChgSign = false;
   updDebug();
@@ -1200,8 +1259,9 @@ function backspace () {
 function invert () {
   if (operand1 === null && operator === null && operand2 === null) {
     // case1: Nothing done! All new calculations must start with a number or a dot!' Not needed; covered by 'Your first entry must be a number or a dot.'
-    return;
-  }
+  keyPressedInv=false;
+  }else{
+  
   if (operand1*1 === 0 && operator === null && operand2 === null) {
     // Nothing was done! CALC does not invert zero. Continue.
     postABullet('inf05', bulletStyles.inf.bg, bulletStyles.inf.font);
@@ -1210,31 +1270,33 @@ function invert () {
      bulletinBoard.style.backgroundColor='var(--noti-board-bg)';
      bulletText.style.color='var(--noti-board-txt)';
      */
-    return;
-  }
-  if (!isNaN(operand1) && operator === null && operand2 === null) {
+  }else if (!isNaN(operand1) && operator === null && operand2 === null) {
     // operand1 valid. Invert.
     operand1 = (1/operand1).toString();
     lcd.innerHTML = operand1;
-    return;
-  }
-  if (!isNaN(operand1) && operator && operand2 === null) {
+  }else if (!isNaN(operand1) && operator && operand2 === null) {
     postABullet('inf06', bulletStyles.inf.bg, bulletStyles.inf.font);
-    return;
-  }
-  if (!isNaN(operand1) && operator && 1*operand2 === 0) {
+  }else if (!isNaN(operand1) && operator && 1*operand2 === 0) {
     postABullet('inf05', bulletStyles.inf.bg, bulletStyles.inf.font);
-    return;
-  }
-  if (operand1*1 === 0 && operator && operand2 === null) {
+  }else if (operand1*1 === 0 && operator && operand2 === null) {
     postABullet('int04', bulletStyles.int.bg, bulletStyles.int.font);
-    return;
-  }
-  if (operand1*1 === 0 && operator && 1*operand2 === 0) {
+  }else if (operand1*1 === 0 && operator && 1*operand2 === 0) {
     postABullet('int04', bulletStyles.int.bg, bulletStyles.int.font);
-    return;
-  }
+  }else if(!isNaN(operand1) && operator && !isNaN(operand2)) {
+    // operand2 valid. Invert.
+    operand2 = (1/operand2).toString();
+lcd.innerHTML=operand2;
+    
+  }else{
+  // NOP
+  } 
+  } 
+  keyPressedInv = false;
+  updDebug();
+  lastOpDispl.innerHTML = '1/x';
+  return;
 }
+
 
 function sqrt () {
   if (operator === null) {
@@ -1289,7 +1351,10 @@ function equals () {
 }
 
 function recycle () {
-  chkForbidExp();
+  if (lastOpDispl==='1/x') {
+    //NOP
+return;}
+  //chkForbidExp(); // Not used function
   // To achieve recycle mode, the trick is to preserve the final result, then modify the environment to mimic conditions during a number key press, and supplant the keyPressed value with the preserved final result. And then call main() to handle the mocked keyPressed.
   preservedFinalResult = finalResult;
   resetCalculator();
@@ -1297,7 +1362,14 @@ function recycle () {
   keyPressedNumber = true;
   keyPressed = preservedFinalResult;
   main();
-  lastOpDispl.innerHTML = '♽';
+  lastOpDispl.innerHTML = '♻️'// '♽';
+  if (preventRecycleBullet) {
+  // Don't post bullet
+  preventRecycleBullet=false;
+  }else{
+  // Post bullet
+   postABullet('inf07',bulletStyles.inf.bg, bulletStyles.inf.font);
+  }
   preservedFinalResult = null;
   return;
 }
@@ -1340,8 +1412,9 @@ finalResult= parseFloat(operand1) * parseFloat(operand2)/100;
 updDebug();
 */
   } else {
-    // error: missing operator
-    // console.log('1031',{subtotal}); // @
+    // error: missing operator §
+    finalResult = '' ;
+    updDebug();
     treatAsDigitKeyPress(subtotal);
     postABullet('fat01', bulletStyles.fat.bg, bulletStyles.fat.font);
     /*
@@ -1392,12 +1465,11 @@ function chkFirstKeypressIsNum() {
     resetCalculator();
     postABullet('int07', bulletStyles.int.bg, bulletStyles.int.font);
     /*
-    // §
 bulletText.innerHTML=`
       ⚠ Your first entry must be a number or a dot!`;
      bulletinBoard.style.backgroundColor='var(--noti-board-bg)'; // '#3cc4ef';
      bulletText.style.color='var(--noti-board-txt)';
-     */ // §
+     */
     defaultKeysColor();
     return;
   }
@@ -1406,11 +1478,12 @@ bulletText.innerHTML=`
 function chgColorOfNumOnLCD (intensity, color = 'var(--all-key-symbols-default-color)') {
   lcd.style.color = color;
   lcd.style.opacity = intensity;
-  if(color==='var(--all-key-symbols-default-color)'){
-  numColorsOnLCD_default=true;
-  }else{
-numColorsOnLCD_default=false;}
-  
+  if (color === 'var(--all-key-symbols-default-color)') {
+    numColorsOnLCD_default = true;
+  } else {
+    numColorsOnLCD_default = false;
+  }
+
 }
 
 function operandLoader () {
@@ -1431,7 +1504,7 @@ function chkMultiOps () {
 
 // Main
 function main () {
-  chkFirstKeypressIsNum(); // §
+  chkFirstKeypressIsNum(); //
   if (keyPressedUnary) {
     // 0y, key press was unary?
     console.log('if 0');
@@ -1478,7 +1551,7 @@ function main () {
               // 4y
               console.log('if 4');
               // call sub backspace.
-              backspace();
+              backspace ();
             } else {
               // 4n,
               // 5 is the else of 4
@@ -1681,12 +1754,11 @@ function assertOperation(keyPressed) {
 }
 
 function switchCalcModes () {
-  hideAppSettingsModal();
-  if (bulletinBoard.style.backgroundColor === 'var(--noti-fatal-error-bg-color)') {
+  if (calcFatalLock){
+  postABullet('fat05', bulletStyles.fat.bg, bulletStyles.fat.font);
     return
   } // Fatal error. Reject all key presses until user resets calculator.
-
-  eraseBullet();
+  eraseBillBoard();
   // Mode1: Entry of a unary or binary operator after final result (in other words, after pressing the equals key)
   if (operand1 !== null && operand2 !== null && finalResult !== null && isNaN(keyPressed)) {
     // Preserve unary environment:
@@ -1733,6 +1805,7 @@ function switchCalcModes () {
     keyPressedUnary = false;
     keyPressedEquals = true;
     keyPressed = '=';
+    preventRecycleBullet=true; // §
 
     // Now call main() to complete the calculation
     main();
@@ -2391,14 +2464,6 @@ function scientificDigitsCount () {
     // Not an exponential number call the fixed number handler
     const fxdNumDigFigCnt = fixedNumSigFigCnt();
     return fxdNumDigFigCnt;
-  }
-  // Test the applicability of this function. It's only valid for exponential numbers, with integer exponential values.
-  if (!Number.isInteger(1*xtract.exponentialValue(lcdBackup))) {
-    postABullet('fat04', bulletStyles.fat.bg, bulletStyles.fat.font);
-    // error: This Calculator  version can only handle integer exponentials.
-    // console.log('error: This Calculator  version can only handle integer exponentials.');
-
-    return;
   }
   // Case 1: exponentialValue=0
   if (xtract.exponentialValue(lcdBackup) === '0') {
