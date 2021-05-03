@@ -1,569 +1,266 @@
-html{
-font-size: 62.5%;
-}
+Skip to content
+GoldenNerd
+/
+customCalculator
+Code
+Issues
+Pull requests
+Actions
+Projects
+Wiki
+Security
+Insights
+Settings
+customCalculator/index.html
+@GoldenNerd
+GoldenNerd Update index.html
+ 1 contributor
+235 lines (207 sloc)  8.19 KB
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <link rel="stylesheet" href="calcStyle.css" type="text/css" media="all" />
+  <title>Simple Calculator</title>
+</head>
+<body>
+<!-- <div id="ref-div">REF</div> -->
 
-/* CONTAINER USED TO APPLY A THEME UTILITY CLASS */
-:root{}
+  <!-- CONTAINER OF WHOLE APP -->
+  <div id="whole-app-container">
+    <!--
+    <input type="button" id="help" value="HELP"/>
+     -->
+     
+    <!-- MODAL FOR USER SETTINGS: -->
+    <div id='app_config_modal-frame'>
+      <ul id="app-settings-modal">
+        <h3>Settings:</h3>
+        <hr />
+        <li><label>
+          <input type="radio" name="theme" class="setting" id="dark-theme-choice" /><span class="user-settings-radio-btn-names"> Dark Theme</span>
+        </label></li>
+         
+        <li><label>
+          <input type="radio" name="theme" class="setting" id="soothing-theme-choice" /><span class="user-settings-radio-btn-names"> Soothing Theme</span>
+        </label></li>
 
-body{
-margin: 0;
-width: 100vw;
-height:100vh;
-background-image: linear-gradient(to top right,  var(--body-bg-gradient_color1) 0%, var(--body-bg-gradient_color2) 20%, var(--body-bg-gradient_color1) 40%, var(--body-bg-gradient_color2) 60%, var(--body-bg-gradient_color1) 80%, var(--body-bg-gradient_color2) 100%); 
-/*
-background-image: linear-gradient(to right top, darkblue , darkgreen );
-background-color: var(--body-bg);
-*/
-background-repeat: no-repeat ;
-position: relative ;
-}
+        <li><label>
+          <input type="radio" name="theme" class="setting" id="light-theme-choice" /><span class="user-settings-radio-btn-names"> Light Theme</span>
+        </label></li>
+        <hr />
+        <li><label>
+          <input type="radio" name="language" class="setting" id="english-language" checked /><span class="user-settings-radio-btn-names"> English</span>
+        </label></li>
 
-/* CONTAINER OF WHOLE APP */
-#whole-app-container {
-/* 
-background-image: url(/16_9.jpg);
-*/
-width: 100%;
-height: 100%;
-position: fixed ;
-}
+        <li><label>
+          <input type="radio" name="language" class="setting" id="spanish-language" /><span class="user-settings-radio-btn-names"> Spanish</span>
+        </label></li>
 
-/* CONFIGURATION MODAL FRAME */
-#app_config_modal-frame{
-  /*
-  */
-outline: 1px solid var(--modal-app-config-wf);  
-background-color: var(--settings-modal-bg); /* #5d0505 */
-color: var(--modal-app-config-txt);
-font-size:0.9rem;
-width: 92%;
-height: 8rem;
-position: absolute ;
-/*
-top and left controlled by JavaScript
-function hideAppSettingsModal ():
-top: -8.2rem;
-left: 101%;
-function showAppSettingsModal ():
-top: 0;
-left: 7%;
-*/
-transition: all 0.5s ease-out;
-z-index:1;
-}
-h3{
-font-weight: bolder;
-font-size: 1.3rem;
-color: var(--modal-app-config-txt);
-margin-top :0;
-margin-left: 0.75rem;
-margin-bottom :0;
-}
-hr{
-width: 100%;
-border-top: 1px solid var(--modal-app-config-wf);
-border-bottom: 0;
-border-left: 0;
-border-right: 0 ;
-}
-.user-settings-radio-btn-names{
-color: var(--modal-app-config-txt);
-font-weight: bolder;
-font-size: 1rem;
-}
-#app-settings-modal.li:last-child{
-padding-bottom: 1rem;
-}
-#app-settings-modal.li{
-display: block;
-width: 35%;
-}
-#app-settings-modal{
-/*
-outline: 1px solid var(--modal-app-config-wf);
-*/
-background-color: var(--modal-app-config-bg);
-color: var(--modal-app-config-txt);
-height: 8rem;
-text-decoration: none;
-margin: 0 auto ;
-padding: 0;
-display: flex;
-flex-direction: row;
-flex-wrap: wrap;
-justify-content: space-between;
-align-items: stretch;
-}
+        <li><label>
+          <input type="checkbox" name="developer" class="setting" id="show-details" checked /><span class="user-settings-radio-btn-names"> More</span>
+        </label></li>
+
+      </ul>
+    </div>
+
+    <!-- LCD SUBASSEMBLY -->
+    <div id="lcd-frame">
+      <span id="lcd" value="">1234</span>
+      <input type="button" id="app-settings-menu-btn" value="&#x22ee;" />
+   <span id="lastOpDispl">C</span>
+    </div>
+
+ <div id="core-switcher-ctrl">
+
+    <!-- MODAL TO RE-FORMAT NUMBERS: -->
+    <div id=format-modal>
+      
+       <!-- REF FRAME FOR DEBUGGING: -->
+      <h2 id="choose-format-hether">Change number format to:</h2>
+
+      <div id="format">
+        <ul class="choices">
+          <li> <label><input type="radio" name="choice" id="original-format-choice" class="choice" value="" checked /> back to original format</label></li>
+          <li> <label><input type="radio" name="choice" id="roundoff-choice" class="choice" value="" /> fixed rounded-off format</label></li>
+          <li> <label><input type="radio" class="choice" name="choice" id="scientific-choice" value="" /> scientific notation</label></li>
+          <!--   <li> <label><input type="radio" class="choice" name="choice" id="scientific-choice" value="" /> scientific notation</label></li>
+              -->
+        </ul>
+
+        <h2 id="new-format-hether">Parameters for new Format:</h2>
+
+        <div id="original-panel">
+          <span class="datum" id="original-format-decimals"> Num.</span> decimal places
+        </div>
+        <div id="round-panel">
+          <label><input
+            type="number"
+            name="num"
+            class="datum"
+            id="decimals"
+            placeholder="Num."
+            value=""
+            min="0"
+            max="13"
+            step="1"
+            /> round-off decimals</label>
+        </div>
+        <div id="scientific-panel">
+          <label><input
+            type="number"
+            name="num"
+            class="datum"
+            id="significant"
+            placeholder="Num."
+            value=""
+            min="0"
+            max="13"
+            step="1"
+            /> significant figures</label>
+        </div>
+
+        <!--<div id="exponent-panel">
+         <label><input
+                  type="number"
+                  name="num"
+                  class="datum"
+                  id="exponential-digits"
+                  placeholder="Num."
+                  value="3"
+                  min="0"
+                  max="13"
+                  step="1"
+                /> decimal places</label>
+        </div>
+         -->
+      </div>
+
+      <div id="format-buttons">
+        <input type="button" class="modal-key" id="quit-format" value="&#x25c0;">
+        <input type="button" class="modal-key" id="apply-format" value="Go">
+        <!-- &#x2704;   &#x2718; -->
+      </div>
+
+    </div>
+    <!-- KEYBOARD: -->
+    <div id="keys">
+      <input type="button" class="key flashable" id="percentage" value="%">
+      <input type="button" class= "key flashable" id="square" value="x²">
+      <input type="button" class= "key flashable" id="sqrt" value="&#x221a;">
+      <input type="button" class= "key flashable" id="divide" value="&#247;">
+      <input type="button" class="key" id="key9" value="9">
+      <input type="button" class="key" id="key8" value="8">
+      <input type="button" class="key" id="key7" value="7">
+      <input type="button" class= "key flashable" id="multiply" value="&#215;">
+      <input type="button" class="key" id="key6" value="6">
+      <input type="button" class="key" id="key5" value="5">
+      <input type="button" class="key" id="key4" value="4">
+      <input type="button" class= "key flashable" id="minus" value="&#8722;">
+      <input type="button" class="key" id="key3" value="3">
+      <input type="button" class="key" id="key2" value="2">
+      <input type="button" class="key" id="key1" value="1">
+      <input type="button" class= "key flashable" id="sum" value="+">
+      <input type="button" class="key" id="key0" value="0">
+      <input type="button" class="key" id="dotKey" value="&middot;">
+      <input type="button" class="key" id="change-sign" value="&#177;">
+      <input type="button" class= "key flashable" id="equal" value="=">
+
+      <!-- <button class="key"><a href="help.html" id="help">&#x3f;</a></button> -->
+      <input type="button" class="key" id="expKey" value="e">
+
+      <input type="button" class= "key flashable" id="invert" value="1/x">
+      <!-- x&#x207b;&#xb9; -->
+      <input type="button" class= "key flashable" id="backspace" value="&#x232b;">
+      <input type="button" class="key" id="clear" value="C">
+      <input type="button" class="mem-key" id="ms" value="MS">
+      <input type="button" class="mem-key" id="mr" value="MR">
+      <input type="button" class="mem-key" id="mc" value="MC">
+      <input type="button" class="key" id="scissors1" value="&#x2704;">
+    </div>
+
+    <!-- DEV INNER DATA PANEL: -->
+    <div id="modal-all_registers-wrapper">
+      <div id="modal-partial_registers-wrapper">
+
+        <div class="debug-pair">
+          <p class="debug-element">
+            lastOp:
+            <span id="last-op-debug"></span>
+          </p>
+          <p class="debug-element">
+            LCD:
+            <span id="lcd-debug"></span>
+          </p>
+        </div>
+        <div class="debug-pair">
+          <p class="debug-element">
+            operand1:
+            <span id="operand1Debug"></span>
+          </p>
+          <p class="debug-element">
+            operand2:
+            <span id="operand2Debug"></span>
+          </p>
+        </div>
+        <!--  -->
+        <div class="debug-pair">
+          <p class="debug-element">
+            opNow: <span id="opNowDebug"></span>
+          </p>
+          <p class="debug-element">
+            RESULT: <span id="resultDebug"></span>
+          </p>
+        </div>
+      </div>
+
+      <!--  -->
+
+      <div class="calc-pair">
+        <p class="calc-element">
+          subTot: <span id="sub-tot"></span>
+        </p>
+        <p class="calc-element">
+          Mem: <span id="memoryOnLCD"></span>
+        </p>
+      </div>
+    </div>
+
+ </div>
  
-/* LCD SUBASSEMBLY */
-#lcd-frame{
-/*
-*/
-outline: 1px solid transparent ;
-width: 99.5%;
-height: 8.2rem;
-background-color: var(--lcd-bg);
-margin: 0 auto;
-margin-bottom: 4px;
-padding: 0;
-position: relative;
-}
-#app-settings-menu-btn{
-width: fit-content ;
-height: 5rem;
-font-size: 2.5em;
-background-color: var(--btn-menu-app-config-bg);
- border: 1px solid var(--btn-menu-app-config-wf);
- border-radius:15%;
- color: var(--modal-app-config-txt);
- font-weight:bold;
- text-align: center;
- /* margin: 0.1vw 0.5vw; */ 
- transition: all 0.4s;
- position: absolute ;
- transform: rotate(-90deg);
- top: -1.2rem;
-  left: 2rem;
-  z-index:2;
-  /* 
-   top: 3rem;
-  left: 0.2rem;
-  */
-}
-#lcd{
-/*
-outline: 1px solid orange ;
-*/
-display: block;
-margin-top: 1px;
-padding-top: 4.5%;
-/*margin:0;
-width: 95%;
-position:relative ;
-*/
-height:50%;
-/* margin: 0 auto; */
-/*padding-right: 0.1em;
-color: var(--lcd-num-typed);
-background-color: var(--lcd-bg);
-*/
-border-radius:10%;
-font-size: 450%;
-text-align:right;
-/*line-height: 180%;*/
-}
-#lastOpDispl{
-  outline: 1px solid transparent ;
-  display: block;
-line-height : 1rem ;
-  padding-bottom: 0.1rem;
-padding-left : 0.1rem;
-  margin: 0;
-  color: var(--lcd-last-op);
-  font-weight: bold;
-  font-size: 2.5rem;
-  position: absolute ;
-  /* 
-  top:  5.7rem;
-  left:0.3rem;
-  */
-bottom :  0;
-  left:0;
-  z-index:1;
-}
+    <!-- NOTIFICATION BILLBOARD: -->
+    <div id="bulletin-board">
+      <span id="bullet-text"></span>
+      <!--
+      <input type="button" id="help" value="&#x3f;">
+      -->
+      <input type="button" id="help" value="?" />
+    </div>
 
-/* KEYS/FORMAT_MODAL SHOW/HIDE CTRL */
-#core-switcher-ctrl {
-outline: 3px solid transparent ;
-position: relative;
-z-index: 2;
-}
-#ref-div {
-/*
-*/
-outline: 1px solid magenta;
-z-index: 3;
-width: 10%;
-height:38.5rem;
-color: white ;
-position: absolute ;
-top: 0;
-right: 10% ;
-}
+  </div>
 
-/*  PROPERTIES FOR FORMAT MODAL  */
-#format-modal{
-outline: 1px solid transparent ;
-width: 98%;
-height:34rem;
-margin: 0;
-padding-top: 4.5rem;
-color:var(--format_modal-txt);
-font-size:1.5rem;
-/*
-top: 22vw;  margin-bottom: 2rem;
-*/
-transition: all 0.5s;
-opacity:0; /* opacity:0; */
-position: absolute ; /* static */
-left :0;
-top: 0;
-z-index:0;  /* z-index:0; */
-}
+  <!--
+  <input type="button" name="debug2" id="test2" value="1/x" />
+  <input type="button" name="debug2" id="test3" value="x²" />
+  <input type="button" name="test" id="test" value="&#x267d; x2026 &#x22ee; TEST" />
+<h1>&#215;</h1>
+  -->
 
-#apply-format, #quit-format{
-/* opacity:1; */
- display: block;
- background-color: var(--key-bg);
- border: 1px solid var(--format_modal-go_btn-wf);
- border-radius:15%;
- font-weight:bolder;
- text-align: center;
- line-height: 150%;
- margin: 0.1vw 0.5vw;
-font-size: 5vw;
-width:fit-content;
-height:fit-content;
-color: var(--format_modal-key-apply_symb);
-}
-
-#quit-format{
-color: var(--format_modal-key-exit_symb);
-}
-
-#choose-format-hether{
-text-align:center;
-}
-
-#new-format-hether{
-/* opacity:0; */
-text-align:center;
-}
-
-ul {
-list-style:none;
-margin-left:3rem;
-}
-
-#choice{
-
-}
-
-.datum{/*
-outline: 1px solid var(--borders-color);
-*/
-margin-left:5.5rem;
-color: gold;
-background-color: var(--format_modal-datum-bg); /* #0080004d; */
-/*rgb(255,255,255,0.2);*/
-border:none ;
-text-align:right;
-margin-right: 1rem;
-font-weight:bold;
-}
-
-#original-format-decimals{
-display:inline-block;
-min-width: 4.46rem;
-padding-right:0;
-}
-
-#format-buttons{
-margin-top:2rem;
-display:flex;
-flex-direction:row;
-flex-wrap:nowrap;
-justify-content:space-around ;
-align-items:flex-start;
-}
-
-/* panel control to show/hide choices */
-li:first-child, #original-panel, #round-panel, #scientific-panel{
-opacity: 0;
-}
-
-/* KEYBOARD SUBASSEMBLY */
-#keys{
-  outline: 1px solid transparent ;
-  width: 98%;
-  height: fit-content;
-  display:flex;
-  flex-direction: row;
-  flex-wrap: wrap;
-  justify-content:flex-start;
-  align-items: center ;
-  font-weight: bold;
-  margin: 0 auto;
-  transition: all 0.75s;
-  opacity:1; /* opacity:1; */
-  position: relative ; /* relative */
-  /* z-index:4; */
-}
-.key, .mem-key{
-background-image: linear-gradient(to  top , var(--body-bg-gradient_color3), var(--body-bg-gradient_color4));
-   /*
- background-image: linear-gradient(to bottom, var(--body-bg-gradient_color1), var(--body-bg-gradient_color2));
---key-bg: rgb(44,44,140) ;
-*/
- display: block;
- width: 23.5vw;
- height: 15vw;
-background-color: var(--key-bg);
-  /* #010153 */
- border: 1px solid var(--key-wf);
- border-radius:15%;
-color: var(--key-symb-all-normal);
- font-size:10vw;
- font-weight:bolder;
- text-align: center;
- line-height: 150%;
- margin: 0.1vw 0.5vw;
-}
- 
-/* DEVELOPER DATA GRILLE */
-#modal-all_registers-wrapper{
-outline: 1px solid transparent ;
-width: 100%;
-background-color: var(--all-registers_modal-bg) ;
-transition: all 0.5s ; 
-z-index: -1; 
-position: absolute ;
-/*bottom: 7.5rem;
-left: 0; bottom: 0;*/
-}
-
-span, p{
- height:1.3rem;
- padding: 0.3rem;
- color: var(--registers_modal-txt);
- margin-top:0.1rem;
- margin-bottom:0.1rem;
- 
-}
-
-.debug-element, .calc-element {
-  border: 1px solid var(--registers_modal-wf);
-  border-radius: 0.3rem;
-  font-weight: bold;
-  width: 49%;
-  display: flex;
-  flex-direction:row;
-  flex-wrap:nowrap;
-  justify-content:space-between;
-  align-items: center;
-  margin-left: 0.5rem;
-  }
-
-#modal-partial_registers-wrapper{
-outline: 1px solid transparent ;
-background-color: var(--part-registers_modal-bg) ;
-font-size: 1.2rem;
- /* margin-top:3vw;
-  margin-left:0; */
-margin: 0.3rem auto;
-display:flex;
-flex-direction: column;
-flex-wrap: nowrap;
-justify-content: flex-start;
-align-items: flex-start;
-  /*  ;*/
-opacity: 0;
-transition: opacity 0.75s ease-in;
-}
-
-.debug-pair, .calc-pair{/*outline: 1px solid #f82929; */
-  width: 99%;
-  display: flex;
-  flex-direction:row;
-  flex-wrap:nowrap;
-  justify-content:space-between;
-}
-
-/* BULLETIN BOARD */
-#bulletin-board{
-/*
-outline:3px solid #f82929;
-background-color: var(--bulletin_board-bg);
-*/
-width: 98%;
-height: 6.5rem;
-border: 1px solid var(--bulletin_board-wf);
-background-color: var(--bulletin_board-clr_bg);
-color: var(--bulletin_board-greet_tx);
-border-radius: 0.3rem;
-display: flex;
-flex-direction:row ;
-flex-wrap: nowrap;
-justify-content: center ;
-align-items: center ;
-margin:0 auto;
-position: absolute ;
-bottom : 3px;
-}
- 
- #bullet-text{
- /*
- outline:3px solid yellow ;
-display: block;
-color: var(--noti-board-txt);
- */
- color: var(--bulletin_board-greet_txt) ;
- width: fit-content;
- height: fit-content;
- font-weight: bold;
- font-size: 1.3rem;
-white-space: pre-wrap;
-text-align: center;
- /*color: #ae35dc;*/
- }
- 
- #help-page{
- font-size: 2rem;
- color: var(--format_modal-txt);
- }
-
-#test2, #test3{
-width: fit-content;
-height: fit-content;
-font-size: 2em;
-background-color: var(--key-bg);
- border: 1px solid var(--key-wf);
- border-radius:15%;
- color: white;
- font-weight:normal;
- text-align: center;
- margin: 0.1vw 0.5vw;
-   
-}
-
- #test2, #test3{
-   margin:1vw;
-   position: absolute;
-   right:.5rem;
-   top: 1rem;
- }
- 
- /* 
-#help{
-margin: 0.1vw 0.5vw;
-margin:3rem auto;
-margin:1vw;
-background-color: #101090 
-display: block;
---btn-help-bg-hsl_hue
-
-font-weight: bold;
-*/
-/*
-width: fit-content;
-height: fit-content;
-font-size: 3rem;
-color: hsl(calc(var(--btn-help-bg-hsl_hue) - 180),100%,49%);
- background-color: darkblue;
- border: 1px solid var(--key-wf);
- border-radius:15%;
- font-weight:normal;
- text-align: center;
- padding:0 0.75rem;
- text-decoration: none;
-transition: all ease-in 2s;
- }
- */
- 
-#help{
-/* transition: all 0.4s;
-transform: rotate(-90deg);
-*/
-width: fit-content ;
-height:  fit-content;
-font-size: 1.5em;
-padding: 0 0.5rem;
-border: 1px solid var(--help_btn-wf);
-background-color: var(--key-bg);
- color: var(--help_btn-symb);
- font-weight:bold;
- text-align: center;
- /* margin: 0.1vw 0.5vw; */ 
- border-radius:15%;
- position: relative ;
-/*
- top: 0.4rem;
-  left: 0.5rem;
-  z-index:3;
-  */
- position: absolute ;
- right: 3px;
- bottom: 3px;
-}
-
-/* UTILITY CLASSES FOR THEMES */
-.dark-theme {
-/*  */
---body-fallback_bg: #004517 ;
---body-bg-gradient_color1: #19005d ;
---body-bg-gradient_color2: #9b4213;
-
---btn-menu-app-config-bg: transparent ;
---btn-menu-app-config-wf: tomato ;
-  --modal-app-config-bg: transparent ;
-  --modal-app-config-wf: darkred ;
-  --modal-app-config-txt: #fefceeff;
-
-    --lcd-bg: transparent ;
-    --lcd-num-typed: #fefceeff;
-    --lcd-num-registered: #90ea9c;
-    --lcd-num-result: #edd037dd;
-    --lcd-last-op:  lightgreen ;
-
-  --all-registers_modal-bg: transparent;
-  --part-registers_modal-bg: transparent;
-  --registers_modal-wf: tomato ;
-  --registers_modal-txt: #fefceeff ;
-
-  --bulletin_board-wf: tomato;
-  --bulletin_board-greet_bg: transparent ;
-  --bulletin_board-inf_bg: transparent ;
-  --bulletin_board-int_bg: transparent ;
-  --bulletin_board-fat_bg: #19005d ;
-  --bulletin_board-clr_bg: transparent ;
-  --bulletin_board-tst_bg: transparent ;
-  
-  --bulletin_board-inf_txt: lightgreen ;
-  --bulletin_board-int_txt: yellow;
-  --bulletin_board-fat_txt: #ff3761 ;
-  --bulletin_board-clr_txt: inherit ;
-  --bulletin_board-tst_txt: yellow;
-  --bulletin_board-greet_txt: #2cfc95;
-  
-  --key-bg: transparent ;
-  --body-bg-gradient_color3: #19005d ;
-  --body-bg-gradient_color4: #9b1342;
-  --key-wf: tomato;
-  --key-symb-all-normal: #fefceeff;
-  --key-symb-op-active: #2cfc95;
-  --key-symb-op-denyed: #f82929;
-  --key-symb-equal: gold;
-  --key-symb-ms: #029d02 ;
-
-  --format_modal-heather: #fefceeff;
-  --format_modal-txt: #fefceeff;
-  --format_modal-param: #fefceeff;
-  --format_modal-datum-bg: #00336c;
-  --format_modal-go_btn-wf: tomato ;
-  --format_modal-exit_btn-wf: tomato ;
---format_modal-key-apply_symb: lightgreen;
---format_modal-key-exit_symb:tomato;
-
---help_btn-wf: #fefceeff;
---help_btn-symb: yellow ;
-  /*
-  --bulletin_board-greet_bg: #120c11;
-  --noti-board-txt: yellow;
-  --noti-greeting_txt: lightgreen;
-  --bulletin_board-fat_txt: #f82929;
-  
---bulletin_board-greet_txt: transparent;
-  --bulletin_board-bg: #120c11;
-  --bulletin_board-fatal_err-bg: tomatoff;
-  */
-}
+  <script type="text/javascript" charset="utf-8" src="calcApp.js"></script>
+</body>
+</html>
+© 2021 GitHub, Inc.
+Terms
+Privacy
+Security
+Status
+Docs
+Contact GitHub
+Pricing
+API
+Training
+Blog
+About
+Loading complete
