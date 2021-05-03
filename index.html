@@ -8,22 +8,23 @@
   <title>Simple Calculator</title>
 </head>
 <body>
+<!-- <div id="ref-div">REF</div> -->
 
+  <!-- CONTAINER OF WHOLE APP -->
   <div id="whole-app-container">
     <!--
     <input type="button" id="help" value="HELP"/>
      -->
+     
     <!-- MODAL FOR USER SETTINGS: -->
-
-    <input type="button" name="debug" id="app-settings-menu-btn" value="&#x22ee;" />
-    <div id='settings-modal-wrapper'>
+    <div id='app_config_modal-frame'>
       <ul id="app-settings-modal">
         <h3>Settings:</h3>
         <hr />
         <li><label>
           <input type="radio" name="theme" class="setting" id="dark-theme-choice" /><span class="user-settings-radio-btn-names"> Dark Theme</span>
         </label></li>
-
+         
         <li><label>
           <input type="radio" name="theme" class="setting" id="soothing-theme-choice" /><span class="user-settings-radio-btn-names"> Soothing Theme</span>
         </label></li>
@@ -48,18 +49,23 @@
     </div>
 
     <!-- LCD SUBASSEMBLY -->
-    <span id="lastOpDispl">C</span>
-    <div id="lcd-dev-container">
+    <div id="lcd-frame">
       <span id="lcd" value="">1234</span>
+      <input type="button" id="app-settings-menu-btn" value="&#x22ee;" />
+   <span id="lastOpDispl">C</span>
     </div>
+
+ <div id="core-switcher-ctrl">
 
     <!-- MODAL TO RE-FORMAT NUMBERS: -->
     <div id=format-modal>
+      
+       <!-- REF FRAME FOR DEBUGGING: -->
       <h2 id="choose-format-hether">Change number format to:</h2>
 
       <div id="format">
         <ul class="choices">
-          <li> <label><input type="radio" name="choice" id="original-format-choice" class="choice" value="" unchecked /> back to original format</label></li>
+          <li> <label><input type="radio" name="choice" id="original-format-choice" class="choice" value="" checked /> back to original format</label></li>
           <li> <label><input type="radio" name="choice" id="roundoff-choice" class="choice" value="" /> fixed rounded-off format</label></li>
           <li> <label><input type="radio" class="choice" name="choice" id="scientific-choice" value="" /> scientific notation</label></li>
           <!--   <li> <label><input type="radio" class="choice" name="choice" id="scientific-choice" value="" /> scientific notation</label></li>
@@ -98,7 +104,6 @@
             /> significant figures</label>
         </div>
 
-
         <!--<div id="exponent-panel">
          <label><input
                   type="number"
@@ -116,41 +121,41 @@
       </div>
 
       <div id="format-buttons">
-        <input type="button" class="modal-key" id="apply-format" value="Go">
         <input type="button" class="modal-key" id="quit-format" value="&#x25c0;">
+        <input type="button" class="modal-key" id="apply-format" value="Go">
         <!-- &#x2704;   &#x2718; -->
       </div>
 
     </div>
     <!-- KEYBOARD: -->
     <div id="keys">
-      <input type="button" class="key" id="percentage" value="%">
-      <input type="button" class="key" id="square" value="x²">
-      <input type="button" class="key" id="sqrt" value="&#x221a;">
-      <input type="button" class="key" id="divide" value="&#247;">
+      <input type="button" class="key flashable" id="percentage" value="%">
+      <input type="button" class= "key flashable" id="square" value="x²">
+      <input type="button" class= "key flashable" id="sqrt" value="&#x221a;">
+      <input type="button" class= "key flashable" id="divide" value="&#247;">
       <input type="button" class="key" id="key9" value="9">
       <input type="button" class="key" id="key8" value="8">
       <input type="button" class="key" id="key7" value="7">
-      <input type="button" class="key" id="multiply" value="&#215;">
+      <input type="button" class= "key flashable" id="multiply" value="&#215;">
       <input type="button" class="key" id="key6" value="6">
       <input type="button" class="key" id="key5" value="5">
       <input type="button" class="key" id="key4" value="4">
-      <input type="button" class="key" id="minus" value="&#8722;">
+      <input type="button" class= "key flashable" id="minus" value="&#8722;">
       <input type="button" class="key" id="key3" value="3">
       <input type="button" class="key" id="key2" value="2">
       <input type="button" class="key" id="key1" value="1">
-      <input type="button" class="key" id="sum" value="+">
+      <input type="button" class= "key flashable" id="sum" value="+">
       <input type="button" class="key" id="key0" value="0">
       <input type="button" class="key" id="dotKey" value="&middot;">
       <input type="button" class="key" id="change-sign" value="&#177;">
-      <input type="button" class="key" id="equal" value="=">
+      <input type="button" class= "key flashable" id="equal" value="=">
 
       <!-- <button class="key"><a href="help.html" id="help">&#x3f;</a></button> -->
       <input type="button" class="key" id="expKey" value="e">
 
-      <input type="button" class="key" id="invert" value="1/x">
+      <input type="button" class= "key flashable" id="invert" value="1/x">
       <!-- x&#x207b;&#xb9; -->
-      <input type="button" class="key" id="backspace" value="&#x232b;">
+      <input type="button" class= "key flashable" id="backspace" value="&#x232b;">
       <input type="button" class="key" id="clear" value="C">
       <input type="button" class="mem-key" id="ms" value="MS">
       <input type="button" class="mem-key" id="mr" value="MR">
@@ -159,8 +164,8 @@
     </div>
 
     <!-- DEV INNER DATA PANEL: -->
-    <div id="inner-data-wrapper">
-      <div id="debug-data-grill">
+    <div id="modal-all_registers-wrapper">
+      <div id="modal-partial_registers-wrapper">
 
         <div class="debug-pair">
           <p class="debug-element">
@@ -205,13 +210,15 @@
       </div>
     </div>
 
+ </div>
+ 
     <!-- NOTIFICATION BILLBOARD: -->
     <div id="bulletin-board">
       <span id="bullet-text"></span>
       <!--
       <input type="button" id="help" value="&#x3f;">
       -->
-      <input type="button" id="help" value="HELP" />
+      <input type="button" id="help" value="?" />
     </div>
 
   </div>
@@ -220,6 +227,7 @@
   <input type="button" name="debug2" id="test2" value="1/x" />
   <input type="button" name="debug2" id="test3" value="x²" />
   <input type="button" name="test" id="test" value="&#x267d; x2026 &#x22ee; TEST" />
+<h1>&#215;</h1>
   -->
 
   <script type="text/javascript" charset="utf-8" src="calcApp.js"></script>
