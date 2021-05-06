@@ -97,6 +97,10 @@ const lcd = document.querySelector('#lcd');
 const bulletText = document.querySelector('#bullet-text');
 const bulletinBoard = document.querySelector ('#bulletin-board');
 
+function hideBB () {
+bulletinBoard.style.bottom='0';
+}
+
 // English language messages:
 const engBullets = {
   /* there are 3 message categories:
@@ -213,6 +217,9 @@ const bulletStyles = {
 
 // Func that posts a bullet:
 function postABullet (bulletCode, bulletinBoardColor, bulletColor) {
+  setTimeout(function () {bulletText.style.color=bulletColor}, 200);
+  bulletText.style.color='transparent';
+  
   // Select language for bullet
   let bulletLang;
   if (englishLanguageRadio.checked) {
@@ -222,7 +229,7 @@ function postABullet (bulletCode, bulletinBoardColor, bulletColor) {
   } else {
     // NOP same pattern as above for future languages
   }
-  bulletText.style.color = bulletColor;
+  
   const bulletWording = eval("`${".concat(bulletLang) + ".".concat(bulletCode) + "}`");
   const bulletVariables = ` ${operand1} ` + operator;
   if (bulletCode !== 'int08') {
@@ -234,6 +241,7 @@ function postABullet (bulletCode, bulletinBoardColor, bulletColor) {
     calcFatalLock = true;
   }
   bulletinBoard.style.backgroundColor=bulletinBoardColor;
+
 }
 
 // Axiliary function of reset:
@@ -748,11 +756,12 @@ function backupNumDisplayed () {
 
 // Enter Format Modal. This is upon pressing the green "Go" button.
 const formatModal = document.querySelector('#format-modal');
-const keyBoard = document.querySelector('#keys');
+const keyBoard = document.querySelector('#keyboard');
 
 let modalStartedFlag;
 function enterFormatModal () {
   hideAppConfigModal();
+  hideOriginalRadioSelector();
   // Test the applicability of this function. It's only valid for exponential numbers, with integer exponential values.
   if (!Number.isInteger(1*xtract.exponentialValue(lcdBackup))) {
     postABullet('fat04', bulletStyles.fat.bg, bulletStyles.fat.txt);
@@ -768,6 +777,7 @@ function enterFormatModal () {
   //keyBoard.style.position='absolute';
   //keyBoard.style.right='101vw';
   keyBoard.style.opacity = '0';
+
   return;
 }
 
@@ -781,23 +791,23 @@ const roundOffInfoPanel = document.querySelector('#round-panel');
 const scientificInfoPanel = document.querySelector('#scientific-panel');
 // All hide functions:
 function hideOriginalRadioSelector () {
-  originalFormatSelectorRadioBtn.style.opacity = '0';
+  originalFormatSelectorRadioBtn.style.left = '101%';
 }
 function hideOriginalInfoPanel () {
-  originalInfoPanel.style.opacity = '0';
+originalInfoPanel.style.left = '101%';
 }
 function hideRoundOffInfoPanel () {
-  roundOffInfoPanel.style.opacity = '0';
+  roundOffInfoPanel.style.left = '101%' ;
 }
 function hideScientificInfoPanel () {
-  scientificInfoPanel.style.opacity = '0';
+  scientificInfoPanel.style.left = '101%';
 }
 // All show functions
 function showOriginalRadioSelector () {
-  originalFormatSelectorRadioBtn.style.opacity = '1';
+  originalFormatSelectorRadioBtn.style.left = '0';
 }
 function showOriginalInfoPanel () {
-  originalInfoPanel.style.opacity = '1';
+  originalInfoPanel.style.left = '0';
   hideRoundOffInfoPanel();
   hideScientificInfoPanel();
 }
@@ -806,13 +816,14 @@ const originalFormatRadioBtn = document. querySelector('#original-format-choice'
 originalFormatRadioBtn.addEventListener('click', applySelectedFormat);
 
 function showRoudOffPanel () {
-  roundOffInfoPanel.style.opacity = '1';
+  roundOffInfoPanel.style.left = '0';
   hideOriginalInfoPanel();
   hideScientificInfoPanel();
 }
 roundOffRadioSelector.addEventListener('click', showRoudOffPanel);
+
 function showScientificfPanel () {
-  scientificInfoPanel.style.opacity = '1';
+  scientificInfoPanel.style.left = '0';
   hideOriginalInfoPanel();
   hideRoundOffInfoPanel();
 }
@@ -1952,7 +1963,7 @@ function switchAppConfigBtnToVertical () {
 }
 
 let appConfigModalOn = false;
-const appConfigModal = document.querySelector('#app_config_modal-frame');
+const appConfigModal = document.querySelector('#app_settings_modal-frame');
 function showAppConfigModal () {
   appConfigModal.style.top = '0';
   appConfigModal.style.left = '7%';
@@ -1992,7 +2003,7 @@ appSettingsMenu.addEventListener('click', toggleAppConfigModal);
 
 // ### BEHAVIOR OF DEVELOPER PANEL: ###
 const debugDataSubpanel = document.querySelector('#modal-partial_registers-wrapper');
-const wholeDataPanel = document.querySelector('#modal-all_registers-wrapper');
+const wholeDataPanel = document.querySelector('#modal-all_registers-frame');
 // Save this user setting in persistent memory
 function vaultDevPanelOnOffState () {
   devPanelVaultedState = checkboxToshowOrHideDevPanel.checked;
