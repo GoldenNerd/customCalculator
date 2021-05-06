@@ -8,7 +8,11 @@
   <title>Simple Calculator</title>
 </head>
 <body>
-<!-- <div id="ref-div">REF</div> -->
+  
+<!--
+REF FRAME FOR DEBUGGING:
+<div id="ref-div">REF</div> 
+-->
 
   <!-- CONTAINER OF WHOLE APP -->
   <div id="whole-app-container">
@@ -17,20 +21,20 @@
      -->
      
     <!-- MODAL FOR USER SETTINGS: -->
-    <div id='app_config_modal-frame'>
+    <div id='app_settings_modal-frame'>
       <ul id="app-settings-modal">
         <h3>Settings:</h3>
         <hr />
         <li><label>
-          <input type="radio" name="theme" class="setting" id="dark-theme-choice" /><span class="user-settings-radio-btn-names"> Dark Theme</span>
+          <input type="radio" name="theme" class="setting" id="dark-theme-choice" /><span class="user-settings-radio-btn-names"> Ocean</span>
         </label></li>
          
         <li><label>
-          <input type="radio" name="theme" class="setting" id="soothing-theme-choice" /><span class="user-settings-radio-btn-names"> Soothing Theme</span>
+          <input type="radio" name="theme" class="setting" id="soothing-theme-choice" /><span class="user-settings-radio-btn-names"> Passion</span>
         </label></li>
 
         <li><label>
-          <input type="radio" name="theme" class="setting" id="light-theme-choice" /><span class="user-settings-radio-btn-names"> Light Theme</span>
+          <input type="radio" name="theme" class="setting" id="light-theme-choice" /><span class="user-settings-radio-btn-names"> Abstract</span>
         </label></li>
         <hr />
         <li><label>
@@ -38,7 +42,7 @@
         </label></li>
 
         <li><label>
-          <input type="radio" name="language" class="setting" id="spanish-language" /><span class="user-settings-radio-btn-names"> Spanish</span>
+          <input type="radio" name="language" class="setting" id="spanish-language" /><span class="user-settings-radio-btn-names"> Español</span>
         </label></li>
 
         <li><label>
@@ -60,8 +64,8 @@
     <!-- MODAL TO RE-FORMAT NUMBERS: -->
     <div id=format-modal>
       
-       <!-- REF FRAME FOR DEBUGGING: -->
-      <h2 id="choose-format-hether">Change number format to:</h2>
+
+      <h2 id="format_choices-heather">Change number format to:</h2>
 
       <div id="format">
         <ul class="choices">
@@ -72,11 +76,13 @@
               -->
         </ul>
 
-        <h2 id="new-format-hether">Parameters for new Format:</h2>
+        <h2 id="format_values-panels-heather">Parameters for new Format:</h2>
+        
+<!-- read only panel:-->
+<div id="original-panel">
+          <span class="datum" id="original-format-decimals"> Num.</span><span>decimal places</span> 
+        </div> 
 
-        <div id="original-panel">
-          <span class="datum" id="original-format-decimals"> Num.</span> decimal places
-        </div>
         <div id="round-panel">
           <label><input
             type="number"
@@ -120,15 +126,15 @@
          -->
       </div>
 
-      <div id="format-buttons">
+      <div id="format_modal-buttons">
         <input type="button" class="modal-key" id="quit-format" value="&#x25c0;">
-        <input type="button" class="modal-key" id="apply-format" value="Go">
+        <input type="button" class="modal-key" id="apply-format" value="Go"/>
         <!-- &#x2704;   &#x2718; -->
       </div>
 
     </div>
     <!-- KEYBOARD: -->
-    <div id="keys">
+    <div id="keyboard">
       <input type="button" class="key flashable" id="percentage" value="%">
       <input type="button" class= "key flashable" id="square" value="x²">
       <input type="button" class= "key flashable" id="sqrt" value="&#x221a;">
@@ -164,7 +170,7 @@
     </div>
 
     <!-- DEV INNER DATA PANEL: -->
-    <div id="modal-all_registers-wrapper">
+    <div id="modal-all_registers-frame">
       <div id="modal-partial_registers-wrapper">
 
         <div class="debug-pair">
@@ -230,6 +236,6 @@
 <h1>&#215;</h1>
   -->
 
-  <script type="text/javascript" charset="utf-8" src="calcApp.js"></script>
+  <script type="text/javascript" charset="utf-8" src="calcAppTest.js"></script>
 </body>
 </html>
