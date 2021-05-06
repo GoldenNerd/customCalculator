@@ -632,7 +632,9 @@ color: var(--bulletin_board-greet_txt) ;
  height: fit-content;
  font-weight: bold;
  font-size: 1.3rem;
+/*
 white-space: pre-wrap;
+*/
 text-align: center;
 margin-top: 0;
  /*color: #ae35dc;*/
